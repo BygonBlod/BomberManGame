@@ -1,4 +1,6 @@
 package Main;
+import java.io.File;
+
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -18,8 +20,8 @@ public class Test {
 		//ViewBomberManGame view=new ViewBomberManGame();
 		
 		
-		
-		String layout="/home/etud/eclipse-workspace/BomberMan/layouts/niveau3.lay";
+		System.out.println(System.getProperty("user.dir"));
+		String layout=System.getProperty("user.dir")+"/layouts/niveau3.lay";
 		ControllerBomberManGame bomber=new ControllerBomberManGame(layout);
 		
 		

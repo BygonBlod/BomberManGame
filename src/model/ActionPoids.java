@@ -26,5 +26,9 @@ public class ActionPoids {
 	public void setPoids(int poids) {
 		this.poids = poids;
 	}
+	
+	public String toString() {
+		return action+" : "+poids;
+	}
 
 }
