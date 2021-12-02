@@ -6,6 +6,11 @@ import utils.AgentAction;
 import utils.InfoBomb;
 
 public class ListActionPoids extends ArrayList<ActionPoids> {
+	private AgentAction up=AgentAction.MOVE_UP;
+	private AgentAction down=AgentAction.MOVE_DOWN;
+	private AgentAction left=AgentAction.MOVE_LEFT;
+	private AgentAction right=AgentAction.MOVE_RIGHT;
+	private AgentAction putBomb=AgentAction.PUT_BOMB;
 	
 	
 	
@@ -16,10 +21,37 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 		return false;
 	}
 	
-	public void remove(AgentAction a) {
+	public void change(AgentAction a,int poids) {
+		int i=0;
 		for(ActionPoids action: this) {
-			if(action.getAction()==a)this.remove(action);
+			if(action.getAction()==a) {
+				this.set(i,new ActionPoids(a,poids));
+			}
+			i++;
 		}
+	}
+	public int getPoids(AgentAction a) {
+		for(ActionPoids action: this) {
+			if(action.getAction()==a) {
+				return action.getPoids();
+			}
+		}
+		return -1;
+	}
+	public ListActionPoids getBestActions(){
+		ListActionPoids res=new ListActionPoids();
+		int best=0;
+		for(ActionPoids action:this) {
+			if(action.getPoids()>best) {
+				res.clear();
+				best=action.getPoids();
+			}
+			if(action.getPoids()==best) {
+				res.add(action);
+			}
+			
+		}
+		return res;
 	}
 	
 	public void cheminPossible(Agent a,BomberManGame game){
@@ -35,39 +67,67 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 		for(InfoBomb bomb:game.getListBomb()) {
 			if(a.getX()<bomb.getX()+5 && a.getX()>bomb.getX()-5 && a.getY()<bomb.getY()+5 && a.getY()>bomb.getY()-5) {
 				if (a.getX()==bomb.getX() && a.getY()==bomb.getY()) {
-					if(this.contains(AgentAction.PUT_BOMB))this.remove(AgentAction.PUT_BOMB);
+					if(this.contains(AgentAction.PUT_BOMB))this.change(AgentAction.PUT_BOMB,-1);
 				}else {
 					int distX=a.getX()-bomb.getX();
 					int distY=a.getY()-bomb.getY();
-					if(distX<0) {
-						
+					if(distX==0) {
+						moveLeft(a,game);
+						moveRight(a,game);
 					}
-					/*if(a.getX()-bomb.getX()<0 && a.getY()-bomb.getY()<0) {
-						if(actions.contains(AgentAction.MOVE_RIGHT))actions.remove(AgentAction.MOVE_RIGHT);
-						if(actions.contains(AgentAction.MOVE_DOWN))actions.remove(AgentAction.MOVE_DOWN);
+					if(distY==0) {
+						moveUp(a,game);
+						moveDown(a,game);
+					}
+					if(distX<0) {
+						moveLeft(a,game);
 					}
 					else {
-						if(a.getX()-bomb.getX()>=0 && a.getY()-bomb.getY()<0) {
-							if(actions.contains(AgentAction.MOVE_RIGHT))actions.remove(AgentAction.MOVE_RIGHT);
-							if(actions.contains(AgentAction.MOVE_UP))actions.remove(AgentAction.MOVE_UP);
-						}
-						else {
-							if(a.getX()-bomb.getX()<0 && a.getY()-bomb.getY()>=0) {
-								if(actions.contains(AgentAction.MOVE_LEFT))actions.remove(AgentAction.MOVE_LEFT);
-								if(actions.contains(AgentAction.MOVE_DOWN))actions.remove(AgentAction.MOVE_DOWN);
-							}
-							else {
-								if(a.getX()-bomb.getX()>=0 && a.getY()-bomb.getY()>=0) {
-									if(actions.contains(AgentAction.MOVE_LEFT))actions.remove(AgentAction.MOVE_LEFT);
-									if(actions.contains(AgentAction.MOVE_UP))actions.remove(AgentAction.MOVE_UP);
-								}
-							}
-						}
-					}*/
+						moveRight(a,game);
+					}
+					if(distY<0) {
+						moveUp(a,game);
+					}else {
+						moveDown(a,game);
+					}
 				}
 			}
 		}
 		
+	}
+	private void moveLeft(Agent a, BomberManGame g) {
+		if(g.IsLegalMove(a, left)) {
+			change(left,this.getPoids(left)+2);
+		}
+	}
+	private void moveRight(Agent a, BomberManGame g) {
+		if(g.IsLegalMove(a,right)) {
+			change(right,this.getPoids(right)+2);
+		}
+	}
+	private void moveDown(Agent a, BomberManGame g) {
+		if(g.IsLegalMove(a,down)) {
+			change(down,this.getPoids(down)+2);
+		}
+
+	}
+	private void moveUp(Agent a, BomberManGame g) {
+		if(g.IsLegalMove(a,up)) {
+			change(up,this.getPoids(up)+2);
+		}
+	}
+
+	private Agent searchEmmeni(Agent a, BomberManGame game) {
+		Agent res=null;
+		for(Agent ennemi:game.getListEnnemi()) {
+			if(res==null)res=ennemi;
+			else {
+				double distEnnemi=Math.sqrt(Math.pow((a.getX()-ennemi.getX()),2)+Math.pow((a.getY()-ennemi.getY()),2));
+				double distRes=Math.sqrt(Math.pow((a.getX()-res.getX()),2)+Math.pow((a.getY()-res.getY()),2));
+				if(distEnnemi<distRes)res=ennemi;
+			}
+		}
+		return res;
 	}
 
 }

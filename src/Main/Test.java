@@ -31,9 +31,7 @@ public class Test {
 		
 		//façon pour choisir dossier
 		/*JFileChooser choose = new JFileChooser(
-		        FileSystemView
-		        .getFileSystemView()
-		        .getHomeDirectory()
+		       System.getProperty("user.dir")+"/layouts"
 		    );
 		    
 		    choose.setDialogTitle("Selectionnez un layout pour votre jeu");

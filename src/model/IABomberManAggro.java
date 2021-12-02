@@ -41,7 +41,7 @@ public class IABomberManAggro implements IAStrategi {
 	}
 
 	private AgentAction movetoEnnemi(Agent a, BomberManGame game) {
-		Agent ennemi=searchEmmeni(a,game);
+		/*Agent ennemi=searchEmmeni(a,game);
 		AgentAction res=AgentAction.PUT_BOMB;
 		if(ennemi!=null) {
 			System.out.println("test ennemi:"+ennemi.getX()+" "+ennemi.getY());
@@ -87,96 +87,10 @@ public class IABomberManAggro implements IAStrategi {
 			System.out.println(a.getType()+" x"+a.getX()+" y"+a.getY()+"  :"+res);
 			return res;
 		}
-		return res;
+		return res;*/
+		return null;
 	}
 	
-	private AgentAction moveLeft(Agent a, BomberManGame g) {
-		AgentAction res=null;
-		System.out.println("test left");
-		if(g.IsLegalMove(a, AgentAction.MOVE_LEFT)) {
-			res=AgentAction.MOVE_LEFT;
-		}
-		else {
-			if(g.IsLegalMove(a, AgentAction.MOVE_UP)) {
-				res=AgentAction.MOVE_UP;
-			}
-			else {
-				if(g.IsLegalMove(a, AgentAction.MOVE_DOWN)) {
-					res=AgentAction.MOVE_DOWN;
-				}
-			}	
-		}
-		return res;
-	}
-	private AgentAction moveRight(Agent a, BomberManGame g) {
-		AgentAction res=null;
-		System.out.println("test right");
-		if(g.IsLegalMove(a,AgentAction.MOVE_RIGHT)) {
-			res=AgentAction.MOVE_RIGHT;
-		}
-		else {
-			if(g.IsLegalMove(a, AgentAction.MOVE_UP)) {
-				res=AgentAction.MOVE_UP;
-				
-			}
-			else {
-				if(g.IsLegalMove(a, AgentAction.MOVE_DOWN)) {
-					res=AgentAction.MOVE_DOWN;
-				}
-			}
-		}
-		return res;
-	}
-	private AgentAction moveDown(Agent a, BomberManGame g) {
-		AgentAction res=null;
-		System.out.println("test down");
-		if(g.IsLegalMove(a,AgentAction.MOVE_DOWN)) {
-			res=AgentAction.MOVE_DOWN;
-		}
-		else {
-			if(g.IsLegalMove(a, AgentAction.MOVE_LEFT)) {
-				res=AgentAction.MOVE_LEFT;
-				
-			}
-			else {
-				if(g.IsLegalMove(a, AgentAction.MOVE_RIGHT)) {
-					res=AgentAction.MOVE_RIGHT;
-				}
-			}
-		}
-		return res;
-	}
-	private AgentAction moveUp(Agent a, BomberManGame g) {
-		AgentAction res=null;
-		System.out.println("test up");
-		if(g.IsLegalMove(a,AgentAction.MOVE_UP)) {
-			res=AgentAction.MOVE_UP;
-		}
-		else {
-			if(g.IsLegalMove(a, AgentAction.MOVE_LEFT)) {
-				res=AgentAction.MOVE_LEFT;
-				
-			}
-			else {
-				if(g.IsLegalMove(a, AgentAction.MOVE_RIGHT)) {
-					res=AgentAction.MOVE_RIGHT;
-				}
-			}
-		}
-		return res;
-	}
-
-	private Agent searchEmmeni(Agent a, BomberManGame game) {
-		Agent res=null;
-		for(Agent ennemi:game.getListEnnemi()) {
-			if(res==null)res=ennemi;
-			else {
-				double distEnnemi=Math.sqrt(Math.pow((a.getX()-ennemi.getX()),2)+Math.pow((a.getY()-ennemi.getY()),2));
-				double distRes=Math.sqrt(Math.pow((a.getX()-res.getX()),2)+Math.pow((a.getY()-res.getY()),2));
-				if(distEnnemi<distRes)res=ennemi;
-			}
-		}
-		return res;
-	}
+	
 
 }

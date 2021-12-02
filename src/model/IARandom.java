@@ -19,13 +19,15 @@ public class IARandom implements IAStrategi {
 			listAction.eviterBomb(a,g);
 			if(listAction.size()==0)res=AgentAction.STOP;
 			else {
-				i=new Random().nextInt(listAction.size());
-				res=listAction.get(i).getAction();
+				ArrayList<ActionPoids> bestActions=listAction.getBestActions();
+				if(bestActions.size()==1)res=bestActions.get(0).getAction();
+				else {
+					int nbAlea=new Random().nextInt(bestActions.size());
+					System.out.println("size "+bestActions.size()+" : choix "+nbAlea+" list : "+bestActions);
+					res=bestActions.get(nbAlea).getAction();
+				}
 			}
-			
-			
 		}
-		System.out.println("list actions "+listAction);
 		listAction.clear();
 		System.out.println(a.getType()+" x"+a.getX()+" y"+a.getY()+"  :"+res);
 		if(res!=AgentAction.PUT_BOMB)g.moveAgent(a, res);
