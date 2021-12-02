@@ -20,7 +20,8 @@ public class BomberManGame extends Game {
 	private boolean walls[][];
 	private boolean breakable_walls[][];
 	private IAStrategi stratEnnemi;
-	public IABomberManManuel stratBomberman;
+	//public IAStrategi stratBomberman;
+	public  IABomberManManuel stratBomberman;
 	private IAStrategi stratVol;
 	private IAStrategi  stratRajion;
 
@@ -29,7 +30,7 @@ public class BomberManGame extends Game {
 		super(maxTurn);
 		this.plateau=p;
 		stratEnnemi=new IARandom();
-		stratBomberman=new IABomberManManuel();/*IABomberManAggro();*/
+		stratBomberman=new /*IABomberManAggro();*/IABomberManManuel();
 		stratVol=new IAVol();
 		stratRajion=new IARandom();
 		this.initializeGame();

@@ -93,8 +93,38 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 				}
 			}
 		}
-		
 	}
+	
+	public void moveto(Agent a,BomberManGame game,int x,int y) {
+		int distX=a.getX()-x;
+		int distY=a.getY()-y;
+		System.out.println("test "+distX+" "+distY);
+		if(distX<=1 && distY<=1 && distX>=-1 && distY>=-1 && game.IsLegalMove(a, putBomb))change(putBomb,this.getPoids(putBomb)+2);
+		else {
+				if(distX==0) {
+					moveUp(a,game);
+					moveDown(a,game);
+				}
+				if(distY==0) {
+					moveLeft(a,game);
+					moveRight(a,game);
+				}
+				if(distX<0) {
+					moveRight(a,game);				
+				}
+				else {
+					moveLeft(a,game);
+				}
+				if(distY<0) {
+					moveDown(a,game);
+				}
+				else {
+					moveUp(a,game);
+				}
+			}
+	}
+	
+	//Méthode de déplacement 
 	private void moveLeft(Agent a, BomberManGame g) {
 		if(g.IsLegalMove(a, left)) {
 			change(left,this.getPoids(left)+2);
@@ -116,8 +146,14 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 			change(up,this.getPoids(up)+2);
 		}
 	}
-
-	private Agent searchEmmeni(Agent a, BomberManGame game) {
+	
+	/**
+	 * retourne l'ennemi le plus proche 
+	 * @param a
+	 * @param game
+	 * @return
+	 */
+	public Agent searchEmmeni(Agent a, BomberManGame game) {
 		Agent res=null;
 		for(Agent ennemi:game.getListEnnemi()) {
 			if(res==null)res=ennemi;
