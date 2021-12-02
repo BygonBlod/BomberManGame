@@ -1,4 +1,10 @@
-package model;
+package model.IA;
+
+import model.Agent.Agent;
+import model.Agent.AgentBird;
+import model.BomberManGame;
+import model.IA.IARandom;
+import model.IA.IAStrategi;
 
 public class IAVol implements IAStrategi {
 

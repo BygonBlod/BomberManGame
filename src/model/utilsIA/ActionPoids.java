@@ -1,6 +1,6 @@
-package model;
+package model.utilsIA;
 
-import utils.AgentAction;
+import model.utils.AgentAction;
 
 public class ActionPoids {
 	private AgentAction action;

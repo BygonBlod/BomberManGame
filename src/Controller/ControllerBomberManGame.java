@@ -3,9 +3,7 @@ package Controller;
 import View.ViewBomberManGame;
 import View.ViewCommand;
 import model.BomberManGame;
-import model.Game;
-import model.IABomberManManuel;
-import utils.AgentAction;
+import model.utils.AgentAction;
 
 public class ControllerBomberManGame extends AbstractController {
 	ViewBomberManGame view;

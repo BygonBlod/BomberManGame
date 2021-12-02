@@ -1,7 +1,7 @@
-package model;
+package model.Agent;
 
-import utils.AgentAction;
-import utils.ColorAgent;
+import model.utils.AgentAction;
+import model.utils.ColorAgent;
 
 public class AgentRajion extends AgentEnnemi {
 

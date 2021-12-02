@@ -1,21 +1,25 @@
-package model;
+package model.IA;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
-import utils.AgentAction;
-import utils.InfoBomb;
+import model.Agent.Agent;
+import model.BomberManGame;
+import model.utilsIA.ActionPoids;
+import model.utilsIA.ListActionPoids;
+import model.utilsIA.Position;
+import model.utils.AgentAction;
 
 public class IARandom implements IAStrategi {
 
 	@Override
-	public void Action(Agent a,BomberManGame g) {
+	public void Action(Agent a, BomberManGame g) {
 		int i=0;
 		AgentAction res=null;
 		ListActionPoids listAction=new ListActionPoids();
+		ArrayList<Position> positionObject=new ArrayList<>();
 		listAction.cheminPossible(a,g);		
-		listAction.eviterBomb(a,g);
+		listAction.eviterObjects(a,g,positionObject);
 		if(listAction.size()==0)res=AgentAction.STOP;
 		else {
 			ArrayList<ActionPoids> bestActions=listAction.getBestActions();

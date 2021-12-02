@@ -12,8 +12,7 @@ import javax.swing.JFrame;
 import Controller.ControllerBomberManGame;
 import model.BomberManGame;
 import model.InputMap;
-import utils.AgentAction;
-import utils.InfoAgent;
+import model.utils.AgentAction;
 
 public class ViewBomberManGame implements Observer, KeyListener {
 	JFrame frame;

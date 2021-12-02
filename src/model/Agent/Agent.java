@@ -1,8 +1,8 @@
-package model;
+package model.Agent;
 
-import utils.AgentAction;
-import utils.ColorAgent;
-import utils.InfoAgent;
+import model.utils.AgentAction;
+import model.utils.ColorAgent;
+import model.utils.InfoAgent;
 
 public abstract class Agent {
 	private int posX;

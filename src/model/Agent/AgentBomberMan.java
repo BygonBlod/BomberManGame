@@ -1,9 +1,9 @@
-package model;
+package model.Agent;
 
-import utils.AgentAction;
-import utils.ColorAgent;
+import model.utils.AgentAction;
+import model.utils.ColorAgent;
 
-public class AgentBomberMan extends Agent{
+public class AgentBomberMan extends Agent {
 
 	public AgentBomberMan(int x, int y, AgentAction agentAction, ColorAgent color, boolean isInvincible,
 			boolean isSick) {

@@ -1,9 +1,17 @@
-package model;
+package model.IA;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import utils.AgentAction;
+import model.Agent.Agent;
+import model.BomberManGame;
+import model.utilsIA.ActionPoids;
+import model.utilsIA.ListActionPoids;
+import model.utilsIA.Position;
+import model.utils.AgentAction;
+
+import static model.utilsIA.Research.getBomb;
+import static model.utilsIA.Research.searchEnnemi;
 
 public class IABomberManAggro implements IAStrategi {
 
@@ -11,10 +19,12 @@ public class IABomberManAggro implements IAStrategi {
 	public void Action(Agent a, BomberManGame game) {
 		AgentAction res;
 		ListActionPoids listAction=new ListActionPoids();
+		ArrayList<Position> positionObject=new ArrayList<>();
+		positionObject=getBomb(a,game);
 		listAction.cheminPossible(a,game);		
-		listAction.eviterBomb(a,game);
+		listAction.eviterObjects(a,game,positionObject);
 		if(a.getAgentG().isInvincible()) {
-			Agent agentMove=listAction.searchEmmeni(a, game);
+			Agent agentMove= searchEnnemi(a, game);
 			listAction.moveto(a, game, agentMove.getX(), agentMove.getY());
 		}
 		if(listAction.size()==0)res=AgentAction.STOP;

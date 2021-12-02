@@ -26,10 +26,8 @@ public class Main {
         ControllerBomberManGame bomber = new ControllerBomberManGame(layout);
 
 
-        //façon pour choisir dossier
-		/*JFileChooser choose = new JFileChooser(
 		//fa�on pour choisir dossier
-		JFileChooser choose = new JFileChooser(
+		/*JFileChooser choose = new JFileChooser(
 		       System.getProperty("user.dir")+"/layouts"
 		    );
 		    
@@ -41,7 +39,7 @@ public class Main {
 		    if (res == JFileChooser.APPROVE_OPTION) {
 		      String layout=choose.getSelectedFile().getPath();
 		      ControllerBomberManGame bomber=new ControllerBomberManGame(layout);
-		    }
+		    }*/
 		
 		
 		

@@ -1,10 +1,9 @@
-package model;
+package model.IA;
 
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-import utils.AgentAction;
+import model.Agent.Agent;
+import model.BomberManGame;
+import model.utils.AgentAction;
 
 public class IABomberManManuel implements IAStrategi {
 	private boolean joue=false;

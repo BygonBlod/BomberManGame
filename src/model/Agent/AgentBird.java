@@ -1,9 +1,9 @@
-package model;
+package model.Agent;
 
-import utils.AgentAction;
-import utils.ColorAgent;
+import model.utils.AgentAction;
+import model.utils.ColorAgent;
 
-public class AgentBird extends AgentEnnemi{
+public class AgentBird extends AgentEnnemi {
 	private boolean contact=false;
 
 	public AgentBird(int x, int y, AgentAction agentAction, ColorAgent color, boolean isInvincible,

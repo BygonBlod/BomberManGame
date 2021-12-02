@@ -3,12 +3,14 @@ package model;
 import java.util.ArrayList;
 import java.util.Random;
 
-import utils.AgentAction;
-import utils.InfoAgent;
-import utils.InfoBomb;
-import utils.InfoItem;
-import utils.ItemType;
-import utils.StateBomb;
+import model.Agent.*;
+import model.IA.*;
+import model.utils.AgentAction;
+import model.utils.InfoAgent;
+import model.utils.InfoBomb;
+import model.utils.InfoItem;
+import model.utils.ItemType;
+import model.utils.StateBomb;
 
 public class BomberManGame extends Game {
 	private String plateau;
@@ -21,7 +23,7 @@ public class BomberManGame extends Game {
 	private boolean breakable_walls[][];
 	private IAStrategi stratEnnemi;
 	//public IAStrategi stratBomberman;
-	public  IABomberManManuel stratBomberman;
+	public IABomberManManuel stratBomberman;
 	private IAStrategi stratVol;
 	private IAStrategi  stratRajion;
 
@@ -32,7 +34,7 @@ public class BomberManGame extends Game {
 		stratEnnemi=new IARandom();
 		stratBomberman=new /*IABomberManAggro();*/IABomberManManuel();
 		stratVol=new IAVol();
-		stratRajion=new IARandom();
+		stratRajion=new IARajion();
 		this.initializeGame();
 	}
 

@@ -1,9 +1,10 @@
-package model;
+package model.utilsIA;
 
 import java.util.ArrayList;
 
-import utils.AgentAction;
-import utils.InfoBomb;
+import model.Agent.Agent;
+import model.BomberManGame;
+import model.utils.AgentAction;
 
 public class ListActionPoids extends ArrayList<ActionPoids> {
 	private AgentAction up=AgentAction.MOVE_UP;
@@ -54,7 +55,7 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 		return res;
 	}
 	
-	public void cheminPossible(Agent a,BomberManGame game){
+	public void cheminPossible(Agent a, BomberManGame game){
 		if(game.IsLegalMove(a, AgentAction.MOVE_DOWN))this.add(new ActionPoids(AgentAction.MOVE_DOWN,0));
 		if(game.IsLegalMove(a, AgentAction.MOVE_UP))this.add(new ActionPoids(AgentAction.MOVE_UP,0));
 		if(game.IsLegalMove(a, AgentAction.MOVE_RIGHT))this.add(new ActionPoids(AgentAction.MOVE_RIGHT,0));
@@ -63,14 +64,14 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 		
 	}
 	
-	public void eviterBomb(Agent a,BomberManGame game){
-		for(InfoBomb bomb:game.getListBomb()) {
-			if(a.getX()<bomb.getX()+5 && a.getX()>bomb.getX()-5 && a.getY()<bomb.getY()+5 && a.getY()>bomb.getY()-5) {
-				if (a.getX()==bomb.getX() && a.getY()==bomb.getY()) {
+	public void eviterObjects(Agent a, BomberManGame game, ArrayList<Position> objectToAvoid){
+		for(Position pos:objectToAvoid) {
+
+				if (a.getX()==pos.getX() && a.getY()==pos.getY()) {
 					if(this.contains(AgentAction.PUT_BOMB))this.change(AgentAction.PUT_BOMB,-1);
 				}else {
-					int distX=a.getX()-bomb.getX();
-					int distY=a.getY()-bomb.getY();
+					int distX=a.getX()-pos.getX();
+					int distY=a.getY()-pos.getY();
 					if(distX==0) {
 						moveLeft(a,game);
 						moveRight(a,game);
@@ -91,7 +92,6 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 						moveDown(a,game);
 					}
 				}
-			}
 		}
 	}
 	
@@ -147,23 +147,6 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 		}
 	}
 	
-	/**
-	 * retourne l'ennemi le plus proche 
-	 * @param a
-	 * @param game
-	 * @return
-	 */
-	public Agent searchEmmeni(Agent a, BomberManGame game) {
-		Agent res=null;
-		for(Agent ennemi:game.getListEnnemi()) {
-			if(res==null)res=ennemi;
-			else {
-				double distEnnemi=Math.sqrt(Math.pow((a.getX()-ennemi.getX()),2)+Math.pow((a.getY()-ennemi.getY()),2));
-				double distRes=Math.sqrt(Math.pow((a.getX()-res.getX()),2)+Math.pow((a.getY()-res.getY()),2));
-				if(distEnnemi<distRes)res=ennemi;
-			}
-		}
-		return res;
-	}
+
 
 }

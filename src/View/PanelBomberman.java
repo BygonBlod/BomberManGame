@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
-import utils.*;
+import model.utils.*;
 
 
 /** 
