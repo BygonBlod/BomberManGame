@@ -1,4 +1,5 @@
 package Main;
+
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -13,24 +14,22 @@ import View.ViewSimpleGame;
 import model.BomberManGame;
 import model.SimpleGame;
 
-public class Test {
-	public static void main(String [] args) throws Exception {
-		//SimpleGame test=new SimpleGame(40);
-		//ControllerSimpleGame controller=new ControllerSimpleGame(test);
-		//ViewBomberManGame view=new ViewBomberManGame();
-		
-		
-		System.out.println(System.getProperty("user.dir"));
-		String layout=System.getProperty("user.dir")+"/layouts/niveau3.lay";
-		ControllerBomberManGame bomber=new ControllerBomberManGame(layout);
-		
-		
-		
-		
-		
-		
-		//façon pour choisir dossier
+public class Main {
+    public static void main(String[] args) throws Exception {
+        //SimpleGame test=new SimpleGame(40);
+        //ControllerSimpleGame controller=new ControllerSimpleGame(test);
+        //ViewBomberManGame view=new ViewBomberManGame();
+
+
+        System.out.println(System.getProperty("user.dir"));
+        String layout = System.getProperty("user.dir") + "/layouts/niveau3.lay";
+        ControllerBomberManGame bomber = new ControllerBomberManGame(layout);
+
+
+        //façon pour choisir dossier
 		/*JFileChooser choose = new JFileChooser(
+		//fa�on pour choisir dossier
+		JFileChooser choose = new JFileChooser(
 		       System.getProperty("user.dir")+"/layouts"
 		    );
 		    
@@ -42,7 +41,7 @@ public class Test {
 		    if (res == JFileChooser.APPROVE_OPTION) {
 		      String layout=choose.getSelectedFile().getPath();
 		      ControllerBomberManGame bomber=new ControllerBomberManGame(layout);
-		    }*/
+		    }
 		
 		
 		
@@ -58,12 +57,12 @@ public class Test {
 		/*game.step();
 		System.out.println("------------------");
 		game.step();*/
-		//ViewSimpleGame view =new ViewSimpleGame();
-		//ViewCommand view2=new ViewCommand(new ControllerSimpleGame);
-		//test.init();
-		//test.step();
-		//test.launch();
-		//test.run();
-	}
+        //ViewSimpleGame view =new ViewSimpleGame();
+        //ViewCommand view2=new ViewCommand(new ControllerSimpleGame);
+        //test.init();
+        //test.step();
+        //test.launch();
+        //test.run();
+    }
 
 }
