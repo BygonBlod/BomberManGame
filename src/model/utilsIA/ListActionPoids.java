@@ -12,6 +12,7 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 	private AgentAction left=AgentAction.MOVE_LEFT;
 	private AgentAction right=AgentAction.MOVE_RIGHT;
 	private AgentAction putBomb=AgentAction.PUT_BOMB;
+	private int distance ;
 	
 	
 	
@@ -65,85 +66,88 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 	}
 	
 	public void eviterObjects(Agent a, BomberManGame game, ArrayList<Position> objectToAvoid){
+		distance= (int) Math.sqrt(Math.pow(game.getWalls().length,2)+Math.pow(game.getWalls()[0].length,2));
 		for(Position pos:objectToAvoid) {
-
 				if (a.getX()==pos.getX() && a.getY()==pos.getY()) {
 					if(this.contains(AgentAction.PUT_BOMB))this.change(AgentAction.PUT_BOMB,-1);
 				}else {
 					int distX=a.getX()-pos.getX();
 					int distY=a.getY()-pos.getY();
+					int poids= (int) Math.sqrt(Math.pow((distX),2)+Math.pow(distY,2));
 					if(distX==0) {
-						moveLeft(a,game);
-						moveRight(a,game);
+						moveLeft(a,game,distance-poids);
+						moveRight(a,game,distance-poids);
 					}
 					if(distY==0) {
-						moveUp(a,game);
-						moveDown(a,game);
+						moveUp(a,game,distance-poids);
+						moveDown(a,game,distance-poids);
 					}
 					if(distX<0) {
-						moveLeft(a,game);
+						moveLeft(a,game,distance-poids);
 					}
 					else {
-						moveRight(a,game);
+						moveRight(a,game,distance-poids);
 					}
 					if(distY<0) {
-						moveUp(a,game);
+						moveUp(a,game,distance-poids);
 					}else {
-						moveDown(a,game);
+						moveDown(a,game,distance-poids);
 					}
 				}
 		}
 	}
 	
-	public void moveto(Agent a,BomberManGame game,int x,int y) {
-		int distX=a.getX()-x;
-		int distY=a.getY()-y;
+	public void moveto(Agent a,BomberManGame game,Position pos) {
+		distance= (int) Math.sqrt(Math.pow(game.getWalls().length,2)+Math.pow(game.getWalls()[0].length,2));
+		int distX=a.getX()-pos.getX();
+		int distY=a.getY()-pos.getY();
+		int poids= (int) Math.sqrt(Math.pow((distX),2)+Math.pow(distY,2));
 		System.out.println("test "+distX+" "+distY);
 		if(distX<=1 && distY<=1 && distX>=-1 && distY>=-1 && game.IsLegalMove(a, putBomb))change(putBomb,this.getPoids(putBomb)+2);
 		else {
 				if(distX==0) {
-					moveUp(a,game);
-					moveDown(a,game);
+					moveUp(a,game,distance-poids);
+					moveDown(a,game,distance-poids);
 				}
 				if(distY==0) {
-					moveLeft(a,game);
-					moveRight(a,game);
+					moveLeft(a,game,distance-poids);
+					moveRight(a,game,distance-poids);
 				}
 				if(distX<0) {
-					moveRight(a,game);				
+					moveRight(a,game,distance-poids);
 				}
 				else {
-					moveLeft(a,game);
+					moveLeft(a,game,distance-poids);
 				}
 				if(distY<0) {
-					moveDown(a,game);
+					moveDown(a,game,distance-poids);
 				}
 				else {
-					moveUp(a,game);
+					moveUp(a,game,distance-poids);
 				}
 			}
 	}
 	
-	//Méthode de déplacement 
-	private void moveLeft(Agent a, BomberManGame g) {
+	//Méthodes de déplacement
+	private void moveLeft(Agent a, BomberManGame g,int poids) {
 		if(g.IsLegalMove(a, left)) {
-			change(left,this.getPoids(left)+2);
+			change(left,this.getPoids(left)+poids);
 		}
 	}
-	private void moveRight(Agent a, BomberManGame g) {
+	private void moveRight(Agent a, BomberManGame g,int poids) {
 		if(g.IsLegalMove(a,right)) {
-			change(right,this.getPoids(right)+2);
+			change(right,this.getPoids(right)+poids);
 		}
 	}
-	private void moveDown(Agent a, BomberManGame g) {
+	private void moveDown(Agent a, BomberManGame g,int poids) {
 		if(g.IsLegalMove(a,down)) {
-			change(down,this.getPoids(down)+2);
+			change(down,this.getPoids(down)+poids);
 		}
 
 	}
-	private void moveUp(Agent a, BomberManGame g) {
+	private void moveUp(Agent a, BomberManGame g,int poids) {
 		if(g.IsLegalMove(a,up)) {
-			change(up,this.getPoids(up)+2);
+			change(up,this.getPoids(up)+poids);
 		}
 	}
 	

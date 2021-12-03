@@ -24,8 +24,8 @@ public class IABomberManAggro implements IAStrategi {
 		listAction.cheminPossible(a,game);		
 		listAction.eviterObjects(a,game,positionObject);
 		if(a.getAgentG().isInvincible()) {
-			Agent agentMove= searchEnnemi(a, game);
-			listAction.moveto(a, game, agentMove.getX(), agentMove.getY());
+			Position agentMove= searchEnnemi(a, game);
+			listAction.moveto(a, game,new Position(agentMove.getX(), agentMove.getY()));
 		}
 		if(listAction.size()==0)res=AgentAction.STOP;
 		else {

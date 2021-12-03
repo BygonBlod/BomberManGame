@@ -26,7 +26,7 @@ public class IARajion implements IAStrategi {
 		listAction.eviterObjects(a,game,positionObject);
 		if(a.getAgentG().isInvincible()) {
 			Agent agentMove=searchEnnemi2(a, game);
-			listAction.moveto(a, game, agentMove.getX(), agentMove.getY());
+			listAction.moveto(a, game,new Position( agentMove.getX(), agentMove.getY()));
 		}
 		if(listAction.size()==0)res=AgentAction.STOP;
 		else {
