@@ -92,7 +92,13 @@ public class Research {
         System.out.println(" Ennemis:"+res);
         return res;
     }
-
+    
+    /**
+     * retourne l'item positif le plus proche
+     * @param a
+     * @param game
+     * @return
+     */
     public static Position searchGoodItems(Agent a, BomberManGame game){
         Position res=null;
         int distRes=0;
