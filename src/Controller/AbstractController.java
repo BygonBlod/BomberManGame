@@ -33,5 +33,6 @@ public abstract class AbstractController {
 	public  void setSpeed(double speed) {
 		game.setSleep((long)speed*1000);
 	}
+	public abstract void changeLvl();
 
 }

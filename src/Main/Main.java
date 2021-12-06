@@ -21,13 +21,13 @@ public class Main {
         //ViewBomberManGame view=new ViewBomberManGame();
 
 
-        System.out.println(System.getProperty("user.dir"));
+        /*System.out.println(System.getProperty("user.dir"));
         String layout = System.getProperty("user.dir") + "/layouts/niveau3.lay";
         ControllerBomberManGame bomber = new ControllerBomberManGame(layout);
-
+		*/
 
 		//fa�on pour choisir dossier
-		/*JFileChooser choose = new JFileChooser(
+		JFileChooser choose = new JFileChooser(
 		       System.getProperty("user.dir")+"/layouts"
 		    );
 		    
@@ -39,7 +39,7 @@ public class Main {
 		    if (res == JFileChooser.APPROVE_OPTION) {
 		      String layout=choose.getSelectedFile().getPath();
 		      ControllerBomberManGame bomber=new ControllerBomberManGame(layout);
-		    }*/
+		    }
 		
 		
 		

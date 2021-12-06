@@ -132,7 +132,17 @@ public class ViewCommand implements Observer {
 		panel3.add(labelEnd);
 		jFrame.add(panel3);
 		
-		
+		JButton buttonChangeLvl=new JButton("Changer niveau");
+		jFrame.add(buttonChangeLvl);
+		buttonChangeLvl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evenement) {
+				System.out.println("changement de niveau");
+				playButton.setEnabled(true);
+				pauseButton.setEnabled(false);
+				stepButton.setEnabled(true);
+				controller.changeLvl();
+			}
+		});
 		
 		//affiche la fenêtre
 		jFrame.setVisible(true);
@@ -151,6 +161,9 @@ public class ViewCommand implements Observer {
 		labelEnd.setText(game.getEnd());
 		
 		
+	}
+	public JFrame getFrame() {
+		return this.jFrame;
 	}
 
 }

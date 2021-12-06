@@ -15,6 +15,11 @@ public class ControllerSimpleGame extends AbstractController {
 		game.addObserver(viewSimple);
 		
 	}
+	@Override
+	public void changeLvl() {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

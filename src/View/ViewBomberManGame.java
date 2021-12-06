@@ -82,5 +82,9 @@ public class ViewBomberManGame implements Observer, KeyListener {
 	public void keyReleased(KeyEvent e) {
 	}
 	
+	public JFrame getFrame() {
+		return this.frame;
+	}
+	
 
 }
