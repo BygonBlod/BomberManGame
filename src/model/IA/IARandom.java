@@ -1,5 +1,7 @@
 package model.IA;
 
+import static model.utilsIA.Research.*;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,8 +20,10 @@ public class IARandom implements IAStrategi {
 		AgentAction res=null;
 		ListActionPoids listAction=new ListActionPoids();
 		ArrayList<Position> positionObject=new ArrayList<>();
+		positionObject=getBomb(a,g);
 		listAction.cheminPossible(a,g);		
-		listAction.eviterObjects(a,g,positionObject);
+		listAction.eviterObjects(a,g,positionObject,10);
+		listAction.moveto(a, g, searchGoodItem(a,g), 4);
 		if(listAction.size()==0)res=AgentAction.STOP;
 		else {
 			ArrayList<ActionPoids> bestActions=listAction.getBestActions();
@@ -35,6 +39,4 @@ public class IARandom implements IAStrategi {
 		if(res!=AgentAction.PUT_BOMB)g.moveAgent(a, res);
 		else g.putBomb(a);
 	}
-	
-
 }

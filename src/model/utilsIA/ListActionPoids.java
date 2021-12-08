@@ -65,7 +65,7 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 		
 	}
 	
-	public void eviterObjects(Agent a, BomberManGame game, ArrayList<Position> objectToAvoid){
+	public void eviterObjects(Agent a, BomberManGame game, ArrayList<Position> objectToAvoid ,int poid){
 		distance= (int) Math.sqrt(Math.pow(game.getWalls().length,2)+Math.pow(game.getWalls()[0].length,2));
 		for(Position pos:objectToAvoid) {
 				if (a.getX()==pos.getX() && a.getY()==pos.getY()) {
@@ -75,57 +75,58 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 					int distY=a.getY()-pos.getY();
 					int poids= (int) Math.sqrt(Math.pow((distX),2)+Math.pow(distY,2));
 					if(distX==0) {
-						moveLeft(a,game,distance-poids);
-						moveRight(a,game,distance-poids);
+						moveLeft(a,game,distance-poids+poid);
+						moveRight(a,game,distance-poids+poid);
 					}
 					if(distY==0) {
-						moveUp(a,game,distance-poids);
-						moveDown(a,game,distance-poids);
+						moveUp(a,game,distance-poids+poid);
+						moveDown(a,game,distance-poids+poid);
 					}
 					if(distX<0) {
-						moveLeft(a,game,distance-poids);
+						moveLeft(a,game,distance-poids+poid);
 					}
 					else {
-						moveRight(a,game,distance-poids);
+						moveRight(a,game,distance-poids+poid);
 					}
 					if(distY<0) {
-						moveUp(a,game,distance-poids);
+						moveUp(a,game,distance-poids+poid);
 					}else {
-						moveDown(a,game,distance-poids);
+						moveDown(a,game,distance-poids+poid);
 					}
 				}
 		}
 	}
 	
-	public void moveto(Agent a,BomberManGame game,Position pos) {
-		distance= (int) Math.sqrt(Math.pow(game.getWalls().length,2)+Math.pow(game.getWalls()[0].length,2));
-		int distX=a.getX()-pos.getX();
-		int distY=a.getY()-pos.getY();
-		int poids= (int) Math.sqrt(Math.pow((distX),2)+Math.pow(distY,2));
-		System.out.println("test "+distX+" "+distY);
-		if(distX<=1 && distY<=1 && distX>=-1 && distY>=-1 && game.IsLegalMove(a, putBomb))change(putBomb,this.getPoids(putBomb)+2);
-		else {
+	public void moveto(Agent a,BomberManGame game,Position pos,int poid) {
+		if(pos!=null) {
+			distance= (int) Math.sqrt(Math.pow(game.getWalls().length,2)+Math.pow(game.getWalls()[0].length,2));
+			int distX=a.getX()-pos.getX();
+			int distY=a.getY()-pos.getY();
+			int poids= (int) Math.sqrt(Math.pow((distX),2)+Math.pow(distY,2));
+			if(distX<=1 && distY<=1 && distX>=-1 && distY>=-1 && game.IsLegalMove(a, putBomb))change(putBomb,this.getPoids(putBomb)+2);
+			else {
 				if(distX==0) {
-					moveUp(a,game,distance-poids);
-					moveDown(a,game,distance-poids);
+					moveUp(a,game,distance-poids+poid);
+					moveDown(a,game,distance-poids+poid);
 				}
 				if(distY==0) {
-					moveLeft(a,game,distance-poids);
-					moveRight(a,game,distance-poids);
+					moveLeft(a,game,distance-poids+poid);
+					moveRight(a,game,distance-poids+poid);
 				}
 				if(distX<0) {
-					moveRight(a,game,distance-poids);
+					moveRight(a,game,distance-poids+poid);
 				}
 				else {
-					moveLeft(a,game,distance-poids);
+					moveLeft(a,game,distance-poids+poid);
 				}
 				if(distY<0) {
-					moveDown(a,game,distance-poids);
+					moveDown(a,game,distance-poids+poid);
 				}
 				else {
-					moveUp(a,game,distance-poids);
+					moveUp(a,game,distance-poids+poid);
 				}
 			}
+		}
 	}
 	
 	//Méthodes de déplacement

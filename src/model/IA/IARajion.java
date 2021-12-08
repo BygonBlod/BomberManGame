@@ -10,8 +10,7 @@ import model.utils.AgentAction;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static model.utilsIA.Research.getBomb;
-import static model.utilsIA.Research.searchEnnemi2;
+import static model.utilsIA.Research.*;
 
 public class IARajion implements IAStrategi {
 
@@ -23,11 +22,13 @@ public class IARajion implements IAStrategi {
 		ArrayList<Position> positionObject=new ArrayList<>();
 		positionObject=getBomb(a,game);
 		listAction.cheminPossible(a,game);
-		listAction.eviterObjects(a,game,positionObject);
-		if(a.getAgentG().isInvincible()) {
-			Agent agentMove=searchEnnemi2(a, game);
-			listAction.moveto(a, game,new Position( agentMove.getX(), agentMove.getY()));
-		}
+		listAction.eviterObjects(a,game,positionObject,10);
+		Position agentMove=searchEnnemi2(a, game);
+		listAction.moveto(a, game,agentMove,5);
+		agentMove=searchGoodItem(a,game);
+		listAction.moveto(a, game, agentMove, 4);
+		
+		listAction.remove(AgentAction.PUT_BOMB);
 		if(listAction.size()==0)res=AgentAction.STOP;
 		else {
 			bestActions=listAction.getBestActions();

@@ -22,10 +22,10 @@ public class IABomberManAggro implements IAStrategi {
 		ArrayList<Position> positionObject=new ArrayList<>();
 		positionObject=getBomb(a,game);
 		listAction.cheminPossible(a,game);		
-		listAction.eviterObjects(a,game,positionObject);
+		listAction.eviterObjects(a,game,positionObject,10);
 		if(a.getAgentG().isInvincible()) {
 			Position agentMove= searchEnnemi(a, game);
-			listAction.moveto(a, game,new Position(agentMove.getX(), agentMove.getY()));
+			listAction.moveto(a, game,new Position(agentMove.getX(), agentMove.getY()),5);
 		}
 		if(listAction.size()==0)res=AgentAction.STOP;
 		else {

@@ -100,6 +100,9 @@ public abstract class Agent {
 		return this.agentG;
 	}
 	
+	public String toString() {
+		return this.getType()+" "+this.getX()+" "+this.getY();
+	}
 	
 
 }

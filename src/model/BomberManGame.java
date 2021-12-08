@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 import model.Agent.*;
@@ -60,7 +61,7 @@ public class BomberManGame extends Game {
 					case 'V':
 						listEnnemi.add(new AgentBird(a.getX(),a.getY(),a.getAgentAction(),a.getColor(),a.isInvincible(),a.isSick()));
 						break;
-					case 'E':
+					default:
 						listEnnemi.add(new AgentEnnemi(a.getX(),a.getY(),a.getAgentAction(),a.getType(),a.getColor(),a.isInvincible(),a.isSick()));
 						break;
 				}
@@ -83,8 +84,12 @@ public class BomberManGame extends Game {
 
 	@Override
 	protected boolean gameContinue() {
-		for(Agent bomber:listBomberMan) {
-			for(Agent ennemi:listEnnemi) {
+		Iterator<Agent> bomberIterator=listBomberMan.iterator();
+		Iterator<Agent> ennemiIterator=listEnnemi.iterator();
+		while(bomberIterator.hasNext()) {
+			Agent bomber=(Agent)bomberIterator.next();
+			while(ennemiIterator.hasNext()) {
+				Agent ennemi=ennemiIterator.next();
 				if((bomber.getX()==ennemi.getX() && bomber.getY()==ennemi.getY())) {
 					listBomberMan.remove(bomber);
 					if(listBomberMan.size()==0) {
@@ -110,9 +115,15 @@ public class BomberManGame extends Game {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		for(Agent a:listBomberMan) {
-			stratBomberman.Action(a,this);
-			stratBomberman.setAction(null);
+		for(int i=0;i<listBomberMan.size();i++) {
+			Agent a =listBomberMan.get(i);
+			if(i==0) {
+				stratBomberman.Action(a,this);
+				stratBomberman.setAction(null);
+			}
+			else {
+				stratEnnemi.Action(a, this);
+			}
 			//stratEnnemi.Action(a, this);
 			if(a.getTpsInvincible()>0)a.setTpsInvincible(a.getTpsInvincible()-1);
 			if(a.getTpsSick()>0)a.setTpsSick(a.getTpsSick()-1);		
@@ -122,7 +133,7 @@ public class BomberManGame extends Game {
 			case 'V':
 				stratVol.Action(a,this);
 				break;
-			case 'R':
+			case 'E':
 				stratRajion.Action(a, this);
 				break;
 			default:
