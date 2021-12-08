@@ -19,6 +19,7 @@ public class IARandom implements IAStrategi {
 		int i=0;
 		AgentAction res=null;
 		ListActionPoids listAction=new ListActionPoids();
+		ListActionPoids bestActions=new ListActionPoids();
 		ArrayList<Position> positionObject=new ArrayList<>();
 		positionObject=getBomb(a,g);
 		listAction.cheminPossible(a,g);		
@@ -26,14 +27,15 @@ public class IARandom implements IAStrategi {
 		listAction.moveto(a, g, searchGoodItem(a,g), 4);
 		if(listAction.size()==0)res=AgentAction.STOP;
 		else {
-			ArrayList<ActionPoids> bestActions=listAction.getBestActions();
+			bestActions=listAction.getBestActions();
 			if(bestActions.size()==1)res=bestActions.get(0).getAction();
 			else {
 				int nbAlea=new Random().nextInt(bestActions.size());
-				System.out.println("size "+bestActions.size()+" : choix "+nbAlea+" list : "+bestActions);
+				System.out.println("size "+bestActions.size()+" : choix "+nbAlea);
 				res=bestActions.get(nbAlea).getAction();
 			}
 		}
+		System.out.println(" list : "+bestActions);
 		listAction.clear();
 		System.out.println(a.getType()+" x"+a.getX()+" y"+a.getY()+"  :"+res);
 		if(res!=AgentAction.PUT_BOMB)g.moveAgent(a, res);

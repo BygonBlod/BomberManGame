@@ -21,7 +21,7 @@ public class Research {
         for(Agent ennemi:game.getListEnnemi()) {
             if(res==null){
                 distRes=Math.sqrt(Math.pow((a.getX()-res.getX()),2)+Math.pow((a.getY()-res.getY()),2));
-                res=new Position(ennemi.getX(),ennemi.getY());
+                res=new Position(200,200);
             }
             else {
                 double distEnnemi=Math.sqrt(Math.pow((a.getX()-ennemi.getX()),2)+Math.pow((a.getY()-ennemi.getY()),2));
@@ -42,7 +42,7 @@ public class Research {
     public static Position searchEnnemi2(Agent a,BomberManGame game){
         Position res=null;
         for(Agent ennemi:game.getListEnnemi()) {
-            if(res==null)res=new Position(ennemi.getX(),ennemi.getY());
+            if(res==null)res=new Position(200,200);
             else {
                 double distEnnemi=Math.sqrt(Math.pow((a.getX()-ennemi.getX()),2)+Math.pow((a.getY()-ennemi.getY()),2));
                 double distRes=Math.sqrt(Math.pow((a.getX()-res.getX()),2)+Math.pow((a.getY()-res.getY()),2));
@@ -54,7 +54,7 @@ public class Research {
             }
         }
         for(Agent bomberman:game.getListBomberMan()) {
-            if(res==null)res=new Position(bomberman.getX(),bomberman.getY());
+            if(res==null)res=new Position(200,200);
             else {
                 double distEnnemi=Math.sqrt(Math.pow((a.getX()-bomberman.getX()),2)+Math.pow((a.getY()-bomberman.getY()),2));
                 double distRes=Math.sqrt(Math.pow((a.getX()-res.getX()),2)+Math.pow((a.getY()-res.getY()),2));

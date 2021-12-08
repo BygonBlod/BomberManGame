@@ -28,7 +28,6 @@ public class IARajion implements IAStrategi {
 		agentMove=searchGoodItem(a,game);
 		listAction.moveto(a, game, agentMove, 4);
 		
-		listAction.remove(AgentAction.PUT_BOMB);
 		if(listAction.size()==0)res=AgentAction.STOP;
 		else {
 			bestActions=listAction.getBestActions();

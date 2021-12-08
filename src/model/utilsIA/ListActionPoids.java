@@ -57,11 +57,11 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 	}
 	
 	public void cheminPossible(Agent a, BomberManGame game){
-		if(game.IsLegalMove(a, AgentAction.MOVE_DOWN))this.add(new ActionPoids(AgentAction.MOVE_DOWN,0));
-		if(game.IsLegalMove(a, AgentAction.MOVE_UP))this.add(new ActionPoids(AgentAction.MOVE_UP,0));
-		if(game.IsLegalMove(a, AgentAction.MOVE_RIGHT))this.add(new ActionPoids(AgentAction.MOVE_RIGHT,0));
-		if(game.IsLegalMove(a, AgentAction.MOVE_LEFT))this.add(new ActionPoids(AgentAction.MOVE_LEFT,0));
-		if(game.IsLegalMove(a, AgentAction.PUT_BOMB))this.add(new ActionPoids(AgentAction.PUT_BOMB,0));
+		if(game.IsLegalMove(a, AgentAction.MOVE_DOWN))this.add(new ActionPoids(AgentAction.MOVE_DOWN,10));
+		if(game.IsLegalMove(a, AgentAction.MOVE_UP))this.add(new ActionPoids(AgentAction.MOVE_UP,10));
+		if(game.IsLegalMove(a, AgentAction.MOVE_RIGHT))this.add(new ActionPoids(AgentAction.MOVE_RIGHT,10));
+		if(game.IsLegalMove(a, AgentAction.MOVE_LEFT))this.add(new ActionPoids(AgentAction.MOVE_LEFT,10));
+		if(game.IsLegalMove(a, AgentAction.PUT_BOMB))this.add(new ActionPoids(AgentAction.PUT_BOMB,10));
 		
 	}
 	
@@ -103,7 +103,7 @@ public class ListActionPoids extends ArrayList<ActionPoids> {
 			int distX=a.getX()-pos.getX();
 			int distY=a.getY()-pos.getY();
 			int poids= (int) Math.sqrt(Math.pow((distX),2)+Math.pow(distY,2));
-			if(distX<=1 && distY<=1 && distX>=-1 && distY>=-1 && game.IsLegalMove(a, putBomb))change(putBomb,this.getPoids(putBomb)+2);
+			if(distX<=1 && distY<=1 && distX>=-1 && distY>=-1 && game.IsLegalMove(a, putBomb))change(putBomb,this.getPoids(putBomb)+distance-poids+10);
 			else {
 				if(distX==0) {
 					moveUp(a,game,distance-poids+poid);
