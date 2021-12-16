@@ -46,7 +46,7 @@ public class BomberManGame extends Game {
 			listEnnemi=new ArrayList<Agent>();
 			listBomb=new ArrayList<InfoBomb>();
 			listItem=new ArrayList<InfoItem>();
-			 InputMap input=new InputMap(plateau);
+			InputMap input=new InputMap(plateau);
 			walls=input.get_walls();
 			breakable_walls=input.getStart_breakable_walls();
 			ArrayList<InfoAgent> agents=input.getStart_agents();
@@ -79,6 +79,7 @@ public class BomberManGame extends Game {
 		System.out.println("------ Fin du Jeu ------");
 		if(listBomberMan.size()==0)end="YOU DIED";
 		if(listEnnemi.size()==0) end="YOU WIN";
+		this.thread.stop();
 		
 	}
 
