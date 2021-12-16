@@ -5,13 +5,10 @@ import java.util.Random;
 
 import model.Agent.Agent;
 import model.BomberManGame;
-import model.utilsIA.ActionPoids;
-import model.utilsIA.ListActionPoids;
-import model.utilsIA.Position;
+import model.IAutils.*;
 import model.utils.AgentAction;
+import static model.IAutils.Research.*;
 
-import static model.utilsIA.Research.getBomb;
-import static model.utilsIA.Research.searchEnnemi;
 
 public class IABomberManAggro implements IAStrategi {
 

@@ -1,15 +1,13 @@
 package model.IA;
 
-import static model.utilsIA.Research.*;
+import static model.IAutils.Research.*;
 
 import java.util.ArrayList;
 import java.util.Random;
-
+import model.IAutils.*;
 import model.Agent.Agent;
 import model.BomberManGame;
-import model.utilsIA.ActionPoids;
-import model.utilsIA.ListActionPoids;
-import model.utilsIA.Position;
+
 import model.utils.AgentAction;
 
 public class IARandom implements IAStrategi {

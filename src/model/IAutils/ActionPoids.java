@@ -1,4 +1,4 @@
-package model.utilsIA;
+package model.IAutils;
 
 import model.utils.AgentAction;
 

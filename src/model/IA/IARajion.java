@@ -2,15 +2,13 @@ package model.IA;
 
 import model.Agent.Agent;
 import model.BomberManGame;
-import model.utilsIA.ActionPoids;
-import model.utilsIA.ListActionPoids;
-import model.utilsIA.Position;
+import model.IAutils.*;
 import model.utils.AgentAction;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import static model.utilsIA.Research.*;
+import static model.IAutils.Research.*;
 
 public class IARajion implements IAStrategi {
 
