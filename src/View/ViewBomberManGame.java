@@ -32,6 +32,7 @@ public class ViewBomberManGame implements Observer, KeyListener {
 	    int dx=centerPoint.x - Taillex/ 2 ;
 		int dy=0;
 		frame.setLocation(dx,dy);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addKeyListener(this);
 		
 		int dy2=input.get_walls()[0].length;
