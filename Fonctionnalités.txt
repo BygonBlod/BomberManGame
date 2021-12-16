@@ -1,0 +1,12 @@
+Fonctionnalités session 5:
+-ia avec des poids
+-possibilité de choisir le jeu au début et à tout moment de la partie
+-possibilité de jouer le bomberman avec les flèches directionnelles et espace pour poser une bombe
+
+Design pattern:
+-MVC pour les interactions entre la vue et le jeu
+-Observateur :les vues observe le jeu et quand il change les vue font de même avec les changements
+-Etat : les boutons dans view commande sont appyable selon l'état en cours
+-Stratégie : les différent ia sont appliqué grace à leurs startégies
+-Itérateur : utiliser pour ne pas interférer dans le game continue
+-Patron de conception : est utile pour l'implémentation de tout les agents
