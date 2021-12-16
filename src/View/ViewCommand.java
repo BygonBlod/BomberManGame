@@ -21,6 +21,7 @@ import javax.swing.event.ChangeListener;
 
 import Controller.AbstractController;
 import Controller.ControllerSimpleGame;
+import View.Etat.*;
 import model.Game;
 
 public class ViewCommand implements Observer {
@@ -28,9 +29,15 @@ public class ViewCommand implements Observer {
 	AbstractController controller;
 	JLabel labelTurn;
 	JLabel labelEnd;
+	public final JButton restartButton;
+	public final JButton playButton;
+	public final JButton pauseButton;
+	public final JButton stepButton;
+	public Etat etat;
 	
 	
 	public ViewCommand(AbstractController contro,int viewx,int viewy) {
+		etat=new EtatPlay(this);
 		controller=contro;
 		jFrame=new JFrame();
 		int x=viewx;
@@ -48,13 +55,13 @@ public class ViewCommand implements Observer {
 		GridLayout g1=new GridLayout(1,4);
 		panel1.setLayout(g1);
 		Icon restartIcon=new ImageIcon("icons/icon_restart.png");
-		final JButton restartButton=new JButton(restartIcon);
+		restartButton=new JButton(restartIcon);
 		Icon playIcon=new ImageIcon("icons/icon_play.png");
-		final JButton playButton=new JButton(playIcon);
+		playButton=new JButton(playIcon);
 		Icon stepIcon=new ImageIcon("icons/icon_step.png");
-		final JButton stepButton=new JButton(stepIcon);
+		stepButton=new JButton(stepIcon);
 		Icon pauseIcon=new ImageIcon("icons/icon_pause.png");
-		final JButton pauseButton=new JButton(pauseIcon);
+		pauseButton=new JButton(pauseIcon);
 		playButton.setEnabled(false);
 		stepButton.setEnabled(false);
 		panel1.add(restartButton);
@@ -67,18 +74,14 @@ public class ViewCommand implements Observer {
 			public void actionPerformed(ActionEvent evenement) {
 				//System.out.println("restart");
 				controller.restart();
-				playButton.setEnabled(false);
-				stepButton.setEnabled(false);
-				pauseButton.setEnabled(true);
+				etat.restart();
 			}
 		});
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evenement) {
 				//System.out.println("play");
 				controller.play();
-				playButton.setEnabled(false);
-				pauseButton.setEnabled(true);
-				stepButton.setEnabled(false);
+				etat.play();
 				
 			}
 		});
@@ -92,9 +95,7 @@ public class ViewCommand implements Observer {
 			public void actionPerformed(ActionEvent evenement) {
 				//System.out.println("pause");
 				controller.pause();
-				playButton.setEnabled(true);
-				pauseButton.setEnabled(false);
-				stepButton.setEnabled(true);
+				etat.pause();
 			}
 		});
 		
