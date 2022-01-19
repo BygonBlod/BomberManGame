@@ -81,7 +81,7 @@ public class Research {
                 res.add(new Position(bomb.getX(),bomb.getY()));
             }
         }
-        System.out.println(" Bombs:"+res);
+       // System.out.println(" Bombs:"+res);
         return res;
     }
 
@@ -98,7 +98,7 @@ public class Research {
                 res.add(new Position(agent.getX(),agent.getY()));
             }
         }
-        System.out.println(" Ennemis:"+res);
+       // System.out.println(" Ennemis:"+res);
         return res;
     }
     
@@ -123,7 +123,7 @@ public class Research {
                 if(distEnnemi<distRes)res=new Position(res.getX(),res.getY());
             }
         }
-        System.out.println(" Good item:"+res);
+       // System.out.println(" Good item:"+res);
         return res;
     }
 }

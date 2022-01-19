@@ -13,6 +13,7 @@ import Controller.ControllerBomberManGame;
 import model.BomberManGame;
 import model.InputMap;
 import model.utils.AgentAction;
+import reseau.CreateJson;
 
 public class ViewBomberManGame implements Observer, KeyListener {
 	JFrame frame;
@@ -41,6 +42,10 @@ public class ViewBomberManGame implements Observer, KeyListener {
 		frame.add(panel );
 		
 		frame.setVisible(true);
+		
+		
+		//test moche
+		CreateJson.JsonGameBegin(input.get_walls(), input.getStart_breakable_walls(), input.getStart_agents());
 	}
 	@Override
 	public void update(Observable o, Object arg) {
@@ -62,7 +67,6 @@ public class ViewBomberManGame implements Observer, KeyListener {
 	}
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override

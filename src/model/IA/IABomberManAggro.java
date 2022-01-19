@@ -30,13 +30,13 @@ public class IABomberManAggro implements IAStrategi {
 			if(bestActions.size()==1)res=bestActions.get(0).getAction();
 			else {
 				int nbAlea=new Random().nextInt(bestActions.size());
-				System.out.println("size "+bestActions.size()+" : choix "+nbAlea+" list : "+bestActions);
+				//System.out.println("size "+bestActions.size()+" : choix "+nbAlea+" list : "+bestActions);
 				res=bestActions.get(nbAlea).getAction();
 			}
 		}
 		
 		listAction.clear();
-		System.out.println(a.getType()+" x"+a.getX()+" y"+a.getY()+"  :"+res);
+		//System.out.println(a.getType()+" x"+a.getX()+" y"+a.getY()+"  :"+res);
 		if(res!=AgentAction.PUT_BOMB)game.moveAgent(a, res);
 		else game.putBomb(a);
 		

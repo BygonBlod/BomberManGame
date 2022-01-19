@@ -109,7 +109,7 @@ public class BomberManGame extends Game {
 
 	@Override
 	protected void takeTurn() {
-		System.out.println("---------  Tour: "+turn+"  ---------");
+		//System.out.println("---------  Tour: "+turn+"  ---------");
 		regleBomb();
 		try {
 			thread.sleep(10);
@@ -245,22 +245,22 @@ public class BomberManGame extends Game {
 			for(Agent a:agent) {
 				if(item.getX()==a.getX() && item.getY()==a.getY()) {
 					if(item.getType()==ItemType.FIRE_DOWN && a.getLvlBomb()>1) {
-						System.out.println("fire-down");
+						//System.out.println("fire-down");
 						a.setLvlBomb(a.getLvlBomb()-1);
 						remove.add(item);
 					}
 					if(item.getType()==ItemType.FIRE_UP && a.getLvlBomb()<4) {
-						System.out.println("fire-up");
+						//System.out.println("fire-up");
 						a.setLvlBomb(a.getLvlBomb()+1);
 						remove.add(item);
 					}
 					if(item.getType()==ItemType.FIRE_SUIT && a.getTpsInvincible()==0) {
-						System.out.println("fire-suit");
+						//System.out.println("fire-suit");
 						a.setTpsInvincible(10);
 						remove.add(item);
 					}
 					if(item.getType()==ItemType.SKULL && a.getTpsSick()==0 ) {
-						System.out.println("skull");
+						//System.out.println("skull");
 						a.setTpsSick(10);
 						remove.add(item);
 					}
