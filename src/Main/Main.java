@@ -38,7 +38,7 @@ public class Main {
 		    int res = choose.showOpenDialog(null);
 		    if (res == JFileChooser.APPROVE_OPTION) {
 		      String layout=choose.getSelectedFile().getPath();
-		      ControllerBomberManGame bomber=new ControllerBomberManGame(layout);
+		     // ControllerBomberManGame bomber=new ControllerBomberManGame(layout);
 		    }
 		
 		
