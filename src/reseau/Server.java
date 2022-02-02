@@ -72,7 +72,7 @@ public class Server {
 		for (Partie game : games) {
 			if (lvl.equals(game.name) && !game.isFool()) {
 				exist = true;
-
+				game.addGamer(client);
 			}
 		}
 		if (!exist) {
