@@ -34,7 +34,7 @@ public class ClientListen extends Thread {
 					JsonElement element = gson.fromJson(data, JsonElement.class);
 					JsonObject jObj = element.getAsJsonObject();
 					JsonObject j2 = gson.fromJson(jObj.getAsJsonObject("Game"), JsonObject.class);
-					// System.out.println(data);
+					System.out.println(data);
 					if (j2 != null) {
 						client.changeGame(DeserializationJson.JsonGameBegin(j2));
 					}

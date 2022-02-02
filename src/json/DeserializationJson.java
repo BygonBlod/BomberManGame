@@ -118,6 +118,7 @@ public class DeserializationJson {
 		boolean[][] breakableGame = new boolean[xGame][yGame];
 		JsonArray breakables = gson.fromJson(json.getAsJsonArray("breakable"), JsonArray.class);
 		JsonArray agents = gson.fromJson(json.getAsJsonArray("agents"), JsonArray.class);
+		JsonArray items = gson.fromJson(json.getAsJsonArray("item"), JsonArray.class);
 
 		ArrayList<InfoAgent> start_agent = new ArrayList<InfoAgent>();
 		for (JsonElement agent : agents) {
@@ -160,7 +161,6 @@ public class DeserializationJson {
 		res.setListBomberMan(listBomberMan);
 		res.setListEnnemi(listEnnemi);
 		res.setBreakable_walls(breakableGame);
-
 		return res;
 	}
 

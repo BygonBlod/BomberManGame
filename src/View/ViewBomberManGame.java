@@ -83,6 +83,19 @@ public class ViewBomberManGame implements Observer, KeyListener {
 		frame.setVisible(true);
 	}
 
+	public void update(BomberManGame g) {
+		if (g.getWalls() == null)
+			System.out.println("merde");
+		int dx2 = g.getWalls().length;
+		int dy2 = g.getWalls()[0].length;
+		frame.remove(panel);
+		panel = new PanelBomberman(dx2, dy2, g.getWalls(), g.getBreakable_walls(), g.getAgents());
+		panel.listInfoBombs = g.getListBomb();
+		panel.listInfoItems = g.getListItem();
+		frame.add(panel);
+		frame.setVisible(true);
+	}
+
 	public int getTaillex() {
 		return Taillex;
 	}

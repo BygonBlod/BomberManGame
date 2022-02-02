@@ -494,6 +494,14 @@ public class BomberManGame extends Game {
 		return listItem;
 	}
 
+	public void setListBomb(ArrayList<InfoBomb> listBomb) {
+		this.listBomb = listBomb;
+	}
+
+	public void setListItem(ArrayList<InfoItem> listItem) {
+		this.listItem = listItem;
+	}
+
 	public ArrayList<Agent> getListEnnemi() {
 		return listEnnemi;
 	}

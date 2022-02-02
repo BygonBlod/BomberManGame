@@ -85,8 +85,12 @@ public class ControllerBomberManGame extends AbstractController {
 	}
 
 	public void changeGame(BomberManGame gameC) {
-		this.game = gameC;
-		this.game.gameChange();
+		this.game.setBreakable_walls(gameC.getBreakable_walls());
+		this.game.setListBomberMan(gameC.getListBomberMan());
+		this.game.setListEnnemi(gameC.getListEnnemi());
+		this.game.setListBomb(gameC.getListBomb());
+		this.game.setListItem(gameC.getListItem());
+		view.update(this.game);
 		ArrayList<InfoAgent> list = this.game.getAgents();
 		for (InfoAgent agent : list) {
 			System.out.println(agent.getType() + " " + agent.getX() + " " + agent.getY());
