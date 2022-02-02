@@ -1,4 +1,4 @@
-package reseau;
+package json;
 
 import java.util.ArrayList;
 
@@ -107,6 +107,13 @@ public class DeserializationJson {
 		res.setListEnnemi(listEnnemi);
 		res.setWalls(wallsGame);
 		res.setBreakable_walls(breakableGame);
+		return res;
+	}
+
+	public static BomberManGame JsonGamePartie(JsonObject json) {
+		BomberManGame res = new BomberManGame();
+		Gson gson = new GsonBuilder().create();
+
 		return res;
 	}
 

@@ -114,12 +114,6 @@ public class BomberManGame extends Game {
 				Agent ennemi = ennemiIterator.next();
 				if ((bomber.getX() == ennemi.getX() && bomber.getY() == ennemi.getY())) {
 					listBomberMan.remove(bomber);
-					if (listBomberMan.size() == 0) {
-						return false;
-					}
-					if (listEnnemi.size() == 0) {
-						return false;
-					}
 				}
 			}
 		}

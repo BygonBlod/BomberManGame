@@ -1,19 +1,19 @@
-package reseau;
+package Server;
 
 import java.util.ArrayList;
 
-import model.BomberManGame;
+import json.CreateJson;
 
 public class Partie {
 	String name;
-	private BomberManGame game;
+	private BomberManGameServ game;
 	private ArrayList<ThreadedClient> gamers = new ArrayList<>();
 	private int nbGamers;
 
 	public Partie(String input) {
 		System.out.println("création de la partie " + input);
 		name = input;
-		game = new BomberManGame(input);
+		game = new BomberManGameServ(input, this);
 		nbGamers = game.getListBomberMan().size();
 
 	}
@@ -38,6 +38,10 @@ public class Partie {
 				game.launch();
 			}
 		}
+	}
+
+	public void endTurn(GameChange game) {
+
 	}
 
 }

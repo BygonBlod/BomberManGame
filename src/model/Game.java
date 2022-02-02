@@ -2,49 +2,50 @@ package model;
 
 import java.util.Observable;
 
-public abstract class Game extends Observable implements Runnable  {
+public abstract class Game extends Observable implements Runnable {
 	protected int turn;
 	protected int maxturn;
 	protected boolean isRunning;
-	Thread thread;
-	protected long sleep=500;
-	
+	protected Thread thread;
+	protected long sleep = 500;
+
 	public Game(int maxTurn) {
-		maxturn=maxTurn;
+		maxturn = maxTurn;
 	}
-	
+
 	public void launch() {
-		isRunning=true;
-		thread=new Thread(this);
+		isRunning = true;
+		thread = new Thread(this);
 		thread.start();
 	}
-	
+
 	public void init() {
-		turn=0;
-		isRunning=true;
+		turn = 0;
+		isRunning = true;
 		initializeGame();
 	}
 
 	protected abstract void initializeGame();
-	
+
 	public void step() {
-		if(maxturn==0) {
-			isRunning=false;
+		if (maxturn == 0) {
+			isRunning = false;
 			gameOver();
-		}
-		else {
-			turn+=1;
+		} else {
+			turn += 1;
 			takeTurn();
-			if(!gameContinue() | turn==maxturn) {
-				isRunning=false;
+			if (!gameContinue() | turn == maxturn) {
+				isRunning = false;
 				gameOver();
-			};
+			}
+			;
 			setChanged();
 			notifyObservers();
 		}
 	}
+
 	public void run() {
-		while(isRunning==true) {
+		while (isRunning == true) {
 			step();
 			try {
 				thread.sleep(sleep);
@@ -54,6 +55,7 @@ public abstract class Game extends Observable implements Runnable  {
 		}
 		thread.stop();
 	}
+
 	public int getMaxturn() {
 		return maxturn;
 	}
@@ -79,7 +81,7 @@ public abstract class Game extends Observable implements Runnable  {
 	}
 
 	public void pause() {
-		isRunning=false;
+		isRunning = false;
 	}
 
 	public int getTurn() {
@@ -97,6 +99,5 @@ public abstract class Game extends Observable implements Runnable  {
 	protected abstract void takeTurn();
 
 	public abstract String getEnd();
-
 
 }

@@ -1,10 +1,12 @@
-package reseau;
+package Client;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Scanner;
+
+import json.CreateJson;
 
 public class ClientWrite extends Thread {
 	private PrintWriter sortie;

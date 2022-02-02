@@ -1,4 +1,4 @@
-package reseau;
+package Client;
 
 import java.net.Socket;
 
@@ -6,6 +6,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Controller.ControllerBomberManGame;
+import json.CreateJson;
 import model.BomberManGame;
 
 public class Client {

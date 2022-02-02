@@ -1,4 +1,7 @@
-package reseau;
+package Main;
+
+import Client.Client;
+import Server.Server;
 
 public class TchatMain {
 

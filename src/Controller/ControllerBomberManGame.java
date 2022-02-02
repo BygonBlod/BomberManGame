@@ -3,11 +3,11 @@ package Controller;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import Client.Client;
 import View.ViewBomberManGame;
 import View.ViewCommand;
 import model.BomberManGame;
 import model.utils.AgentAction;
-import reseau.Client;
 
 public class ControllerBomberManGame extends AbstractController {
 	ViewBomberManGame view;
