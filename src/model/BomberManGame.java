@@ -461,6 +461,11 @@ public class BomberManGame extends Game {
 		return false;
 	}
 
+	public void gameChange() {
+		setChanged();
+		notifyObservers();
+	}
+
 	public void addActionBomberMan(AgentAction action) {
 
 	}

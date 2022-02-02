@@ -1,5 +1,7 @@
 package Controller;
 
+import java.util.ArrayList;
+
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -8,10 +10,12 @@ import View.ViewBomberManGame;
 import View.ViewCommand;
 import model.BomberManGame;
 import model.utils.AgentAction;
+import model.utils.InfoAgent;
 
 public class ControllerBomberManGame extends AbstractController {
 	ViewBomberManGame view;
 	ViewCommand view2;
+	BomberManGame game;
 	private String plateau;
 	private Client client;
 
@@ -75,9 +79,17 @@ public class ControllerBomberManGame extends AbstractController {
 	}
 
 	public void setGame(BomberManGame game) {
-		super.setGame(game);
+		this.game = game;
 		view = new ViewBomberManGame(game, this);
 		game.addObserver(view);
 	}
 
+	public void changeGame(BomberManGame gameC) {
+		this.game = gameC;
+		this.game.gameChange();
+		ArrayList<InfoAgent> list = this.game.getAgents();
+		for (InfoAgent agent : list) {
+			System.out.println(agent.getType() + " " + agent.getX() + " " + agent.getY());
+		}
+	}
 }

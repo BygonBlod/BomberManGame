@@ -113,6 +113,53 @@ public class DeserializationJson {
 	public static BomberManGame JsonGamePartie(JsonObject json) {
 		BomberManGame res = new BomberManGame();
 		Gson gson = new GsonBuilder().create();
+		int xGame = gson.fromJson(json.getAsJsonPrimitive("x"), Integer.class);
+		int yGame = gson.fromJson(json.getAsJsonPrimitive("y"), Integer.class);
+		boolean[][] breakableGame = new boolean[xGame][yGame];
+		JsonArray breakables = gson.fromJson(json.getAsJsonArray("breakable"), JsonArray.class);
+		JsonArray agents = gson.fromJson(json.getAsJsonArray("agents"), JsonArray.class);
+
+		ArrayList<InfoAgent> start_agent = new ArrayList<InfoAgent>();
+		for (JsonElement agent : agents) {
+			JsonObject agentE = gson.fromJson(agent.getAsJsonObject(), JsonObject.class);
+			String type = gson.fromJson(agentE.getAsJsonPrimitive("type"), String.class);
+			int x = gson.fromJson(agentE.getAsJsonPrimitive("x"), Integer.class);
+			int y = gson.fromJson(agentE.getAsJsonPrimitive("y"), Integer.class);
+			start_agent.add(new InfoAgent(x, y, AgentAction.STOP, type.charAt(0), ColorAgent.DEFAULT, false, false));
+
+		}
+		ArrayList<Agent> listBomberMan = new ArrayList<Agent>();
+		ArrayList<Agent> listEnnemi = new ArrayList<Agent>();
+		for (InfoAgent a : start_agent) {
+			switch (a.getType()) {
+			case 'B':
+				listBomberMan.add(new AgentBomberMan(a.getX(), a.getY(), a.getAgentAction(), a.getColor(),
+						a.isInvincible(), a.isSick()));
+				break;
+			case 'R':
+				listEnnemi.add(new AgentRajion(a.getX(), a.getY(), a.getAgentAction(), a.getColor(), a.isInvincible(),
+						a.isSick()));
+				break;
+			case 'V':
+				listEnnemi.add(new AgentBird(a.getX(), a.getY(), a.getAgentAction(), a.getColor(), a.isInvincible(),
+						a.isSick()));
+				break;
+			default:
+				listEnnemi.add(new AgentEnnemi(a.getX(), a.getY(), a.getAgentAction(), a.getType(), a.getColor(),
+						a.isInvincible(), a.isSick()));
+				break;
+			}
+		}
+
+		for (JsonElement wall : breakables) {
+			JsonObject wallE = gson.fromJson(wall.getAsJsonObject(), JsonObject.class);
+			int x = gson.fromJson(wallE.getAsJsonPrimitive("x"), Integer.class);
+			int y = gson.fromJson(wallE.getAsJsonPrimitive("y"), Integer.class);
+			breakableGame[x][y] = true;
+		}
+		res.setListBomberMan(listBomberMan);
+		res.setListEnnemi(listEnnemi);
+		res.setBreakable_walls(breakableGame);
 
 		return res;
 	}

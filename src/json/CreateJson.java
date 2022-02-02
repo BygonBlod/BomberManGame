@@ -72,7 +72,9 @@ public class CreateJson {
 		ArrayList<InfoBomb> listBomb = game.getListBomb();
 		ArrayList<InfoItem> listItem = game.getListItem();
 		boolean breakable[][] = game.getBreakable_walls();
-		String res = "{\"Game\":{";
+		String res = "{\"GameParty\":{";
+		res += "\"x\":" + breakable.length + ",";
+		res += "\"y\":" + breakable[0].length + ",";
 		/*
 		 * if (!listBomberMan.isEmpty()) {
 		 * 
@@ -90,9 +92,22 @@ public class CreateJson {
 			res += "],";
 		}
 		if (!listBomb.isEmpty()) {
-
+			res += "\"bomb\":[";
+			for (InfoBomb bomb : listBomb) {
+				res += "{\"lvl\":" + bomb.getRange() + "," + "\"state\":\"" + bomb.getStateBomb() + "\"," + "\"x\":"
+						+ bomb.getX() + "," + "\"y\":" + bomb.getY() + "},";
+			}
+			res = res.substring(0, res.lastIndexOf(","));
+			res += "],";
 		}
 		if (!listItem.isEmpty()) {
+			res += "\"item\":[";
+			for (InfoItem item : listItem) {
+				res += "{\"type\":" + item.getType() + "," + "\"x\":" + item.getX() + "," + "\"y\":" + item.getY()
+						+ "},";
+			}
+			res = res.substring(0, res.lastIndexOf(","));
+			res += "],";
 
 		}
 		res += "\"breakable\":[";

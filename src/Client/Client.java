@@ -14,6 +14,7 @@ public class Client {
 	private final String host;
 	private final int port;
 	private final String Id;
+	private boolean start = false;
 	private ClientListen listen;
 	private ClientWrite write;
 	private ControllerBomberManGame bomber;
@@ -57,7 +58,13 @@ public class Client {
 	}
 
 	public void changeGame(BomberManGame game) {
-		bomber.setGame(game);
+		if (!start) {
+			bomber.setGame(game);
+			start = true;
+		} else {
+			bomber.changeGame(game);
+		}
+
 	}
 
 	public void deleteClient() {

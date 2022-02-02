@@ -32,16 +32,20 @@ public class Partie {
 			System.out.println("nb Joueurs :" + gamers.size());
 			if (isFool()) {
 				System.out.println("lancement de la partie " + name);
-				for (ThreadedClient gamer : gamers) {
-					gamer.sendMessage(CreateJson.JsonGameBegin(game));
-				}
+				broadcast(CreateJson.JsonGameBegin(game));
 				game.launch();
 			}
 		}
 	}
 
 	public void endTurn(GameChange game) {
+		broadcast(CreateJson.JsonGamePartie(game));
+	}
 
+	public void broadcast(String message) {
+		for (ThreadedClient gamer : gamers) {
+			gamer.sendMessage(message);
+		}
 	}
 
 }
