@@ -1,17 +1,15 @@
 package model.utils;
 
 public class InfoItem {
-	
+
 	private int x;
 	private int y;
 	private ItemType type;
 
-
-
 	public InfoItem(int x, int y, ItemType type) {
-		this.x=x;
-		this.y=y;
-		this.type=type;
+		this.x = x;
+		this.y = y;
+		this.type = type;
 
 	}
 
@@ -31,16 +29,16 @@ public class InfoItem {
 		this.y = y;
 	}
 
-
 	public ItemType getType() {
 		return type;
 	}
-
 
 	public void setType(ItemType type) {
 		this.type = type;
 	}
 
-	
+	public String toString() {
+		return "{" + "\"x\":" + x + ",\"y\":" + y + ",\"type\":" + type + "}";
+	}
+
 }
-	

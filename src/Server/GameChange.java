@@ -7,6 +7,7 @@ import model.Agent.Agent;
 import model.utils.InfoAgent;
 import model.utils.InfoBomb;
 import model.utils.InfoItem;
+import model.utils.Wall;
 
 public class GameChange {
 
@@ -15,6 +16,7 @@ public class GameChange {
 	ArrayList<InfoAgent> listAgents;
 	ArrayList<InfoBomb> listBomb;
 	ArrayList<InfoItem> listItem;
+	ArrayList<Wall> listBreakable;
 	boolean breakable_walls[][];
 	private int x;
 	private int y;
@@ -25,13 +27,17 @@ public class GameChange {
 		reset();
 	}
 
+	public GameChange() {
+		reset();
+	}
+
 	public void reset() {
 		listBomberMan = new ArrayList<Agent>();
 		listEnnemi = new ArrayList<Agent>();
 		listAgents = new ArrayList<InfoAgent>();
 		listBomb = new ArrayList<InfoBomb>();
 		listItem = new ArrayList<InfoItem>();
-		breakable_walls = new boolean[x][y];
+		listBreakable = new ArrayList<Wall>();
 	}
 
 	public void set(BomberManGame game) {
@@ -81,8 +87,8 @@ public class GameChange {
 		this.listItem = listItem;
 	}
 
-	public boolean[][] getBreakable_walls() {
-		return breakable_walls;
+	public ArrayList<Wall> getBreakable_walls() {
+		return listBreakable;
 	}
 
 	public void setBreakable_walls(boolean[][] breakable_walls) {

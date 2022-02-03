@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import json.DeserializationJson;
 
@@ -27,20 +27,23 @@ public class ClientListen extends Thread {
 		try {
 			entree = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			while (socket.isConnected()) {
-				Gson gson = new GsonBuilder().create();
+				JSONParser jsonParser = new JSONParser();
 				String data = entree.readLine();
 				String message = "";
 				if (data.length() > 0) {
-					JsonElement element = gson.fromJson(data, JsonElement.class);
-					JsonObject jObj = element.getAsJsonObject();
-					JsonObject j2 = gson.fromJson(jObj.getAsJsonObject("Game"), JsonObject.class);
 					System.out.println(data);
-					if (j2 != null) {
-						client.changeGame(DeserializationJson.JsonGameBegin(j2));
-					}
-					j2 = gson.fromJson(jObj.getAsJsonObject("GameParty"), JsonObject.class);
-					if (j2 != null) {
-						client.changeGame(DeserializationJson.JsonGamePartie(j2));
+					JSONObject json = (JSONObject) jsonParser.parse(data);
+					String type = (String) json.get("type");
+					System.out.println("type :" + type);
+					switch (type) {
+					case "tchat":
+						Tchat(DeserializationJson.JsonTchat(json));
+						break;
+					case "GameBegin":
+						client.changeGame(DeserializationJson.JsonGameBegin(json));
+						break;
+					case "GameParty":
+						break;
 					}
 				}
 			}
@@ -49,6 +52,13 @@ public class ClientListen extends Thread {
 			client.deleteClient();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
+	}
+
+	private void Tchat(ArrayList<String> jsonTchat) {
+		System.out.println("[TCHAT] " + jsonTchat.get(0) + ">" + jsonTchat.get(1));
+
 	}
 }

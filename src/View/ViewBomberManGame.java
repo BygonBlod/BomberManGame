@@ -84,8 +84,6 @@ public class ViewBomberManGame implements Observer, KeyListener {
 	}
 
 	public void update(BomberManGame g) {
-		if (g.getWalls() == null)
-			System.out.println("merde");
 		int dx2 = g.getWalls().length;
 		int dy2 = g.getWalls()[0].length;
 		frame.remove(panel);

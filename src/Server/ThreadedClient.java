@@ -8,11 +8,10 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
+import json.CreateJson;
 import json.DeserializationJson;
 
 public class ThreadedClient extends Thread {
@@ -47,23 +46,34 @@ public class ThreadedClient extends Thread {
 		if (socket.isConnected()) {
 			try {
 				while (socket.isConnected()) {
-					Gson gson = new GsonBuilder().create();
 					String data = entree.readLine();
 					String message = "";
+					JSONParser jsonParser = new JSONParser();
 					if (data.length() > 0) {
-						JsonElement element = gson.fromJson(data, JsonElement.class);
-						JsonObject jObj = element.getAsJsonObject();
-						JsonObject j2 = gson.fromJson(jObj.getAsJsonObject("tchat"), JsonObject.class);
-						if (j2 != null) {
-							received = DeserializationJson.JsonTchat(j2);
+						System.out.println(data);
+
+						JSONObject json = (JSONObject) jsonParser.parse(data);
+						String type = (String) json.get("type");
+						System.out.println("type :" + type);
+						switch (type) {
+						case "tchat":
+							received = DeserializationJson.JsonTchat(json);
 							Tchat();
-						} else {
-							j2 = gson.fromJson(jObj.getAsJsonObject("select"), JsonObject.class);
-							if (j2 != null) {
-								received = DeserializationJson.JsonSelect(j2);
-								Select();
-							}
+							break;
+						case "select":
+							received = DeserializationJson.JsonSelect(json);
+							Select();
+							break;
+
 						}
+						/*
+						 * JsonElement element = gson.fromJson(data, JsonElement.class); JsonObject jObj
+						 * = element.getAsJsonObject(); JsonObject j2 =
+						 * gson.fromJson(jObj.getAsJsonObject("tchat"), JsonObject.class); if (j2 !=
+						 * null) { received = DeserializationJson.JsonTchat(j2); Tchat(); } else { j2 =
+						 * gson.fromJson(jObj.getAsJsonObject("select"), JsonObject.class); if (j2 !=
+						 * null) { received = DeserializationJson.JsonSelect(j2); Select(); } }
+						 */
 					}
 				}
 			} catch (SocketException e) {
@@ -88,13 +98,14 @@ public class ThreadedClient extends Thread {
 
 	public void Tchat() {
 		try {
-			name = received.get(0);
-			String message = received.get(1);
-			if (message.contains("/close")) {
-				socket.close();
-			} else {
-				System.out.println("[TCHAT]" + name + "> " + message);
-				server.broadcast("[TCHAT]" + name + "> " + message, socket);
+			if (name.equals(received.get(0))) {
+				String message = received.get(1);
+				if (message.contains("/close")) {
+					socket.close();
+				} else {
+					System.out.println("[TCHAT]" + name + "> " + message);
+					server.broadcast(CreateJson.JsonTchat(name, message), socket);
+				}
 			}
 		} catch (SocketException e) {
 			System.out.println("connexion fermer avec " + name);
