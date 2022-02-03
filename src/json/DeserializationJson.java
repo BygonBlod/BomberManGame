@@ -9,7 +9,6 @@ import org.json.simple.parser.ParseException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import Server.GameChange;
 import model.BomberManGame;
@@ -20,6 +19,9 @@ import model.Agent.AgentEnnemi;
 import model.Agent.AgentRajion;
 import model.utils.AgentAction;
 import model.utils.ColorAgent;
+import model.utils.InfoBomb;
+import model.utils.InfoItem;
+import model.utils.StateBomb;
 
 public class DeserializationJson {
 
@@ -64,7 +66,6 @@ public class DeserializationJson {
 			breakables[xw][yw] = true;
 		}
 		list = (JSONArray) json.get("listBomberman");
-		System.out.println(list);
 		ColorAgent[] color = ColorAgent.values();
 		int cpt_col = 0;
 		for (Object w3 : list) {
@@ -85,7 +86,6 @@ public class DeserializationJson {
 
 		}
 		list = (JSONArray) json.get("listEnnemi");
-		System.out.println(list);
 		for (Object w3 : list) {
 			JSONObject obj = (JSONObject) jsonParser.parse(w3.toString());
 			int xw = (int) ((long) obj.get("x"));
@@ -105,6 +105,84 @@ public class DeserializationJson {
 		res.setWalls(walls);
 		return res;
 
+	}
+
+	public static GameChange JsonGamePartie(JSONObject json) throws ParseException {
+		JSONParser jsonParser = new JSONParser();
+		GameChange res = new GameChange();
+		ArrayList<Agent> listBomber = new ArrayList<Agent>();
+		ArrayList<Agent> listEnnemi = new ArrayList<Agent>();
+		ArrayList<InfoBomb> listBomb = new ArrayList<InfoBomb>();
+		ArrayList<InfoItem> listItem = new ArrayList<InfoItem>();
+
+		JSONArray list = (JSONArray) json.get("listBomberman");
+		ColorAgent[] color = ColorAgent.values();
+		int cpt_col = 0;
+		for (Object w3 : list) {
+			ColorAgent col;
+			if (cpt_col < color.length)
+				col = color[cpt_col];
+			else
+				col = ColorAgent.DEFAULT;
+			JSONObject obj = (JSONObject) jsonParser.parse(w3.toString());
+			int xw = (int) ((long) obj.get("x"));
+			int yw = (int) ((long) obj.get("y"));
+			int lvlB = (int) ((long) obj.get("lvlB"));
+			int ti = (int) ((long) obj.get("ti"));
+			int ts = (int) ((long) obj.get("ts"));
+			String action = (String) obj.get("action");
+			AgentAction actionA = getAction(action);
+			listBomber.add(new AgentBomberMan(xw, yw, actionA, col, false, false));
+
+		}
+		list = (JSONArray) json.get("listEnnemi");
+		for (Object w3 : list) {
+			JSONObject obj = (JSONObject) jsonParser.parse(w3.toString());
+			int xw = (int) ((long) obj.get("x"));
+			int yw = (int) ((long) obj.get("y"));
+			int lvlB = (int) ((long) obj.get("lvlB"));
+			String type = (String) obj.get("type");
+			int ti = (int) ((long) obj.get("ti"));
+			int ts = (int) ((long) obj.get("ts"));
+			String action = (String) obj.get("action");
+			AgentAction actionA = getAction(action);
+			listEnnemi.add(FabriqueAgent(xw, yw, actionA, type.charAt(0), ColorAgent.DEFAULT, false, false));
+
+		}
+		list = (JSONArray) json.get("listBomb");
+		for (Object w3 : list) {
+			JSONObject obj = (JSONObject) jsonParser.parse(w3.toString());
+			int xw = (int) ((long) obj.get("x"));
+			int yw = (int) ((long) obj.get("y"));
+			int lvlB = (int) ((long) obj.get("range"));
+			String step = (String) obj.get("state");
+			listBomb.add(new InfoBomb(xw, yw, lvlB, GetStep(step)));
+
+		}
+
+		res.setListBomb(listBomb);
+		res.setListBomberMan(listBomber);
+		res.setListEnnemi(listEnnemi);
+		res.setListItem(listItem);
+		return res;
+
+	}
+
+	private static StateBomb GetStep(String step) {
+		switch (step) {
+		case "Step0":
+			return StateBomb.Step0;
+		case "Step1":
+			return StateBomb.Step1;
+		case "Step2":
+			return StateBomb.Step2;
+		case "Step3":
+			return StateBomb.Step3;
+		case "Boom":
+			return StateBomb.Boom;
+
+		}
+		return null;
 	}
 
 	private static Agent FabriqueAgent(int xw, int yw, AgentAction actionA, char cha, ColorAgent color, boolean b,
@@ -136,49 +214,6 @@ public class DeserializationJson {
 
 		}
 		return null;
-	}
-
-	public static GameChange JsonGamePartie(JsonObject json) {
-		GameChange res = new GameChange();
-		/*
-		 * BomberManGame res = new BomberManGame(); Gson gson = new
-		 * GsonBuilder().create(); int xGame =
-		 * gson.fromJson(json.getAsJsonPrimitive("x"), Integer.class); int yGame =
-		 * gson.fromJson(json.getAsJsonPrimitive("y"), Integer.class); boolean[][]
-		 * breakableGame = new boolean[xGame][yGame]; JsonArray breakables =
-		 * gson.fromJson(json.getAsJsonArray("breakable"), JsonArray.class); JsonArray
-		 * agents = gson.fromJson(json.getAsJsonArray("agents"), JsonArray.class);
-		 * JsonArray items = gson.fromJson(json.getAsJsonArray("item"),
-		 * JsonArray.class);
-		 * 
-		 * ArrayList<InfoAgent> start_agent = new ArrayList<InfoAgent>(); for
-		 * (JsonElement agent : agents) { JsonObject agentE =
-		 * gson.fromJson(agent.getAsJsonObject(), JsonObject.class); String type =
-		 * gson.fromJson(agentE.getAsJsonPrimitive("type"), String.class); int x =
-		 * gson.fromJson(agentE.getAsJsonPrimitive("x"), Integer.class); int y =
-		 * gson.fromJson(agentE.getAsJsonPrimitive("y"), Integer.class);
-		 * start_agent.add(new InfoAgent(x, y, AgentAction.STOP, type.charAt(0),
-		 * ColorAgent.DEFAULT, false, false));
-		 * 
-		 * } ArrayList<Agent> listBomberMan = new ArrayList<Agent>(); ArrayList<Agent>
-		 * listEnnemi = new ArrayList<Agent>(); for (InfoAgent a : start_agent) { switch
-		 * (a.getType()) { case 'B': listBomberMan.add(new AgentBomberMan(a.getX(),
-		 * a.getY(), a.getAgentAction(), a.getColor(), a.isInvincible(), a.isSick()));
-		 * break; case 'R': listEnnemi.add(new AgentRajion(a.getX(), a.getY(),
-		 * a.getAgentAction(), a.getColor(), a.isInvincible(), a.isSick())); break; case
-		 * 'V': listEnnemi.add(new AgentBird(a.getX(), a.getY(), a.getAgentAction(),
-		 * a.getColor(), a.isInvincible(), a.isSick())); break; default:
-		 * listEnnemi.add(new AgentEnnemi(a.getX(), a.getY(), a.getAgentAction(),
-		 * a.getType(), a.getColor(), a.isInvincible(), a.isSick())); break; } }
-		 * 
-		 * for (JsonElement wall : breakables) { JsonObject wallE =
-		 * gson.fromJson(wall.getAsJsonObject(), JsonObject.class); int x =
-		 * gson.fromJson(wallE.getAsJsonPrimitive("x"), Integer.class); int y =
-		 * gson.fromJson(wallE.getAsJsonPrimitive("y"), Integer.class);
-		 * breakableGame[x][y] = true; } res.setListBomberMan(listBomberMan);
-		 * res.setListEnnemi(listEnnemi); res.setBreakable_walls(breakableGame);
-		 */
-		return res;
 	}
 
 }

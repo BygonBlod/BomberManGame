@@ -20,6 +20,7 @@ import model.utils.InfoBomb;
 import model.utils.InfoItem;
 import model.utils.ItemType;
 import model.utils.StateBomb;
+import model.utils.Wall;
 
 public class BomberManGame extends Game {
 	private String plateau;
@@ -464,6 +465,12 @@ public class BomberManGame extends Game {
 	public void gameChange() {
 		setChanged();
 		notifyObservers();
+	}
+
+	public void changeBreakables(ArrayList<Wall> breakable) {
+		for (Wall w : breakable) {
+			breakable_walls[w.getX()][w.getY()] = false;
+		}
 	}
 
 	public void addActionBomberMan(AgentAction action) {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import model.BomberManGame;
 import model.Agent.Agent;
-import model.utils.InfoAgent;
 import model.utils.InfoBomb;
 import model.utils.InfoItem;
 import model.utils.Wall;
@@ -13,7 +12,6 @@ public class GameChange {
 
 	ArrayList<Agent> listBomberMan;
 	ArrayList<Agent> listEnnemi;
-	ArrayList<InfoAgent> listAgents;
 	ArrayList<InfoBomb> listBomb;
 	ArrayList<InfoItem> listItem;
 	ArrayList<Wall> listBreakable;
@@ -34,25 +32,19 @@ public class GameChange {
 	public void reset() {
 		listBomberMan = new ArrayList<Agent>();
 		listEnnemi = new ArrayList<Agent>();
-		listAgents = new ArrayList<InfoAgent>();
 		listBomb = new ArrayList<InfoBomb>();
 		listItem = new ArrayList<InfoItem>();
 		listBreakable = new ArrayList<Wall>();
 	}
 
 	public void set(BomberManGame game) {
-		listAgents = game.getAgents();
+		listBomberMan = game.getListBomberMan();
+		listEnnemi = game.getListEnnemi();
 		listBomb = game.getListBomb();
 		listItem = game.getListItem();
-		breakable_walls = game.getBreakable_walls();
-	}
-
-	public ArrayList<InfoAgent> getListAgents() {
-		return listAgents;
-	}
-
-	public void setListAgents(ArrayList<InfoAgent> listAgents) {
-		this.listAgents = listAgents;
+		System.out.println("agents: " + listBomberMan.toString());
+		System.out.println("bombs: " + listBomb.toString());
+		System.out.println("items: " + listItem.toString());
 	}
 
 	public ArrayList<Agent> getListBomberMan() {
@@ -89,10 +81,6 @@ public class GameChange {
 
 	public ArrayList<Wall> getBreakable_walls() {
 		return listBreakable;
-	}
-
-	public void setBreakable_walls(boolean[][] breakable_walls) {
-		this.breakable_walls = breakable_walls;
 	}
 
 }

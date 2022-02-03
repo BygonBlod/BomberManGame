@@ -62,7 +62,7 @@ public class InfoBomb {
 	}
 
 	public String toString() {
-		return "{" + "\"x\":" + x + ",\"y\":" + y + ",\"range\":" + range + ",\"state\":" + stateBomb + "}";
+		return "{" + "\"x\":" + x + ",\"y\":" + y + ",\"range\":" + range + ",\"state\":\"" + stateBomb + "\"}";
 
 	}
 

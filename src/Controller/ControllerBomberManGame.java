@@ -6,6 +6,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Client.Client;
+import Server.GameChange;
 import View.ViewBomberManGame;
 import View.ViewCommand;
 import model.BomberManGame;
@@ -95,5 +96,15 @@ public class ControllerBomberManGame extends AbstractController {
 		for (InfoAgent agent : list) {
 			System.out.println(agent.getType() + " " + agent.getX() + " " + agent.getY());
 		}
+	}
+
+	public void changeGame(GameChange game2) {
+		this.game.setListBomb(game2.getListBomb());
+		this.game.setListItem(game2.getListItem());
+		this.game.setListBomberMan(game2.getListBomberMan());
+		this.game.setListEnnemi(game2.getListEnnemi());
+		this.game.changeBreakables(game2.getBreakable_walls());
+		view.update(this.game);
+
 	}
 }

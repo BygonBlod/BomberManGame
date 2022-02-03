@@ -6,6 +6,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Controller.ControllerBomberManGame;
+import Server.GameChange;
 import json.CreateJson;
 import model.BomberManGame;
 
@@ -65,6 +66,10 @@ public class Client {
 			bomber.changeGame(game);
 		}
 
+	}
+
+	public void changeGame(GameChange game) {
+		bomber.changeGame(game);
 	}
 
 	public void deleteClient() {

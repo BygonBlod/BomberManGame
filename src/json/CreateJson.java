@@ -59,35 +59,13 @@ public class CreateJson {
 	}
 
 	public static String JsonGamePartie(GameChange game) {
-		/*
-		 * ArrayList<InfoAgent> listAgents = game.getListAgents(); ArrayList<InfoBomb>
-		 * listBomb = game.getListBomb(); ArrayList<InfoItem> listItem =
-		 * game.getListItem(); boolean breakable[][] = game.getBreakable_walls(); String
-		 * res = "{\"GameParty\":{"; res += "\"x\":" + breakable.length + ","; res +=
-		 * "\"y\":" + breakable[0].length + ","; if (!listAgents.isEmpty()) { res +=
-		 * "\"agents\":["; for (InfoAgent agent : listAgents) { res += "{" +
-		 * "\"type\":\"" + agent.getType() + "\"," + "\"x\":" + agent.getX() + "," +
-		 * "\"y\":" + agent.getY() + "},"; } res = res.substring(0,
-		 * res.lastIndexOf(",")); res += "],"; } if (!listBomb.isEmpty()) { res +=
-		 * "\"bomb\":["; for (InfoBomb bomb : listBomb) { res += "{\"lvl\":" +
-		 * bomb.getRange() + "," + "\"state\":\"" + bomb.getStateBomb() + "\"," +
-		 * "\"x\":" + bomb.getX() + "," + "\"y\":" + bomb.getY() + "},"; } res =
-		 * res.substring(0, res.lastIndexOf(",")); res += "],"; } if
-		 * (!listItem.isEmpty()) { res += "\"item\":["; for (InfoItem item : listItem) {
-		 * res += "{\"type\":" + item.getType() + "," + "\"x\":" + item.getX() + "," +
-		 * "\"y\":" + item.getY() + "},"; } res = res.substring(0,
-		 * res.lastIndexOf(",")); res += "],";
-		 * 
-		 * } res += "\"breakable\":["; for (int i = 0; i < breakable.length; i++) { for
-		 * (int j = 0; j < breakable[0].length; j++) { if (breakable[i][j] == true) {
-		 * res += "{" + "\"x\":" + i + "," + "\"y\":" + j + "},"; } } } res =
-		 * res.substring(0, res.lastIndexOf(",")); res += "]"; res += "}}"; return res;
-		 */
 		JSONObject json = new JSONObject();
 		json.put("type", "GameParty");
 		json.put("walls", game.getBreakable_walls());
 		json.put("listBomberman", game.getListBomberMan());
 		json.put("listEnnemi", game.getListEnnemi());
+		json.put("listBomb", game.getListBomb());
+		json.put("listItem", game.getListItem());
 		return json.toJSONString();
 
 	}

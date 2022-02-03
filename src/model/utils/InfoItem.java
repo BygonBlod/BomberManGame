@@ -38,7 +38,7 @@ public class InfoItem {
 	}
 
 	public String toString() {
-		return "{" + "\"x\":" + x + ",\"y\":" + y + ",\"type\":" + type + "}";
+		return "{" + "\"x\":" + x + ",\"y\":" + y + ",\"type\":\"" + type + "\"}";
 	}
 
 }

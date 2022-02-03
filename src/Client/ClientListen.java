@@ -43,7 +43,9 @@ public class ClientListen extends Thread {
 						client.changeGame(DeserializationJson.JsonGameBegin(json));
 						break;
 					case "GameParty":
+						client.changeGame(DeserializationJson.JsonGamePartie(json));
 						break;
+
 					}
 				}
 			}
