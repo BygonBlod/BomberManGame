@@ -22,6 +22,15 @@ public abstract class Agent {
 		agentG = new InfoAgent(x, y, agentAction, type, color, isInvincible, isSick);
 	}
 
+	public void change(int x, int y, AgentAction action, int ti, int ts, int lvl) {
+		this.posX = x;
+		this.posY = y;
+		this.setLvlBomb(lvl);
+		this.setAgentAction(action);
+		this.setTpsInvincible(ti);
+		this.setTpsSick(ts);
+	}
+
 	public int getTpsInvincible() {
 		return tpsInvincible;
 	}

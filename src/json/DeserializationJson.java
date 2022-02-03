@@ -14,6 +14,12 @@ import com.google.gson.JsonObject;
 import Server.GameChange;
 import model.BomberManGame;
 import model.Agent.Agent;
+import model.Agent.AgentBird;
+import model.Agent.AgentBomberMan;
+import model.Agent.AgentEnnemi;
+import model.Agent.AgentRajion;
+import model.utils.AgentAction;
+import model.utils.ColorAgent;
 
 public class DeserializationJson {
 
@@ -42,30 +48,94 @@ public class DeserializationJson {
 		boolean[][] breakables = new boolean[x][y];
 		ArrayList<Agent> listBomber = new ArrayList<Agent>();
 		ArrayList<Agent> listEnnemi = new ArrayList<Agent>();
-		JSONArray listWall = (JSONArray) json.get("walls");
-		for (Object w : listWall) {
+		JSONArray list = (JSONArray) json.get("walls");
+		for (Object w : list) {
 			JSONObject obj = (JSONObject) jsonParser.parse(w.toString());
 			int xw = (int) ((long) obj.get("x"));
 			int yw = (int) ((long) obj.get("y"));
 			walls[xw][yw] = true;
 		}
-		JSONArray listWall2 = (JSONArray) json.get("breakables");
-		System.out.println(listWall2);
-		for (Object w2 : listWall2) {
+		list = (JSONArray) json.get("breakables");
+		System.out.println(list);
+		for (Object w2 : list) {
 			JSONObject obj = (JSONObject) jsonParser.parse(w2.toString());
-			System.out.println(w2);
 			int xw = (int) ((long) obj.get("x"));
 			int yw = (int) ((long) obj.get("y"));
 			breakables[xw][yw] = true;
 		}
-		// listBomber = (ArrayList<Agent>) json.get("listBomberman");
-		// listEnnemi = (ArrayList<Agent>) json.get("listEnnemi");
+		list = (JSONArray) json.get("listBomberman");
+		System.out.println(list);
+		ColorAgent[] color = ColorAgent.values();
+		int cpt_col = 0;
+		for (Object w3 : list) {
+			ColorAgent col;
+			if (cpt_col < color.length)
+				col = color[cpt_col];
+			else
+				col = ColorAgent.DEFAULT;
+			JSONObject obj = (JSONObject) jsonParser.parse(w3.toString());
+			int xw = (int) ((long) obj.get("x"));
+			int yw = (int) ((long) obj.get("y"));
+			int lvlB = (int) ((long) obj.get("lvlB"));
+			int ti = (int) ((long) obj.get("ti"));
+			int ts = (int) ((long) obj.get("ts"));
+			String action = (String) obj.get("action");
+			AgentAction actionA = getAction(action);
+			listBomber.add(new AgentBomberMan(xw, yw, actionA, col, false, false));
+
+		}
+		list = (JSONArray) json.get("listEnnemi");
+		System.out.println(list);
+		for (Object w3 : list) {
+			JSONObject obj = (JSONObject) jsonParser.parse(w3.toString());
+			int xw = (int) ((long) obj.get("x"));
+			int yw = (int) ((long) obj.get("y"));
+			int lvlB = (int) ((long) obj.get("lvlB"));
+			String type = (String) obj.get("type");
+			int ti = (int) ((long) obj.get("ti"));
+			int ts = (int) ((long) obj.get("ts"));
+			String action = (String) obj.get("action");
+			AgentAction actionA = getAction(action);
+			listEnnemi.add(FabriqueAgent(xw, yw, actionA, type.charAt(0), ColorAgent.DEFAULT, false, false));
+
+		}
 		res.setListBomberMan(listBomber);
 		res.setListEnnemi(listEnnemi);
 		res.setBreakable_walls(breakables);
 		res.setWalls(walls);
 		return res;
 
+	}
+
+	private static Agent FabriqueAgent(int xw, int yw, AgentAction actionA, char cha, ColorAgent color, boolean b,
+			boolean c) {
+		switch (cha) {
+		case 'R':
+			return new AgentRajion(xw, yw, actionA, color, b, c);
+		case 'V':
+			return new AgentBird(xw, yw, actionA, color, b, c);
+		default:
+			return new AgentEnnemi(xw, yw, actionA, cha, color, b, c);
+		}
+	}
+
+	private static AgentAction getAction(String action) {
+		switch (action) {
+		case "MOVE_UP":
+			return AgentAction.MOVE_UP;
+		case "MOVE_DOWN":
+			return AgentAction.MOVE_DOWN;
+		case "MOVE_LEFT":
+			return AgentAction.MOVE_LEFT;
+		case "MOVE_RIGHT":
+			return AgentAction.MOVE_RIGHT;
+		case "STOP":
+			return AgentAction.STOP;
+		case "PUT_BOMB":
+			return AgentAction.PUT_BOMB;
+
+		}
+		return null;
 	}
 
 	public static GameChange JsonGamePartie(JsonObject json) {
