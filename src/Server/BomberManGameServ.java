@@ -1,6 +1,6 @@
 package Server;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import model.BomberManGame;
 import model.utils.Wall;
@@ -26,7 +26,7 @@ public class BomberManGameServ extends BomberManGame {
 
 	@Override
 	public void noBreakable(int x, int y) {
-		ArrayList<Wall> res = change.getListBreakable();
+		List<Wall> res = change.getListBreakable();
 		res.add(new Wall(x, y));
 		change.setListBreakable(res);
 

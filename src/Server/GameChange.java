@@ -1,6 +1,7 @@
 package Server;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import model.BomberManGame;
 import model.Agent.Agent;
@@ -10,11 +11,11 @@ import model.utils.Wall;
 
 public class GameChange {
 
-	ArrayList<Agent> listBomberMan;
-	ArrayList<Agent> listEnnemi;
-	ArrayList<InfoBomb> listBomb;
-	ArrayList<InfoItem> listItem;
-	ArrayList<Wall> listBreakable;
+	List<Agent> listBomberMan;
+	List<Agent> listEnnemi;
+	List<InfoBomb> listBomb;
+	List<InfoItem> listItem;
+	List<Wall> listBreakable;
 	boolean breakable_walls[][];
 	private int x;
 	private int y;
@@ -47,44 +48,44 @@ public class GameChange {
 		System.out.println("items: " + listItem.toString());
 	}
 
-	public ArrayList<Agent> getListBomberMan() {
+	public List<Agent> getListBomberMan() {
 		return listBomberMan;
 	}
 
-	public void setListBomberMan(ArrayList<Agent> listBomberMan) {
+	public void setListBomberMan(List<Agent> listBomberMan) {
 		this.listBomberMan = listBomberMan;
 	}
 
-	public ArrayList<Agent> getListEnnemi() {
+	public List<Agent> getListEnnemi() {
 		return listEnnemi;
 	}
 
-	public void setListEnnemi(ArrayList<Agent> listEnnemi) {
+	public void setListEnnemi(List<Agent> listEnnemi) {
 		this.listEnnemi = listEnnemi;
 	}
 
-	public ArrayList<InfoBomb> getListBomb() {
+	public List<InfoBomb> getListBomb() {
 		return listBomb;
 	}
 
-	public void setListBomb(ArrayList<InfoBomb> listBomb) {
+	public void setListBomb(List<InfoBomb> listBomb) {
 		this.listBomb = listBomb;
 	}
 
-	public ArrayList<InfoItem> getListItem() {
+	public List<InfoItem> getListItem() {
 		return listItem;
 	}
 
-	public void setListItem(ArrayList<InfoItem> listItem) {
+	public void setListItem(List<InfoItem> listItem) {
 		this.listItem = listItem;
 	}
 
-	public ArrayList<Wall> getListBreakable() {
+	public List<Wall> getListBreakable() {
 		return listBreakable;
 	}
 
-	public void setListBreakable(ArrayList<Wall> listBreakable) {
-		this.listBreakable = listBreakable;
+	public void setListBreakable(List<Wall> res) {
+		this.listBreakable = res;
 	}
 
 }

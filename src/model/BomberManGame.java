@@ -1,7 +1,9 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import model.Agent.Agent;
@@ -25,10 +27,10 @@ import model.utils.Wall;
 public class BomberManGame extends Game {
 	private String plateau;
 	private String end = "";
-	private ArrayList<Agent> listBomberMan;
-	private ArrayList<Agent> listEnnemi;
-	private ArrayList<InfoBomb> listBomb;
-	private ArrayList<InfoItem> listItem;
+	private List<Agent> listBomberMan;
+	private List<Agent> listEnnemi;
+	private List<InfoBomb> listBomb;
+	private List<InfoItem> listItem;
 	private boolean walls[][];
 	private boolean breakable_walls[][];
 	private IAStrategi stratEnnemi;
@@ -58,36 +60,40 @@ public class BomberManGame extends Game {
 	@Override
 	protected void initializeGame() {
 		try {
-			listBomberMan = new ArrayList<Agent>();
-			listEnnemi = new ArrayList<Agent>();
-			listBomb = new ArrayList<InfoBomb>();
-			listItem = new ArrayList<InfoItem>();
+			listBomberMan = Collections.synchronizedList(new ArrayList<Agent>());
+			listEnnemi = Collections.synchronizedList(new ArrayList<Agent>());
+			listBomb = Collections.synchronizedList(new ArrayList<InfoBomb>());
+			listItem = Collections.synchronizedList(new ArrayList<InfoItem>());
 			InputMap input = new InputMap(plateau);
 			walls = input.get_walls();
 			breakable_walls = input.getStart_breakable_walls();
 			ArrayList<InfoAgent> agents = input.getStart_agents();
-			for (InfoAgent a : agents) {
-				switch (a.getType()) {
-				case 'B':
-					listBomberMan.add(new AgentBomberMan(a.getX(), a.getY(), a.getAgentAction(), a.getColor(),
-							a.isInvincible(), a.isSick()));
-					break;
-				case 'R':
-					listEnnemi.add(new AgentRajion(a.getX(), a.getY(), a.getAgentAction(), a.getColor(),
-							a.isInvincible(), a.isSick()));
-					break;
-				case 'V':
-					listEnnemi.add(new AgentBird(a.getX(), a.getY(), a.getAgentAction(), a.getColor(), a.isInvincible(),
-							a.isSick()));
-					break;
-				default:
-					listEnnemi.add(new AgentEnnemi(a.getX(), a.getY(), a.getAgentAction(), a.getType(), a.getColor(),
-							a.isInvincible(), a.isSick()));
-					break;
+			synchronized (listBomberMan) {
+				synchronized (listEnnemi) {
+					for (InfoAgent a : agents) {
+						switch (a.getType()) {
+						case 'B':
+							listBomberMan.add(new AgentBomberMan(a.getX(), a.getY(), a.getAgentAction(), a.getColor(),
+									a.isInvincible(), a.isSick()));
+							break;
+						case 'R':
+							listEnnemi.add(new AgentRajion(a.getX(), a.getY(), a.getAgentAction(), a.getColor(),
+									a.isInvincible(), a.isSick()));
+							break;
+						case 'V':
+							listEnnemi.add(new AgentBird(a.getX(), a.getY(), a.getAgentAction(), a.getColor(),
+									a.isInvincible(), a.isSick()));
+							break;
+						default:
+							listEnnemi.add(new AgentEnnemi(a.getX(), a.getY(), a.getAgentAction(), a.getType(),
+									a.getColor(), a.isInvincible(), a.isSick()));
+							break;
+						}
+					}
+					System.out.println(listBomberMan.size());
+					System.out.println(listEnnemi.size());
 				}
 			}
-			System.out.println(listBomberMan.size());
-			System.out.println(listEnnemi.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -97,32 +103,40 @@ public class BomberManGame extends Game {
 	@Override
 	public void gameOver() {
 		System.out.println("------ Fin du Jeu ------");
-		if (listBomberMan.size() == 0)
-			end = "YOU DIED";
-		if (listEnnemi.size() == 0)
-			end = "YOU WIN";
-		this.thread.stop();
+		synchronized (listBomberMan) {
+			synchronized (listEnnemi) {
+				if (listBomberMan.size() == 0)
+					end = "YOU DIED";
+				if (listEnnemi.size() == 0)
+					end = "YOU WIN";
+				this.thread.stop();
+			}
+		}
 
 	}
 
 	@Override
 	protected boolean gameContinue() {
-		Iterator<Agent> bomberIterator = listBomberMan.iterator();
-		Iterator<Agent> ennemiIterator = listEnnemi.iterator();
-		while (bomberIterator.hasNext()) {
-			Agent bomber = (Agent) bomberIterator.next();
-			while (ennemiIterator.hasNext()) {
-				Agent ennemi = ennemiIterator.next();
-				if ((bomber.getX() == ennemi.getX() && bomber.getY() == ennemi.getY())) {
-					listBomberMan.remove(bomber);
+		synchronized (listBomberMan) {
+			synchronized (listEnnemi) {
+				Iterator<Agent> bomberIterator = listBomberMan.iterator();
+				Iterator<Agent> ennemiIterator = listEnnemi.iterator();
+				while (bomberIterator.hasNext()) {
+					Agent bomber = (Agent) bomberIterator.next();
+					while (ennemiIterator.hasNext()) {
+						Agent ennemi = ennemiIterator.next();
+						if ((bomber.getX() == ennemi.getX() && bomber.getY() == ennemi.getY())) {
+							listBomberMan.remove(bomber);
+						}
+					}
 				}
+				if (listBomberMan.size() == 0)
+					return false;
+				if (listEnnemi.size() == 0)
+					return false;
+				return true;
 			}
 		}
-		if (listBomberMan.size() == 0)
-			return false;
-		if (listEnnemi.size() == 0)
-			return false;
-		return true;
 	}
 
 	@Override
@@ -134,34 +148,38 @@ public class BomberManGame extends Game {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		for (int i = 0; i < listBomberMan.size(); i++) {
-			Agent a = listBomberMan.get(i);
-			if (i == 0) {
-				stratBomberman.Action(a, this);
-				stratBomberman.setAction(null);
-			} else {
-				stratEnnemi.Action(a, this);
+		synchronized (listBomberMan) {
+			for (int i = 0; i < listBomberMan.size(); i++) {
+				Agent a = listBomberMan.get(i);
+				if (i == 0) {
+					stratBomberman.Action(a, this);
+					stratBomberman.setAction(null);
+				} else {
+					stratEnnemi.Action(a, this);
+				}
+				if (a.getTpsInvincible() > 0)
+					a.setTpsInvincible(a.getTpsInvincible() - 1);
+				if (a.getTpsSick() > 0)
+					a.setTpsSick(a.getTpsSick() - 1);
 			}
-			if (a.getTpsInvincible() > 0)
-				a.setTpsInvincible(a.getTpsInvincible() - 1);
-			if (a.getTpsSick() > 0)
-				a.setTpsSick(a.getTpsSick() - 1);
 		}
-		for (Agent a : listEnnemi) {
-			switch (a.getType()) {
-			case 'V':
-				stratVol.Action(a, this);
-				break;
-			case 'E':
-				stratRajion.Action(a, this);
-				break;
-			default:
-				stratEnnemi.Action(a, this);
+		synchronized (listEnnemi) {
+			for (Agent a : listEnnemi) {
+				switch (a.getType()) {
+				case 'V':
+					stratVol.Action(a, this);
+					break;
+				case 'E':
+					stratRajion.Action(a, this);
+					break;
+				default:
+					stratEnnemi.Action(a, this);
+				}
+				if (a.getTpsInvincible() > 0)
+					a.setTpsInvincible(a.getTpsInvincible() - 1);
+				if (a.getTpsSick() > 0)
+					a.setTpsSick(a.getTpsSick() - 1);
 			}
-			if (a.getTpsInvincible() > 0)
-				a.setTpsInvincible(a.getTpsInvincible() - 1);
-			if (a.getTpsSick() > 0)
-				a.setTpsSick(a.getTpsSick() - 1);
 		}
 		regleItem();
 
@@ -169,27 +187,29 @@ public class BomberManGame extends Game {
 
 	private void regleBomb() {
 		ArrayList<InfoBomb> remove = new ArrayList<InfoBomb>();
-		for (InfoBomb bomb : listBomb) {
-			switch (bomb.getStateBomb()) {
-			case Step0:
-				bomb.setStateBomb(StateBomb.Step1);
-				break;
-			case Step1:
-				bomb.setStateBomb(StateBomb.Step2);
-				break;
-			case Step2:
-				bomb.setStateBomb(StateBomb.Step3);
-				break;
-			case Step3:
-				bomb.setStateBomb(StateBomb.Boom);
-				break;
-			case Boom:
-				explosion(bomb);
-				remove.add(bomb);
-				break;
+		synchronized (listBomb) {
+			for (InfoBomb bomb : listBomb) {
+				switch (bomb.getStateBomb()) {
+				case Step0:
+					bomb.setStateBomb(StateBomb.Step1);
+					break;
+				case Step1:
+					bomb.setStateBomb(StateBomb.Step2);
+					break;
+				case Step2:
+					bomb.setStateBomb(StateBomb.Step3);
+					break;
+				case Step3:
+					bomb.setStateBomb(StateBomb.Boom);
+					break;
+				case Boom:
+					explosion(bomb);
+					remove.add(bomb);
+					break;
+				}
 			}
+			listBomb.removeAll(remove);
 		}
-		listBomb.removeAll(remove);
 	}
 
 	public void explosion(InfoBomb bomb) {
@@ -197,59 +217,65 @@ public class BomberManGame extends Game {
 		ArrayList<Agent> removeBM = new ArrayList<Agent>();
 		ArrayList<Agent> removeE = new ArrayList<Agent>();
 		int range = bomb.getRange();
-		for (int i = 1; i <= range; i++) {
-			for (Agent b : listBomberMan) {
-				if (b.getX() == bomb.getX() && b.getY() == bomb.getY() && !b.getAgentG().isInvincible())
-					removeBM.add(b);
-				if (b.getX() == bomb.getX() + i && b.getY() == bomb.getY() && !b.getAgentG().isInvincible())
-					removeBM.add(b);
-				if (b.getY() == bomb.getY() + i && b.getX() == bomb.getX() && !b.getAgentG().isInvincible())
-					removeBM.add(b);
-				if (b.getX() == bomb.getX() - i && b.getY() == bomb.getY() && !b.getAgentG().isInvincible())
-					removeBM.add(b);
-				if (b.getY() == bomb.getY() - i && b.getX() == bomb.getX() && !b.getAgentG().isInvincible())
-					removeBM.add(b);
-			}
-			for (Agent e : listEnnemi) {
-				if (e.getX() == bomb.getX() && e.getY() == bomb.getY() && !e.getAgentG().isInvincible())
-					removeE.add(e);
-				if (e.getX() == bomb.getX() + i && e.getY() == bomb.getY() && !e.getAgentG().isInvincible())
-					removeE.add(e);
-				if (e.getY() == bomb.getY() + i && e.getX() == bomb.getX() && !e.getAgentG().isInvincible())
-					removeE.add(e);
-				if (e.getX() == bomb.getX() - i && e.getY() == bomb.getY() && !e.getAgentG().isInvincible())
-					removeE.add(e);
-				if (e.getY() == bomb.getY() - i && e.getX() == bomb.getX() && !e.getAgentG().isInvincible())
-					removeE.add(e);
-			}
-			if (breakable_walls[bomb.getX()][bomb.getY()] == true) {
-				NewItem(bomb.getX(), bomb.getY());
-				breakable_walls[bomb.getX()][bomb.getY()] = false;
-				noBreakable(bomb.getX(), bomb.getY());
-			}
-			if (bomb.getX() + i < breakable_walls.length && breakable_walls[bomb.getX() + i][bomb.getY()] == true) {
-				NewItem(bomb.getX() + i, bomb.getY());
-				breakable_walls[bomb.getX() + i][bomb.getY()] = false;
-				noBreakable(bomb.getX() + i, bomb.getY());
-			}
-			if (bomb.getY() + i < breakable_walls[0].length && breakable_walls[bomb.getX()][bomb.getY() + i] == true) {
-				NewItem(bomb.getX(), bomb.getY() + i);
-				breakable_walls[bomb.getX()][bomb.getY() + i] = false;
-				noBreakable(bomb.getX(), bomb.getY() + i);
-			}
-			if (bomb.getX() - i > -1 && breakable_walls[bomb.getX() - i][bomb.getY()] == true) {
-				NewItem(bomb.getX() - i, bomb.getY());
-				breakable_walls[bomb.getX() - i][bomb.getY()] = false;
-				noBreakable(bomb.getX() - i, bomb.getY());
-			}
-			if (bomb.getY() - i > -1 && breakable_walls[bomb.getX()][bomb.getY() - i] == true) {
-				NewItem(bomb.getX(), bomb.getY() - i);
-				breakable_walls[bomb.getX()][bomb.getY() - i] = false;
-				noBreakable(bomb.getX(), bomb.getY() - i);
+		synchronized (listBomberMan) {
+			synchronized (listEnnemi) {
+				for (int i = 1; i <= range; i++) {
+					for (Agent b : listBomberMan) {
+						if (b.getX() == bomb.getX() && b.getY() == bomb.getY() && !b.getAgentG().isInvincible())
+							removeBM.add(b);
+						if (b.getX() == bomb.getX() + i && b.getY() == bomb.getY() && !b.getAgentG().isInvincible())
+							removeBM.add(b);
+						if (b.getY() == bomb.getY() + i && b.getX() == bomb.getX() && !b.getAgentG().isInvincible())
+							removeBM.add(b);
+						if (b.getX() == bomb.getX() - i && b.getY() == bomb.getY() && !b.getAgentG().isInvincible())
+							removeBM.add(b);
+						if (b.getY() == bomb.getY() - i && b.getX() == bomb.getX() && !b.getAgentG().isInvincible())
+							removeBM.add(b);
+					}
+					for (Agent e : listEnnemi) {
+						if (e.getX() == bomb.getX() && e.getY() == bomb.getY() && !e.getAgentG().isInvincible())
+							removeE.add(e);
+						if (e.getX() == bomb.getX() + i && e.getY() == bomb.getY() && !e.getAgentG().isInvincible())
+							removeE.add(e);
+						if (e.getY() == bomb.getY() + i && e.getX() == bomb.getX() && !e.getAgentG().isInvincible())
+							removeE.add(e);
+						if (e.getX() == bomb.getX() - i && e.getY() == bomb.getY() && !e.getAgentG().isInvincible())
+							removeE.add(e);
+						if (e.getY() == bomb.getY() - i && e.getX() == bomb.getX() && !e.getAgentG().isInvincible())
+							removeE.add(e);
+					}
+					if (breakable_walls[bomb.getX()][bomb.getY()] == true) {
+						NewItem(bomb.getX(), bomb.getY());
+						breakable_walls[bomb.getX()][bomb.getY()] = false;
+						noBreakable(bomb.getX(), bomb.getY());
+					}
+					if (bomb.getX() + i < breakable_walls.length
+							&& breakable_walls[bomb.getX() + i][bomb.getY()] == true) {
+						NewItem(bomb.getX() + i, bomb.getY());
+						breakable_walls[bomb.getX() + i][bomb.getY()] = false;
+						noBreakable(bomb.getX() + i, bomb.getY());
+					}
+					if (bomb.getY() + i < breakable_walls[0].length
+							&& breakable_walls[bomb.getX()][bomb.getY() + i] == true) {
+						NewItem(bomb.getX(), bomb.getY() + i);
+						breakable_walls[bomb.getX()][bomb.getY() + i] = false;
+						noBreakable(bomb.getX(), bomb.getY() + i);
+					}
+					if (bomb.getX() - i > -1 && breakable_walls[bomb.getX() - i][bomb.getY()] == true) {
+						NewItem(bomb.getX() - i, bomb.getY());
+						breakable_walls[bomb.getX() - i][bomb.getY()] = false;
+						noBreakable(bomb.getX() - i, bomb.getY());
+					}
+					if (bomb.getY() - i > -1 && breakable_walls[bomb.getX()][bomb.getY() - i] == true) {
+						NewItem(bomb.getX(), bomb.getY() - i);
+						breakable_walls[bomb.getX()][bomb.getY() - i] = false;
+						noBreakable(bomb.getX(), bomb.getY() - i);
+					}
+				}
+				listBomberMan.removeAll(removeBM);
+				listEnnemi.removeAll(removeE);
 			}
 		}
-		listBomberMan.removeAll(removeBM);
-		listEnnemi.removeAll(removeE);
 	}
 
 	public void NewItem(int x, int y) {
@@ -271,7 +297,9 @@ public class BomberManGame extends Game {
 				type2 = ItemType.SKULL;
 				break;
 			}
-			listItem.add(new InfoItem(x, y, type2));
+			synchronized (listItem) {
+				listItem.add(new InfoItem(x, y, type2));
+			}
 		}
 
 	}
@@ -281,34 +309,36 @@ public class BomberManGame extends Game {
 		ArrayList<Agent> agent = new ArrayList<Agent>();
 		agent.addAll(listBomberMan);
 		agent.addAll(listEnnemi);
-		for (InfoItem item : listItem) {
-			for (Agent a : agent) {
-				if (item.getX() == a.getX() && item.getY() == a.getY()) {
-					if (item.getType() == ItemType.FIRE_DOWN && a.getLvlBomb() > 1) {
-						// System.out.println("fire-down");
-						a.setLvlBomb(a.getLvlBomb() - 1);
-						remove.add(item);
-					}
-					if (item.getType() == ItemType.FIRE_UP && a.getLvlBomb() < 4) {
-						// System.out.println("fire-up");
-						a.setLvlBomb(a.getLvlBomb() + 1);
-						remove.add(item);
-					}
-					if (item.getType() == ItemType.FIRE_SUIT && a.getTpsInvincible() == 0) {
-						// System.out.println("fire-suit");
-						a.setTpsInvincible(10);
-						remove.add(item);
-					}
-					if (item.getType() == ItemType.SKULL && a.getTpsSick() == 0) {
-						// System.out.println("skull");
-						a.setTpsSick(10);
-						remove.add(item);
-					}
+		synchronized (listItem) {
+			for (InfoItem item : listItem) {
+				for (Agent a : agent) {
+					if (item.getX() == a.getX() && item.getY() == a.getY()) {
+						if (item.getType() == ItemType.FIRE_DOWN && a.getLvlBomb() > 1) {
+							// System.out.println("fire-down");
+							a.setLvlBomb(a.getLvlBomb() - 1);
+							remove.add(item);
+						}
+						if (item.getType() == ItemType.FIRE_UP && a.getLvlBomb() < 4) {
+							// System.out.println("fire-up");
+							a.setLvlBomb(a.getLvlBomb() + 1);
+							remove.add(item);
+						}
+						if (item.getType() == ItemType.FIRE_SUIT && a.getTpsInvincible() == 0) {
+							// System.out.println("fire-suit");
+							a.setTpsInvincible(10);
+							remove.add(item);
+						}
+						if (item.getType() == ItemType.SKULL && a.getTpsSick() == 0) {
+							// System.out.println("skull");
+							a.setTpsSick(10);
+							remove.add(item);
+						}
 
+					}
 				}
 			}
+			listItem.removeAll(remove);
 		}
-		listItem.removeAll(remove);
 	}
 
 	public boolean IsLegalMove(Agent a, AgentAction ag) {
@@ -425,19 +455,25 @@ public class BomberManGame extends Game {
 
 	public ArrayList<InfoAgent> getAgents() {
 		ArrayList<InfoAgent> res = new ArrayList<InfoAgent>();
-		for (Agent a : listBomberMan)
-			res.add(a.getAgentG());
-		for (Agent a : listEnnemi)
-			res.add(a.getAgentG());
+		synchronized (listBomberMan) {
+			for (Agent a : listBomberMan)
+				res.add(a.getAgentG());
+		}
+		synchronized (listEnnemi) {
+			for (Agent a : listEnnemi)
+				res.add(a.getAgentG());
+		}
 		return res;
 	}
 
 	public boolean IsLegalPutBomb(Agent a) {
 		if (a.getAgentG().isSick())
 			return false;
-		for (InfoBomb b : listBomb) {
-			if (b.getX() == a.getX() && b.getY() == a.getY())
-				return false;
+		synchronized (listBomb) {
+			for (InfoBomb b : listBomb) {
+				if (b.getX() == a.getX() && b.getY() == a.getY())
+					return false;
+			}
 		}
 		return true;
 	}
@@ -447,22 +483,18 @@ public class BomberManGame extends Game {
 			listBomb.add(new InfoBomb(a.getX(), a.getY(), a.getLvlBomb(), StateBomb.Step0));
 	}
 
-	public ArrayList<Agent> getListBomberMan() {
-		return listBomberMan;
-	}
-
-	public void setListBomberMan(ArrayList<Agent> listBomberMan) {
-		this.listBomberMan = listBomberMan;
-	}
-
 	public boolean isEnnemiOrInvicible(int x, int y) {
-		for (Agent ennemi : listEnnemi) {
-			if (ennemi.getX() == x && ennemi.getY() == y)
-				return true;
+		synchronized (listEnnemi) {
+			for (Agent ennemi : listEnnemi) {
+				if (ennemi.getX() == x && ennemi.getY() == y)
+					return true;
+			}
 		}
-		for (Agent agent : listBomberMan) {
-			if (agent.getTpsInvincible() > 0 && agent.getX() == x && agent.getY() == y)
-				return true;
+		synchronized (listBomberMan) {
+			for (Agent agent : listBomberMan) {
+				if (agent.getTpsInvincible() > 0 && agent.getX() == x && agent.getY() == y)
+					return true;
+			}
 		}
 		return false;
 	}
@@ -472,8 +504,8 @@ public class BomberManGame extends Game {
 		notifyObservers();
 	}
 
-	public void changeBreakables(ArrayList<Wall> breakable) {
-		for (Wall w : breakable) {
+	public void changeBreakables(List<Wall> list) {
+		for (Wall w : list) {
 			breakable_walls[w.getX()][w.getY()] = false;
 		}
 	}
@@ -502,32 +534,56 @@ public class BomberManGame extends Game {
 		this.breakable_walls = breakable_walls;
 	}
 
-	public ArrayList<InfoBomb> getListBomb() {
-		return listBomb;
+	public List<InfoBomb> getListBomb() {
+		synchronized (listBomb) {
+			return listBomb;
+		}
 	}
 
-	public ArrayList<InfoItem> getListItem() {
-		return listItem;
+	public List<InfoItem> getListItem() {
+		synchronized (listItem) {
+			return listItem;
+		}
 	}
 
-	public void setListBomb(ArrayList<InfoBomb> listBomb) {
-		this.listBomb = listBomb;
+	public void setListBomb(List<InfoBomb> listBomb) {
+		synchronized (listBomb) {
+			this.listBomb = listBomb;
+		}
 	}
 
-	public void setListItem(ArrayList<InfoItem> listItem) {
-		this.listItem = listItem;
+	public void setListItem(List<InfoItem> listItem) {
+		synchronized (listItem) {
+			this.listItem = listItem;
+		}
 	}
 
-	public ArrayList<Agent> getListEnnemi() {
-		return listEnnemi;
+	public List<Agent> getListEnnemi() {
+		synchronized (listEnnemi) {
+			return listEnnemi;
+		}
 	}
 
 	public String getEnd() {
 		return end;
 	}
 
-	public void setListEnnemi(ArrayList<Agent> listEnnemi) {
-		this.listEnnemi = listEnnemi;
+	public void setListEnnemi(List<Agent> listEnnemi) {
+		synchronized (listEnnemi) {
+			this.listEnnemi = listEnnemi;
+		}
+	}
+
+	public List<Agent> getListBomberMan() {
+		synchronized (listBomberMan) {
+			return listBomberMan;
+		}
+	}
+
+	public void setListBomberMan(List<Agent> listBomberMan) {
+		synchronized (listBomberMan) {
+			this.listBomberMan = listBomberMan;
+		}
 	}
 
 }
