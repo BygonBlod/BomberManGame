@@ -13,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 
 import json.CreateJson;
 import json.DeserializationJson;
+import model.utils.AgentAction;
 
 public class ThreadedClient extends Thread {
 	private Server server;
@@ -21,6 +22,8 @@ public class ThreadedClient extends Thread {
 	private PrintWriter sortie;
 	private String name;
 	private ArrayList<String> received;
+	private AgentAction action;
+	private Partie party;
 
 	public ThreadedClient(Socket socket, Server s) {
 		this.socket = socket;
@@ -64,16 +67,11 @@ public class ThreadedClient extends Thread {
 							received = DeserializationJson.JsonSelect(json);
 							Select();
 							break;
-
+						case "action":
+							action = DeserializationJson.JsonAction(json);
+							System.out.println("action " + action);
+							party.action(action, this);
 						}
-						/*
-						 * JsonElement element = gson.fromJson(data, JsonElement.class); JsonObject jObj
-						 * = element.getAsJsonObject(); JsonObject j2 =
-						 * gson.fromJson(jObj.getAsJsonObject("tchat"), JsonObject.class); if (j2 !=
-						 * null) { received = DeserializationJson.JsonTchat(j2); Tchat(); } else { j2 =
-						 * gson.fromJson(jObj.getAsJsonObject("select"), JsonObject.class); if (j2 !=
-						 * null) { received = DeserializationJson.JsonSelect(j2); Select(); } }
-						 */
 					}
 				}
 			} catch (SocketException e) {
@@ -81,7 +79,7 @@ public class ThreadedClient extends Thread {
 				server.removeClient(this);
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("null connexion fermer avec " + name);
+				System.out.println("connexion fermer avec " + name);
 				server.removeClient(this);
 			}
 		}
@@ -124,6 +122,10 @@ public class ThreadedClient extends Thread {
 		System.out.println("[GAME]:choix niveau " + name + "> " + partie);
 		// this.sendMessage("[GAME] vous avez choisi le niveau " + partie);
 
+	}
+
+	public void setParty(Partie p) {
+		this.party = p;
 	}
 
 }

@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import Server.GameChange;
 import model.BomberManGame;
+import model.utils.AgentAction;
 import model.utils.Wall;
 
 public class CreateJson {
@@ -23,6 +24,13 @@ public class CreateJson {
 		json.put("type", "select");
 		json.put("name", nameUser);
 		json.put("partie", partie);
+		return json.toJSONString();
+	}
+
+	public static String JsonAction(AgentAction action) {
+		JSONObject json = new JSONObject();
+		json.put("type", "action");
+		json.put("action", action.toString());
 		return json.toJSONString();
 	}
 

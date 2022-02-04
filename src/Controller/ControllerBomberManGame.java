@@ -43,7 +43,8 @@ public class ControllerBomberManGame extends AbstractController {
 	}
 
 	public void moveBomberman(AgentAction action) {
-		((BomberManGame) game).stratBomberman.setAction(action);
+		// ((BomberManGame) game).stratBomberman.setAction(action);
+		client.setAction(action);
 
 	}
 

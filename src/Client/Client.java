@@ -9,6 +9,7 @@ import Controller.ControllerBomberManGame;
 import Server.GameChange;
 import json.CreateJson;
 import model.BomberManGame;
+import model.utils.AgentAction;
 
 public class Client {
 
@@ -76,6 +77,10 @@ public class Client {
 		listen.interrupt();
 		write.interrupt();
 		System.exit(0);
+	}
+
+	public void setAction(AgentAction action) {
+		write.sendMessage(CreateJson.JsonAction(action));
 	}
 
 	public ClientListen getListen() {

@@ -43,6 +43,11 @@ public class DeserializationJson {
 		return res;
 	}
 
+	public static AgentAction JsonAction(JSONObject json) {
+		String action = (String) json.get("action");
+		return getAction(action);
+	}
+
 	public static BomberManGame JsonGameBegin(JSONObject json) throws ParseException {
 		JSONParser jsonParser = new JSONParser();
 		BomberManGame res = new BomberManGame();
