@@ -225,22 +225,27 @@ public class BomberManGame extends Game {
 			if (breakable_walls[bomb.getX()][bomb.getY()] == true) {
 				NewItem(bomb.getX(), bomb.getY());
 				breakable_walls[bomb.getX()][bomb.getY()] = false;
+				noBreakable(bomb.getX(), bomb.getY());
 			}
 			if (bomb.getX() + i < breakable_walls.length && breakable_walls[bomb.getX() + i][bomb.getY()] == true) {
 				NewItem(bomb.getX() + i, bomb.getY());
 				breakable_walls[bomb.getX() + i][bomb.getY()] = false;
+				noBreakable(bomb.getX() + i, bomb.getY());
 			}
 			if (bomb.getY() + i < breakable_walls[0].length && breakable_walls[bomb.getX()][bomb.getY() + i] == true) {
 				NewItem(bomb.getX(), bomb.getY() + i);
 				breakable_walls[bomb.getX()][bomb.getY() + i] = false;
+				noBreakable(bomb.getX(), bomb.getY() + i);
 			}
 			if (bomb.getX() - i > -1 && breakable_walls[bomb.getX() - i][bomb.getY()] == true) {
 				NewItem(bomb.getX() - i, bomb.getY());
 				breakable_walls[bomb.getX() - i][bomb.getY()] = false;
+				noBreakable(bomb.getX() - i, bomb.getY());
 			}
 			if (bomb.getY() - i > -1 && breakable_walls[bomb.getX()][bomb.getY() - i] == true) {
 				NewItem(bomb.getX(), bomb.getY() - i);
 				breakable_walls[bomb.getX()][bomb.getY() - i] = false;
+				noBreakable(bomb.getX(), bomb.getY() - i);
 			}
 		}
 		listBomberMan.removeAll(removeBM);
@@ -471,6 +476,10 @@ public class BomberManGame extends Game {
 		for (Wall w : breakable) {
 			breakable_walls[w.getX()][w.getY()] = false;
 		}
+	}
+
+	public void noBreakable(int x, int y) {
+
 	}
 
 	public void addActionBomberMan(AgentAction action) {

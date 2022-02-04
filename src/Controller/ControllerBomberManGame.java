@@ -103,7 +103,7 @@ public class ControllerBomberManGame extends AbstractController {
 		this.game.setListItem(game2.getListItem());
 		this.game.setListBomberMan(game2.getListBomberMan());
 		this.game.setListEnnemi(game2.getListEnnemi());
-		this.game.changeBreakables(game2.getBreakable_walls());
+		this.game.changeBreakables(game2.getListBreakable());
 		view.update(this.game);
 
 	}

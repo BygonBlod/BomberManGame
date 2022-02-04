@@ -21,7 +21,9 @@ import model.utils.AgentAction;
 import model.utils.ColorAgent;
 import model.utils.InfoBomb;
 import model.utils.InfoItem;
+import model.utils.ItemType;
 import model.utils.StateBomb;
+import model.utils.Wall;
 
 public class DeserializationJson {
 
@@ -114,6 +116,7 @@ public class DeserializationJson {
 		ArrayList<Agent> listEnnemi = new ArrayList<Agent>();
 		ArrayList<InfoBomb> listBomb = new ArrayList<InfoBomb>();
 		ArrayList<InfoItem> listItem = new ArrayList<InfoItem>();
+		ArrayList<Wall> listWall = new ArrayList<Wall>();
 
 		JSONArray list = (JSONArray) json.get("listBomberman");
 		ColorAgent[] color = ColorAgent.values();
@@ -159,13 +162,46 @@ public class DeserializationJson {
 			listBomb.add(new InfoBomb(xw, yw, lvlB, GetStep(step)));
 
 		}
+		list = (JSONArray) json.get("walls");
+		for (Object w3 : list) {
+			JSONObject obj = (JSONObject) jsonParser.parse(w3.toString());
+			int xw = (int) ((long) obj.get("x"));
+			int yw = (int) ((long) obj.get("y"));
+			listWall.add(new Wall(xw, yw));
+
+		}
+		list = (JSONArray) json.get("listItem");
+		for (Object w3 : list) {
+			JSONObject obj = (JSONObject) jsonParser.parse(w3.toString());
+			int xw = (int) ((long) obj.get("x"));
+			int yw = (int) ((long) obj.get("y"));
+			String type = (String) obj.get("type");
+			ItemType typeI = GetItem(type);
+			listItem.add(new InfoItem(xw, yw, typeI));
+
+		}
 
 		res.setListBomb(listBomb);
 		res.setListBomberMan(listBomber);
 		res.setListEnnemi(listEnnemi);
 		res.setListItem(listItem);
+		res.setListBreakable(listWall);
 		return res;
 
+	}
+
+	private static ItemType GetItem(String type) {
+		switch (type) {
+		case "FIRE_UP":
+			return ItemType.FIRE_UP;
+		case "FIRE_DOWN":
+			return ItemType.FIRE_DOWN;
+		case "FIRE_SUIT":
+			return ItemType.FIRE_SUIT;
+		case "SKULL":
+			return ItemType.SKULL;
+		}
+		return null;
 	}
 
 	private static StateBomb GetStep(String step) {

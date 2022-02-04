@@ -79,8 +79,12 @@ public class GameChange {
 		this.listItem = listItem;
 	}
 
-	public ArrayList<Wall> getBreakable_walls() {
+	public ArrayList<Wall> getListBreakable() {
 		return listBreakable;
+	}
+
+	public void setListBreakable(ArrayList<Wall> listBreakable) {
+		this.listBreakable = listBreakable;
 	}
 
 }

@@ -61,7 +61,7 @@ public class CreateJson {
 	public static String JsonGamePartie(GameChange game) {
 		JSONObject json = new JSONObject();
 		json.put("type", "GameParty");
-		json.put("walls", game.getBreakable_walls());
+		json.put("walls", game.getListBreakable());
 		json.put("listBomberman", game.getListBomberMan());
 		json.put("listEnnemi", game.getListEnnemi());
 		json.put("listBomb", game.getListBomb());
