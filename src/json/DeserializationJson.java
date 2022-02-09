@@ -7,8 +7,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import Server.GameChange;
 import model.Agent.Agent;
@@ -27,7 +25,6 @@ import model.utils.Wall;
 public class DeserializationJson {
 
 	public static ArrayList<String> JsonTchat(JSONObject json) {
-		Gson gson = new GsonBuilder().create();
 		ArrayList<String> res = new ArrayList<>();
 		res.add((String) json.get("name"));
 		res.add((String) json.get("message"));
@@ -35,7 +32,6 @@ public class DeserializationJson {
 	}
 
 	public static String JsonName(JSONObject json) {
-		Gson gson = new GsonBuilder().create();
 		String res = "";
 		res += (String) json.get("name");
 		return res;
