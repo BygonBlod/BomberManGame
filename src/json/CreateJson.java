@@ -19,6 +19,13 @@ public class CreateJson {
 		return json.toJSONString();
 	}
 
+	public static String JsonName(String nameUser) {
+		JSONObject json = new JSONObject();
+		json.put("type", "name");
+		json.put("name", nameUser);
+		return json.toJSONString();
+	}
+
 	public static String JsonSelect(String nameUser, String partie) {
 		JSONObject json = new JSONObject();
 		json.put("type", "select");

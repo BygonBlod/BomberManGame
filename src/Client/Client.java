@@ -20,11 +20,13 @@ public class Client {
 	private ClientWrite write;
 	private GameChange game;
 	private ViewBomberManGame view;
+	private boolean isConnected;
 
 	public Client(String host, int port, String id) {
 		this.host = host;
 		this.port = port;
 		this.Id = id;
+		this.isConnected = false;
 	}
 
 	public void start() {
@@ -39,24 +41,28 @@ public class Client {
 			listen.start();
 			write.start();
 
-			// fa�on pour choisir dossier
-			JFileChooser choose = new JFileChooser(System.getProperty("user.dir") + "/layouts");
-
-			choose.setDialogTitle("Selectionnez un layout pour votre jeu");
-			choose.setAcceptAllFileFilterUsed(false);
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("layout .lay", "lay");
-			choose.addChoosableFileFilter(filter);
-			int res = choose.showOpenDialog(null);
-			if (res == JFileChooser.APPROVE_OPTION) {
-				String layout = choose.getSelectedFile().getPath();
-				write.sendMessage(CreateJson.JsonSelect(Id, choose.getSelectedFile().getPath()));
-
-			}
+			write.sendMessage(CreateJson.JsonName(Id));
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void connect() {
+		// façon pour choisir dossier
+		JFileChooser choose = new JFileChooser(System.getProperty("user.dir") + "/layouts");
+
+		choose.setDialogTitle("Selectionnez un layout pour votre jeu");
+		choose.setAcceptAllFileFilterUsed(false);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("layout .lay", "lay");
+		choose.addChoosableFileFilter(filter);
+		int res = choose.showOpenDialog(null);
+		if (res == JFileChooser.APPROVE_OPTION) {
+			String layout = choose.getSelectedFile().getPath();
+			write.sendMessage(CreateJson.JsonSelect(Id, choose.getSelectedFile().getPath()));
+
+		}
 	}
 
 	public void changeGame(GameChange game) {
@@ -95,6 +101,17 @@ public class Client {
 
 	public void setWrite(ClientWrite write) {
 		this.write = write;
+	}
+
+	public boolean isConnected() {
+		return isConnected;
+	}
+
+	public void setConnected(boolean isConnected) {
+		this.isConnected = isConnected;
+		if (isConnected) {
+			connect();
+		}
 	}
 
 }

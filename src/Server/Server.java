@@ -6,6 +6,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
+import json.CreateJson;
+
 public class Server {
 
 	private final int port;
@@ -38,9 +40,6 @@ public class Server {
 				clients.add(threadedClient);
 
 				threadedClient.start();
-				// threadedClient.sendMessage("[SERVER] Vous êtes connecter au serveur");
-
-				// broadcast("Nouveau client", socket);
 
 			}
 
@@ -61,7 +60,8 @@ public class Server {
 	}
 
 	public void removeClient(ThreadedClient threadedClient) {
-		broadcast("[SERVER] " + threadedClient.getNameClient() + " s'est déconnecter", threadedClient.getSocket());
+		broadcast(CreateJson.JsonTchat("[SERVER]", threadedClient.getNameClient() + " s'est déconnecter"),
+				threadedClient.getSocket());
 		threadedClient.interrupt();
 		this.clients.remove(threadedClient);
 

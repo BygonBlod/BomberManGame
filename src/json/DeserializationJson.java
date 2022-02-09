@@ -34,6 +34,13 @@ public class DeserializationJson {
 		return res;
 	}
 
+	public static String JsonName(JSONObject json) {
+		Gson gson = new GsonBuilder().create();
+		String res = "";
+		res += (String) json.get("name");
+		return res;
+	}
+
 	public static ArrayList<String> JsonSelect(JSONObject json) {
 
 		ArrayList<String> res = new ArrayList<>();
@@ -64,7 +71,6 @@ public class DeserializationJson {
 			walls[xw][yw] = true;
 		}
 		list = (JSONArray) json.get("breakables");
-		System.out.println(list);
 		for (Object w2 : list) {
 			JSONObject obj = (JSONObject) jsonParser.parse(w2.toString());
 			int xw = (int) ((long) obj.get("x"));

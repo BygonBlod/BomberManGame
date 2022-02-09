@@ -20,7 +20,7 @@ public class ThreadedClient extends Thread {
 	private Socket socket;
 	private BufferedReader entree;
 	private PrintWriter sortie;
-	private String name;
+	private String nameClient;
 	private ArrayList<String> received;
 	private AgentAction action;
 	private Partie party;
@@ -59,6 +59,9 @@ public class ThreadedClient extends Thread {
 						String type = (String) json.get("type");
 						System.out.println("type :" + type);
 						switch (type) {
+						case "name":
+							this.setNameClient(DeserializationJson.JsonName(json));
+							break;
 						case "tchat":
 							received = DeserializationJson.JsonTchat(json);
 							Tchat();
@@ -75,11 +78,11 @@ public class ThreadedClient extends Thread {
 					}
 				}
 			} catch (SocketException e) {
-				System.out.println("connexion fermer avec " + name);
+				System.out.println("connexion fermer avec " + nameClient);
 				server.removeClient(this);
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("connexion fermer avec " + name);
+				System.out.println("connexion fermer avec " + nameClient);
 				server.removeClient(this);
 			}
 		}
@@ -91,22 +94,22 @@ public class ThreadedClient extends Thread {
 	}
 
 	public String getNameClient() {
-		return name;
+		return nameClient;
 	}
 
 	public void Tchat() {
 		try {
-			if (name.equals(received.get(0))) {
+			if (nameClient.equals(received.get(0))) {
 				String message = received.get(1);
 				if (message.contains("/close")) {
 					socket.close();
 				} else {
-					System.out.println("[TCHAT]" + name + "> " + message);
-					server.broadcast(CreateJson.JsonTchat(name, message), socket);
+					System.out.println("[TCHAT]" + nameClient + "> " + message);
+					server.broadcast(CreateJson.JsonTchat(nameClient, message), socket);
 				}
 			}
 		} catch (SocketException e) {
-			System.out.println("connexion fermer avec " + name);
+			System.out.println("connexion fermer avec " + nameClient);
 			server.removeClient(this);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,18 +117,24 @@ public class ThreadedClient extends Thread {
 	}
 
 	private void Select() {
-		name = received.get(0);
-		String message = received.get(1);
-		String[] partieUrl = message.split("/");
-		String partie = partieUrl[partieUrl.length - 1];
-		server.addGame(message, this);
-		System.out.println("[GAME]:choix niveau " + name + "> " + partie);
-		// this.sendMessage("[GAME] vous avez choisi le niveau " + partie);
+		System.out.println(nameClient + " " + received.get(0));
+		if (nameClient.equals(received.get(0))) {
+			String message = received.get(1);
+			String[] partieUrl = message.split("/");
+			String partie = partieUrl[partieUrl.length - 1];
+			server.addGame(message, this);
+			System.out.println("[GAME]:choix niveau " + nameClient + "> " + partie);
+			// this.sendMessage("[GAME] vous avez choisi le niveau " + partie);
+		}
 
 	}
 
 	public void setParty(Partie p) {
 		this.party = p;
+	}
+
+	public void setNameClient(String n) {
+		this.nameClient = n;
 	}
 
 }

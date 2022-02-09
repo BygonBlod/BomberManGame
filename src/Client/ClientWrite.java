@@ -32,24 +32,29 @@ public class ClientWrite extends Thread {
 				String jsonStr = "";
 				Scanner scanner = new Scanner(System.in);
 				String text = scanner.nextLine();
-				if (text.contains("/choose")) {
-					String[] textSplit = text.split("/choose");
-					if (textSplit.length == 2) {
-						String lvl = textSplit[1];
-						jsonStr = CreateJson.JsonSelect(Id, lvl);
-					} else
-						System.out.println("Vous devez utiliser le commande /choose \"votre niveau\"");
-					;
-				} else {
+				switch (text) {
+				case "/connect":
+					System.out.println("entrer votre pseudo :");
+					scanner = new Scanner(System.in);
+					String pseudo = scanner.nextLine();
+					System.out.println("entrer votre mot de passe :");
+					scanner = new Scanner(System.in);
+					String pwd = scanner.nextLine();
+
+					// reste les tests avec la base de donnée pour savoir si il existe
+					client.setConnected(true);
+					System.out.println("vous essayer de vous connecter sans succès");
+
+					break;
+				case "/close":
+					socket.close();
+					break;
+				default:
 					jsonStr = CreateJson.JsonTchat(Id, text);
+					sendMessage(jsonStr);
+					break;
 				}
-				if (text.length() != 0) {
-					sortie.println(jsonStr);
-					sortie.flush();
-					if (text.contains("/close")) {
-						socket.close();
-					}
-				}
+
 			}
 
 		} catch (SocketException e) {

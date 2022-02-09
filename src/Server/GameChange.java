@@ -63,6 +63,20 @@ public class GameChange {
 		for (Wall w : listBreakable) {
 			breakable_walls[w.getX()][w.getY()] = false;
 		}
+		changeEnd();
+
+	}
+
+	private void changeEnd() {
+
+		if (listBomberMan.size() == 0)
+			end = "YOU DIED";
+		if (listEnnemi.size() == 0)
+			end = "YOU WIN";
+		if (!end.contentEquals("")) {
+			System.out.println("------ Fin du Jeu ------");
+			System.out.println(end);
+		}
 	}
 
 	public ArrayList<InfoAgent> getAgents() {

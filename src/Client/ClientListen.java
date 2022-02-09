@@ -27,14 +27,13 @@ public class ClientListen extends Thread {
 		try {
 			entree = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			while (socket.isConnected()) {
+
 				JSONParser jsonParser = new JSONParser();
 				String data = entree.readLine();
 				String message = "";
 				if (data.length() > 0) {
-					System.out.println(data);
 					JSONObject json = (JSONObject) jsonParser.parse(data);
 					String type = (String) json.get("type");
-					System.out.println("type :" + type);
 					switch (type) {
 					case "tchat":
 						Tchat(DeserializationJson.JsonTchat(json));
