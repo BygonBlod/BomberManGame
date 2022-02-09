@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -43,7 +42,7 @@ public class BomberManGame extends Game {
 		super(200);
 		this.plateau = p;
 		stratEnnemi = new IARandom();
-		stratBomberman = new /* IABomberManAggro(); */IABomberManManuel();
+		stratBomberman = new IABomberManManuel();
 		stratVol = new IAVol();
 		stratRajion = new IARajion();
 		this.initializeGame();
@@ -109,27 +108,17 @@ public class BomberManGame extends Game {
 					end = "YOU DIED";
 				if (listEnnemi.size() == 0)
 					end = "YOU WIN";
-				this.thread.stop();
+				if (thread != null) {
+					this.thread.stop();
+				}
 			}
 		}
-
 	}
 
 	@Override
-	protected boolean gameContinue() {
+	public boolean gameContinue() {
 		synchronized (listBomberMan) {
 			synchronized (listEnnemi) {
-				Iterator<Agent> bomberIterator = listBomberMan.iterator();
-				Iterator<Agent> ennemiIterator = listEnnemi.iterator();
-				while (bomberIterator.hasNext()) {
-					Agent bomber = (Agent) bomberIterator.next();
-					while (ennemiIterator.hasNext()) {
-						Agent ennemi = ennemiIterator.next();
-						if ((bomber.getX() == ennemi.getX() && bomber.getY() == ennemi.getY())) {
-							listBomberMan.remove(bomber);
-						}
-					}
-				}
 				if (listBomberMan.size() == 0)
 					return false;
 				if (listEnnemi.size() == 0)
@@ -143,6 +132,7 @@ public class BomberManGame extends Game {
 	protected void takeTurn() {
 		System.out.println("---------  Tour: " + turn + "  ---------");
 		regleBomb();
+		regleEnnemi();
 		try {
 			thread.sleep(10);
 		} catch (InterruptedException e) {
@@ -183,6 +173,23 @@ public class BomberManGame extends Game {
 		}
 		regleItem();
 
+	}
+
+	public void regleEnnemi() {
+		ArrayList<Agent> removeBM = new ArrayList<Agent>();
+		synchronized (listBomberMan) {
+			synchronized (listEnnemi) {
+				for (Agent b : listBomberMan) {
+					for (Agent e : listEnnemi) {
+						if (b.getX() == e.getX() && b.getY() == e.getY()) {
+							removeBM.add(b);
+						}
+					}
+				}
+				listBomberMan.removeAll(removeBM);
+			}
+			System.out.println(listBomberMan.toString());
+		}
 	}
 
 	private void regleBomb() {

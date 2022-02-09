@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import Server.GameChange;
-import model.BomberManGame;
 import model.Agent.Agent;
 import model.Agent.AgentBird;
 import model.Agent.AgentBomberMan;
@@ -48,11 +47,11 @@ public class DeserializationJson {
 		return getAction(action);
 	}
 
-	public static BomberManGame JsonGameBegin(JSONObject json) throws ParseException {
+	public static GameChange JsonGameBegin(JSONObject json) throws ParseException {
 		JSONParser jsonParser = new JSONParser();
-		BomberManGame res = new BomberManGame();
 		int x = (int) ((long) json.get("x"));
 		int y = (int) ((long) json.get("y"));
+		GameChange res = new GameChange(x, y);
 		boolean[][] walls = new boolean[x][y];
 		boolean[][] breakables = new boolean[x][y];
 		ArrayList<Agent> listBomber = new ArrayList<Agent>();

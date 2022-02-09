@@ -5,10 +5,9 @@ import java.net.Socket;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import Controller.ControllerBomberManGame;
 import Server.GameChange;
+import View.ViewBomberManGame;
 import json.CreateJson;
-import model.BomberManGame;
 import model.utils.AgentAction;
 
 public class Client {
@@ -19,7 +18,8 @@ public class Client {
 	private boolean start = false;
 	private ClientListen listen;
 	private ClientWrite write;
-	private ControllerBomberManGame bomber;
+	private GameChange game;
+	private ViewBomberManGame view;
 
 	public Client(String host, int port, String id) {
 		this.host = host;
@@ -50,7 +50,7 @@ public class Client {
 			if (res == JFileChooser.APPROVE_OPTION) {
 				String layout = choose.getSelectedFile().getPath();
 				write.sendMessage(CreateJson.JsonSelect(Id, choose.getSelectedFile().getPath()));
-				bomber = new ControllerBomberManGame(this);
+
 			}
 
 		} catch (Exception e) {
@@ -59,18 +59,16 @@ public class Client {
 
 	}
 
-	public void changeGame(BomberManGame game) {
+	public void changeGame(GameChange game) {
 		if (!start) {
-			bomber.setGame(game);
+			this.game = game;
+			view = new ViewBomberManGame(game, this);
 			start = true;
 		} else {
-			bomber.changeGame(game);
+			this.game.set(game);
+			view.update(this.game);
 		}
 
-	}
-
-	public void changeGame(GameChange game) {
-		bomber.changeGame(game);
 	}
 
 	public void deleteClient() {
@@ -97,14 +95,6 @@ public class Client {
 
 	public void setWrite(ClientWrite write) {
 		this.write = write;
-	}
-
-	public ControllerBomberManGame getBomber() {
-		return bomber;
-	}
-
-	public void setBomber(ControllerBomberManGame bomber) {
-		this.bomber = bomber;
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import model.BomberManGame;
 import model.Agent.Agent;
+import model.utils.InfoAgent;
 import model.utils.InfoBomb;
 import model.utils.InfoItem;
 import model.utils.Wall;
@@ -17,12 +18,17 @@ public class GameChange {
 	List<InfoItem> listItem;
 	List<Wall> listBreakable;
 	boolean breakable_walls[][];
+	boolean walls[][];
+	private String end;
 	private int x;
 	private int y;
 
 	public GameChange(int x, int y) {
 		this.x = x;
 		this.y = y;
+		this.end = "";
+		this.breakable_walls = new boolean[x][y];
+		this.walls = new boolean[x][y];
 		reset();
 	}
 
@@ -46,6 +52,28 @@ public class GameChange {
 		System.out.println("agents: " + listBomberMan.toString());
 		System.out.println("bombs: " + listBomb.toString());
 		System.out.println("items: " + listItem.toString());
+	}
+
+	public void set(GameChange game) {
+		listBomberMan = game.getListBomberMan();
+		listEnnemi = game.getListEnnemi();
+		listBomb = game.getListBomb();
+		listItem = game.getListItem();
+		listBreakable = game.getListBreakable();
+		for (Wall w : listBreakable) {
+			breakable_walls[w.getX()][w.getY()] = false;
+		}
+	}
+
+	public ArrayList<InfoAgent> getAgents() {
+		ArrayList<InfoAgent> res = new ArrayList<InfoAgent>();
+		for (Agent a : listBomberMan)
+			res.add(a.getAgentG());
+
+		for (Agent a : listEnnemi)
+			res.add(a.getAgentG());
+
+		return res;
 	}
 
 	public List<Agent> getListBomberMan() {
@@ -86,6 +114,30 @@ public class GameChange {
 
 	public void setListBreakable(List<Wall> res) {
 		this.listBreakable = res;
+	}
+
+	public boolean[][] getBreakable_walls() {
+		return breakable_walls;
+	}
+
+	public void setBreakable_walls(boolean[][] breakable_walls) {
+		this.breakable_walls = breakable_walls;
+	}
+
+	public boolean[][] getWalls() {
+		return walls;
+	}
+
+	public void setWalls(boolean[][] walls) {
+		this.walls = walls;
+	}
+
+	public String getEnd() {
+		return end;
+	}
+
+	public void setEnd(String end) {
+		this.end = end;
 	}
 
 }

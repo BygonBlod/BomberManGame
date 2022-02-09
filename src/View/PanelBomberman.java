@@ -53,15 +53,16 @@ public class PanelBomberman extends JPanel {
 	private boolean breakable_walls[][];
 
 	private boolean[][] walls;
+	private String end;
 
 	int cpt;
 
 	public PanelBomberman(int sizeX, int sizeY, boolean[][] walls, boolean[][] breakable_walls,
-			ArrayList<InfoAgent> listInfoAgents) {
+			ArrayList<InfoAgent> listInfoAgents, String end) {
 
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
-
+		this.end = end;
 		this.walls = walls;
 
 		this.listInfoAgents = listInfoAgents;
@@ -137,6 +138,9 @@ public class PanelBomberman extends JPanel {
 			dessine_Agent(g, listInfoAgents.get(i));
 		}
 
+		if (!this.end.contentEquals("")) {
+			g.drawString(end, fen_x / 2, fen_y / 2);
+		}
 		cpt++;
 	}
 
