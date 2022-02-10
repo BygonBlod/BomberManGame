@@ -76,10 +76,17 @@ public class Server {
 			}
 		}
 		if (!exist) {
-			Partie newPart = new Partie(lvl);
+			Partie newPart = new Partie(lvl, this);
 			newPart.addGamer(client);
 			games.add(newPart);
 		}
+	}
+
+	public void removeParty(Partie partie) {
+		if (games.contains(partie)) {
+			games.remove(partie);
+		}
+
 	}
 
 }

@@ -10,10 +10,12 @@ public class Partie {
 	private BomberManGameServ game;
 	private ArrayList<ThreadedClient> gamers = new ArrayList<>();
 	private int nbGamers;
+	private Server serveur;
 
-	public Partie(String input) {
+	public Partie(String input, Server serv) {
 		System.out.println("création de la partie " + input);
 		name = input;
+		serveur = serv;
 		game = new BomberManGameServ(input, this);
 		nbGamers = game.getListBomberMan().size();
 
@@ -57,6 +59,16 @@ public class Partie {
 				game.stratBomberman.setAction(action);
 			}
 			++i;
+		}
+	}
+
+	public void remove(ThreadedClient threadedClient) {
+		if (gamers.contains(threadedClient)) {
+			gamers.remove(threadedClient);
+			if (gamers.size() == 0) {
+				game.setRunning(false);
+				serveur.removeParty(this);
+			}
 		}
 	}
 

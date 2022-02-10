@@ -85,12 +85,8 @@ public class PanelBomberman extends JPanel {
 
 		if (!this.end.contentEquals("")) {
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-			// Get the FontMetrics
 			FontMetrics metrics = g.getFontMetrics(g.getFont());
-			// Determine the X coordinate for the text
 			int x = (fen_x - metrics.stringWidth(end)) / 2;
-			// Determine the Y coordinate for the text (note we add the ascent, as in java
-			// 2d 0 is top of the screen)
 			int y = ((fen_y - metrics.getHeight()) / 2) + metrics.getAscent();
 			g.drawString(end, x, y);
 		} else {

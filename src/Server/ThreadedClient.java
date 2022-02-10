@@ -78,15 +78,21 @@ public class ThreadedClient extends Thread {
 					}
 				}
 			} catch (SocketException e) {
-				System.out.println("connexion fermer avec " + nameClient);
-				server.removeClient(this);
+				deconnect();
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("connexion fermer avec " + nameClient);
-				server.removeClient(this);
+				deconnect();
 			}
 		}
 
+	}
+
+	public void deconnect() {
+		System.out.println("connexion fermer avec " + nameClient);
+		server.removeClient(this);
+		if (party != null) {
+			party.remove(this);
+		}
 	}
 
 	public Socket getSocket() {
@@ -109,8 +115,7 @@ public class ThreadedClient extends Thread {
 				}
 			}
 		} catch (SocketException e) {
-			System.out.println("connexion fermer avec " + nameClient);
-			server.removeClient(this);
+			deconnect();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -124,7 +129,6 @@ public class ThreadedClient extends Thread {
 			String partie = partieUrl[partieUrl.length - 1];
 			server.addGame(message, this);
 			System.out.println("[GAME]:choix niveau " + nameClient + "> " + partie);
-			// this.sendMessage("[GAME] vous avez choisi le niveau " + partie);
 		}
 
 	}

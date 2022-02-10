@@ -1,6 +1,7 @@
 package Client;
 
 import java.net.Socket;
+import java.sql.Timestamp;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -21,6 +22,8 @@ public class Client {
 	private GameChange game;
 	private ViewBomberManGame view;
 	private boolean isConnected;
+	private long time;
+	private AgentAction action;
 
 	public Client(String host, int port, String id) {
 		this.host = host;
@@ -67,6 +70,7 @@ public class Client {
 
 	public void changeGame(GameChange game) {
 		if (!start) {
+			time = (System.currentTimeMillis());
 			this.game = game;
 			view = new ViewBomberManGame(game, this);
 			start = true;
@@ -83,8 +87,15 @@ public class Client {
 		System.exit(0);
 	}
 
-	public void setAction(AgentAction action) {
-		write.sendMessage(CreateJson.JsonAction(action));
+	public void setAction(AgentAction a) {
+		long actualTime = (System.currentTimeMillis());
+		action = a;
+		if (actualTime - time >= 100) {
+			write.sendMessage(CreateJson.JsonAction(action));
+			time = actualTime;
+
+			System.out.println(new Timestamp(time));
+		}
 	}
 
 	public ClientListen getListen() {
