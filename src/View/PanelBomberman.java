@@ -1,6 +1,8 @@
 package View;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -81,65 +83,77 @@ public class PanelBomberman extends JPanel {
 		this.stepx = fen_x / (double) sizeX;
 		this.stepy = fen_y / (double) sizeY;
 
-		g.setColor(ground_Color);
-		g.fillRect(0, 0, fen_x, fen_y);
-
-		double position_x = 0;
-
-		for (int x = 0; x < sizeX; x++) {
-			double position_y = 0;
-
-			for (int y = 0; y < sizeY; y++) {
-
-				if (walls[x][y]) {
-
-					try {
-						Image img = ImageIO.read(new File("./images/wall.png"));
-						g.drawImage(img, (int) position_x, (int) position_y, (int) stepx, (int) stepy, this);
-
-					} catch (IOException e) {
-						e.printStackTrace();
-
-					}
-				}
-
-				else if (this.breakable_walls[x][y]) {
-
-					try {
-						Image img = ImageIO.read(new File("./images/brique_2.png"));
-						g.drawImage(img, (int) position_x, (int) position_y, (int) stepx, (int) stepy, this);
-
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-
-				} else {
-					try {
-						Image img = ImageIO.read(new File("./images/grass.png"));
-						g.drawImage(img, (int) position_x, (int) position_y, (int) stepx, (int) stepy, this);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				position_y += stepy;
-			}
-			position_x += stepx;
-		}
-
-		for (int i = 0; i < listInfoItems.size(); i++) {
-			dessine_Items(g, listInfoItems.get(i));
-		}
-
-		for (int j = 0; j < listInfoBombs.size(); j++) {
-			dessine_Bomb(g, listInfoBombs.get(j));
-		}
-
-		for (int i = 0; i < listInfoAgents.size(); i++) {
-			dessine_Agent(g, listInfoAgents.get(i));
-		}
-
 		if (!this.end.contentEquals("")) {
-			g.drawString(end, fen_x / 2, fen_y / 2);
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+			// Get the FontMetrics
+			FontMetrics metrics = g.getFontMetrics(g.getFont());
+			// Determine the X coordinate for the text
+			int x = (fen_x - metrics.stringWidth(end)) / 2;
+			// Determine the Y coordinate for the text (note we add the ascent, as in java
+			// 2d 0 is top of the screen)
+			int y = ((fen_y - metrics.getHeight()) / 2) + metrics.getAscent();
+			g.drawString(end, x, y);
+		} else {
+			g.setColor(ground_Color);
+			g.fillRect(0, 0, fen_x, fen_y);
+
+			double position_x = 0;
+
+			for (int x = 0; x < sizeX; x++) {
+				double position_y = 0;
+
+				for (int y = 0; y < sizeY; y++) {
+
+					if (walls[x][y]) {
+
+						try {
+							Image img = ImageIO.read(new File("./images/wall.png"));
+							g.drawImage(img, (int) position_x, (int) position_y, (int) stepx, (int) stepy, this);
+
+						} catch (IOException e) {
+							e.printStackTrace();
+
+						}
+					}
+
+					else if (this.breakable_walls[x][y]) {
+
+						try {
+							Image img = ImageIO.read(new File("./images/brique_2.png"));
+							g.drawImage(img, (int) position_x, (int) position_y, (int) stepx, (int) stepy, this);
+
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+					} else {
+						try {
+							Image img = ImageIO.read(new File("./images/grass.png"));
+							g.drawImage(img, (int) position_x, (int) position_y, (int) stepx, (int) stepy, this);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					position_y += stepy;
+				}
+				position_x += stepx;
+			}
+
+			for (int i = 0; i < listInfoItems.size(); i++) {
+				dessine_Items(g, listInfoItems.get(i));
+			}
+
+			for (int j = 0; j < listInfoBombs.size(); j++) {
+				dessine_Bomb(g, listInfoBombs.get(j));
+			}
+
+			for (int i = 0; i < listInfoAgents.size(); i++) {
+				dessine_Agent(g, listInfoAgents.get(i));
+			}
+
+			if (!this.end.contentEquals("")) {
+				g.drawString(end, fen_x / 2, fen_y / 2);
+			}
 		}
 		cpt++;
 	}
