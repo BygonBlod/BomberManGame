@@ -1,7 +1,6 @@
 package Client;
 
 import java.net.Socket;
-import java.sql.Timestamp;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -44,7 +43,7 @@ public class Client {
 			listen.start();
 			write.start();
 
-			write.sendMessage(CreateJson.JsonName(Id));
+			// write.sendMessage(CreateJson.JsonName(Id));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,8 +92,6 @@ public class Client {
 		if (actualTime - time >= 100) {
 			write.sendMessage(CreateJson.JsonAction(action));
 			time = actualTime;
-
-			System.out.println(new Timestamp(time));
 		}
 	}
 
@@ -121,6 +118,7 @@ public class Client {
 	public void setConnected(boolean isConnected) {
 		this.isConnected = isConnected;
 		if (isConnected) {
+			System.out.println("est connecté");
 			connect();
 		}
 	}

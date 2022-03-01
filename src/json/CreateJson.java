@@ -19,9 +19,10 @@ public class CreateJson {
 		return json.toJSONString();
 	}
 
-	public static String JsonName(String nameUser) {
+	public static String JsonName(String nameUser, String pwd) {
 		JSONObject json = new JSONObject();
 		json.put("type", "name");
+		json.put("pwd", pwd);
 		json.put("name", nameUser);
 		return json.toJSONString();
 	}
@@ -31,6 +32,13 @@ public class CreateJson {
 		json.put("type", "select");
 		json.put("name", nameUser);
 		json.put("partie", partie);
+		return json.toJSONString();
+	}
+
+	public static String JsonConnect(boolean co) {
+		JSONObject json = new JSONObject();
+		json.put("type", "connect");
+		json.put("valid", co);
 		return json.toJSONString();
 	}
 

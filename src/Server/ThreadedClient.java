@@ -6,6 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
@@ -53,14 +57,36 @@ public class ThreadedClient extends Thread {
 					String message = "";
 					JSONParser jsonParser = new JSONParser();
 					if (data.length() > 0) {
-						System.out.println(data);
+						// System.out.println(data);
 
 						JSONObject json = (JSONObject) jsonParser.parse(data);
 						String type = (String) json.get("type");
 						System.out.println("type :" + type);
 						switch (type) {
 						case "name":
-							this.setNameClient(DeserializationJson.JsonName(json));
+							received = DeserializationJson.JsonName(json);
+							nameClient = received.get(0);
+							if (received.size() == 2) {
+								try {
+									HttpClient client = HttpClient.newHttpClient();
+
+									HttpRequest request = HttpRequest.newBuilder()
+											.uri(URI.create("http://127.0.0.1:8080/Oui/ConnexionApi?name="
+													+ received.get(0) + "&pwd=" + received.get(1)))
+											.GET().header("Accept", "application.json").build();
+
+									HttpResponse<String> response = client.send(request,
+											HttpResponse.BodyHandlers.ofString());
+
+									System.out.println(response.body());
+									if (response.body().contains("success")) {
+										sendMessage(CreateJson.JsonConnect(true));
+										System.out.println("succés");
+									}
+								} catch (IOException | InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
 							break;
 						case "tchat":
 							received = DeserializationJson.JsonTchat(json);

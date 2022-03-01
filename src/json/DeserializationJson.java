@@ -7,7 +7,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-
 import Server.GameChange;
 import model.Agent.Agent;
 import model.Agent.AgentBird;
@@ -31,9 +30,10 @@ public class DeserializationJson {
 		return res;
 	}
 
-	public static String JsonName(JSONObject json) {
-		String res = "";
-		res += (String) json.get("name");
+	public static ArrayList<String> JsonName(JSONObject json) {
+		ArrayList<String> res = new ArrayList<String>();
+		res.add((String) json.get("name"));
+		res.add((String) json.get("pwd"));
 		return res;
 	}
 
@@ -42,6 +42,11 @@ public class DeserializationJson {
 		ArrayList<String> res = new ArrayList<>();
 		res.add((String) json.get("name"));
 		res.add((String) json.get("partie"));
+		return res;
+	}
+
+	public static boolean JsonConnect(JSONObject json) {
+		boolean res = (boolean) json.get("valid");
 		return res;
 	}
 

@@ -40,10 +40,11 @@ public class ClientWrite extends Thread {
 					System.out.println("entrer votre mot de passe :");
 					scanner = new Scanner(System.in);
 					String pwd = scanner.nextLine();
-
+					jsonStr = CreateJson.JsonName(pseudo, pwd);
+					sendMessage(jsonStr);
 					// reste les tests avec la base de donnée pour savoir si il existe
-					client.setConnected(true);
-					System.out.println("vous essayer de vous connecter sans succès");
+					// client.setConnected(true);
+					// System.out.println("vous essayer de vous connecter sans succès");
 
 					break;
 				case "/close":

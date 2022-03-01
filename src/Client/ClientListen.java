@@ -35,6 +35,9 @@ public class ClientListen extends Thread {
 					JSONObject json = (JSONObject) jsonParser.parse(data);
 					String type = (String) json.get("type");
 					switch (type) {
+					case "connect":
+						client.setConnected(DeserializationJson.JsonConnect(json));
+						break;
 					case "tchat":
 						Tchat(DeserializationJson.JsonTchat(json));
 						break;
