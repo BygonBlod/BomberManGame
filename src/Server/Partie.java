@@ -56,7 +56,8 @@ public class Partie {
 		int i = 0;
 		for (ThreadedClient t : gamers) {
 			if (t == client) {
-				game.stratBomberman.setAction(action);
+				game.stratBomberman.setAction(action, i);
+				System.out.println("action partie " + i);
 			}
 			++i;
 		}

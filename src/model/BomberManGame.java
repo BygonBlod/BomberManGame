@@ -89,8 +89,8 @@ public class BomberManGame extends Game {
 							break;
 						}
 					}
-					System.out.println(listBomberMan.size());
-					System.out.println(listEnnemi.size());
+					// System.out.println(listBomberMan.size());
+					// System.out.println(listEnnemi.size());
 				}
 			}
 		} catch (Exception e) {
@@ -141,12 +141,12 @@ public class BomberManGame extends Game {
 		synchronized (listBomberMan) {
 			for (int i = 0; i < listBomberMan.size(); i++) {
 				Agent a = listBomberMan.get(i);
-				if (i == 0) {
-					stratBomberman.Action(a, this);
-					stratBomberman.setAction(null);
-				} else {
-					stratEnnemi.Action(a, this);
-				}
+				// if (i == 0) {
+				stratBomberman.Action(a, this);
+				stratBomberman.setAction(null, i);
+				// } else {
+				// stratEnnemi.Action(a, this);
+				// }
 				if (a.getTpsInvincible() > 0)
 					a.setTpsInvincible(a.getTpsInvincible() - 1);
 				if (a.getTpsSick() > 0)
@@ -188,7 +188,7 @@ public class BomberManGame extends Game {
 				}
 				listBomberMan.removeAll(removeBM);
 			}
-			System.out.println(listBomberMan.toString());
+			// System.out.println(listBomberMan.toString());
 		}
 	}
 

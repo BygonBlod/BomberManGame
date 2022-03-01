@@ -49,9 +49,11 @@ public class GameChange {
 		listEnnemi = game.getListEnnemi();
 		listBomb = game.getListBomb();
 		listItem = game.getListItem();
-		System.out.println("agents: " + listBomberMan.toString());
-		System.out.println("bombs: " + listBomb.toString());
-		System.out.println("items: " + listItem.toString());
+		/*
+		 * System.out.println("agents: " + listBomberMan.toString());
+		 * System.out.println("bombs: " + listBomb.toString());
+		 * System.out.println("items: " + listItem.toString());
+		 */
 	}
 
 	public void set(GameChange game) {
