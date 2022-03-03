@@ -37,22 +37,28 @@ public class ClientWrite extends Thread {
 					System.out.println("entrer votre pseudo :");
 					scanner = new Scanner(System.in);
 					String pseudo = scanner.nextLine();
+					client.Id = pseudo;
 					System.out.println("entrer votre mot de passe :");
 					scanner = new Scanner(System.in);
 					String pwd = scanner.nextLine();
 					jsonStr = CreateJson.JsonName(pseudo, pwd);
 					sendMessage(jsonStr);
-					// reste les tests avec la base de donnée pour savoir si il existe
-					// client.setConnected(true);
-					// System.out.println("vous essayer de vous connecter sans succès");
 
 					break;
 				case "/close":
 					socket.close();
 					break;
+				case "/play":
+					if (client.isConnected()) {
+						System.out.println("essai play");
+						client.connect();
+					}
+					break;
 				default:
-					jsonStr = CreateJson.JsonTchat(Id, text);
-					sendMessage(jsonStr);
+					if (client.isConnected()) {
+						jsonStr = CreateJson.JsonTchat(Id, text);
+						sendMessage(jsonStr);
+					}
 					break;
 				}
 

@@ -1,13 +1,20 @@
 package View;
 
+import java.awt.Container;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 import Client.Client;
 import Server.GameChange;
@@ -17,6 +24,8 @@ import model.utils.AgentAction;
 public class ViewBomberManGame implements Observer, KeyListener {
 	JFrame frame;
 	PanelBomberman panel;
+	JPanel choix;
+	Container contenu;
 	int Taillex;
 	int Tailley;
 	Client client;
@@ -72,11 +81,43 @@ public class ViewBomberManGame implements Observer, KeyListener {
 	public void update(GameChange g) {
 		int dx2 = g.getWalls().length;
 		int dy2 = g.getWalls()[0].length;
-		frame.remove(panel);
+		if (contenu != null) {
+			frame.remove(contenu);
+		}
+		contenu = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		panel = new PanelBomberman(dx2, dy2, g.getWalls(), g.getBreakable_walls(), g.getAgents(), g.getEnd());
 		panel.listInfoBombs = g.getListBomb();
 		panel.listInfoItems = g.getListItem();
-		frame.add(panel);
+
+		if (!g.getEnd().contentEquals("")) {
+			JPanel p = new JPanel();
+			p.setSize(40, g.getWalls()[0].length * 50);
+			JLabel lab = new JLabel("voulez vous continuer à jouer ?");
+			JButton b1 = new JButton("Oui");
+			JButton b2 = new JButton("Non");
+			b1.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					client.connect();
+				}
+
+			});
+			b2.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					frame.dispose();
+				}
+
+			});
+			p.add(lab);
+			p.add(b1);
+			p.add(b2);
+			contenu.add(p);
+		}
+		contenu.add(panel);
+		frame.add(contenu);
 		frame.setVisible(true);
 	}
 

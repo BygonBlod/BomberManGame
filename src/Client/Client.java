@@ -14,7 +14,7 @@ public class Client {
 
 	private final String host;
 	private final int port;
-	private final String Id;
+	String Id;
 	private boolean start = false;
 	private ClientListen listen;
 	private ClientWrite write;
@@ -24,10 +24,10 @@ public class Client {
 	private long time;
 	private AgentAction action;
 
-	public Client(String host, int port, String id) {
+	public Client(String host, int port) {
 		this.host = host;
 		this.port = port;
-		this.Id = id;
+		this.Id = "";
 		this.isConnected = false;
 	}
 
@@ -43,8 +43,6 @@ public class Client {
 			listen.start();
 			write.start();
 
-			// write.sendMessage(CreateJson.JsonName(Id));
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -52,6 +50,8 @@ public class Client {
 	}
 
 	public void connect() {
+		game = null;
+		start = false;
 		// façon pour choisir dossier
 		JFileChooser choose = new JFileChooser(System.getProperty("user.dir") + "/layouts");
 
@@ -71,7 +71,13 @@ public class Client {
 		if (!start) {
 			time = (System.currentTimeMillis());
 			this.game = game;
-			view = new ViewBomberManGame(game, this);
+			if (view == null) {
+				System.out.println("new view");
+				view = new ViewBomberManGame(game, this);
+			} else {
+				view.getFrame().dispose();
+				view = new ViewBomberManGame(game, this);
+			}
 			start = true;
 		} else {
 			this.game.set(game);

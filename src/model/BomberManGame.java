@@ -108,6 +108,9 @@ public class BomberManGame extends Game {
 					end = "YOU DIED";
 				if (listEnnemi.size() == 0)
 					end = "YOU WIN";
+				if (this.turn == this.getMaxturn()) {
+					end = "GAME FINISH";
+				}
 				if (thread != null) {
 					this.thread.stop();
 				}

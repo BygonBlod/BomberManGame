@@ -14,8 +14,7 @@ public class TchatMain {
 
 			server.listening();
 		} else {
-			Client client = new Client(args.length >= 2 ? args[1] : "127.0.0.1", 4042,
-					args.length >= 1 ? args[0] : "Bob");
+			Client client = new Client(args.length >= 1 ? args[0] : "127.0.0.1", 4042);
 
 			client.start();
 		}
