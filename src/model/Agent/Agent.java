@@ -11,6 +11,7 @@ public abstract class Agent {
 	private int lvlBomb;
 	private int tpsInvincible;
 	private int tpsSick;
+	private String id;
 
 	public Agent(int x, int y, AgentAction agentAction, char type, ColorAgent color, boolean isInvincible,
 			boolean isSick) {
@@ -19,6 +20,17 @@ public abstract class Agent {
 		this.lvlBomb = 1;
 		this.tpsInvincible = 0;
 		this.tpsSick = 0;
+		agentG = new InfoAgent(x, y, agentAction, type, color, isInvincible, isSick);
+	}
+
+	public Agent(int x, int y, AgentAction agentAction, char type, ColorAgent color, boolean isInvincible,
+			boolean isSick, String s) {
+		this.posX = x;
+		this.posY = y;
+		this.lvlBomb = 1;
+		this.tpsInvincible = 0;
+		this.tpsSick = 0;
+		this.id = s;
 		agentG = new InfoAgent(x, y, agentAction, type, color, isInvincible, isSick);
 	}
 
@@ -101,10 +113,18 @@ public abstract class Agent {
 		return this.agentG;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public String toString() {
 		return "{\"type\":\"" + this.getType() + "\",\"x\":" + this.getX() + ",\"y\":" + this.getY() + ",\"lvlB\":"
 				+ lvlBomb + ",\"ti\":" + tpsInvincible + ",\"ts\":" + tpsSick + ",\"action\":\"" + getAgentAction()
-				+ "\"}";
+				+ "\"" + "\"id\":\"" + id + "\"}";
 	}
 
 }

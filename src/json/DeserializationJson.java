@@ -95,7 +95,8 @@ public class DeserializationJson {
 			int ts = (int) ((long) obj.get("ts"));
 			String action = (String) obj.get("action");
 			AgentAction actionA = getAction(action);
-			listBomber.add(new AgentBomberMan(xw, yw, actionA, col, false, false));
+			String id = (String) obj.get("id");
+			listBomber.add(new AgentBomberMan(xw, yw, actionA, col, false, false, id));
 
 		}
 		list = (JSONArray) json.get("listEnnemi");
@@ -146,7 +147,8 @@ public class DeserializationJson {
 			int ts = (int) ((long) obj.get("ts"));
 			String action = (String) obj.get("action");
 			AgentAction actionA = getAction(action);
-			listBomber.add(new AgentBomberMan(xw, yw, actionA, col, false, false));
+			String id = (String) obj.get("id");
+			listBomber.add(new AgentBomberMan(xw, yw, actionA, col, false, false, id));
 
 		}
 		list = (JSONArray) json.get("listEnnemi");

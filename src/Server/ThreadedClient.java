@@ -9,7 +9,6 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
@@ -26,6 +25,7 @@ public class ThreadedClient extends Thread {
 	private BufferedReader entree;
 	private PrintWriter sortie;
 	private String nameClient;
+	private String id;
 	private ArrayList<String> received;
 	private AgentAction action;
 	private Partie party;
@@ -72,19 +72,20 @@ public class ThreadedClient extends Thread {
 
 									String dataSet = "name=" + received.get(0) + "&pwd=" + received.get(1);
 
-									HttpClient client = HttpClient.newHttpClient();
-									HttpRequest request = HttpRequest.newBuilder()
-											.uri(URI.create("http://127.0.0.1:8080/Oui/ConnexionApi"))
-											.POST(BodyPublishers.ofString(dataSet))
-											.header("Accept", "z32iG.4_N7|{)DjcbDU4").build();
-
 									/*
 									 * HttpClient client = HttpClient.newHttpClient(); HttpRequest request =
 									 * HttpRequest.newBuilder()
-									 * .uri(URI.create("http://127.0.0.1:8080/Oui/ConnexionApi?name=" +
-									 * received.get(0) + "&pwd=" + received.get(1))) .GET().header("Accept",
+									 * .uri(URI.create("http://127.0.0.1:8080/Oui/ConnexionApi"))
+									 * .POST(BodyPublishers.ofString(dataSet)) .header("Accept",
 									 * "z32iG.4_N7|{)DjcbDU4").build();
 									 */
+
+									HttpClient client = HttpClient.newHttpClient();
+									HttpRequest request = HttpRequest.newBuilder()
+											.uri(URI.create("http://127.0.0.1:8080/Oui/ConnexionApi?name="
+													+ received.get(0) + "&pwd=" + received.get(1)))
+											.GET().header("Accept", "z32iG.4_N7|{)DjcbDU4").build();
+
 									HttpResponse<String> response = client.send(request,
 											HttpResponse.BodyHandlers.ofString());
 
@@ -117,6 +118,11 @@ public class ThreadedClient extends Thread {
 				deconnect();
 			} catch (Exception e) {
 				e.printStackTrace();
+				try {
+					socket.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 				deconnect();
 			}
 		}
@@ -175,6 +181,14 @@ public class ThreadedClient extends Thread {
 
 	public void setNameClient(String n) {
 		this.nameClient = n;
+	}
+
+	public String getIdClient() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

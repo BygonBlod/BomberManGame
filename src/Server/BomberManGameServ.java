@@ -16,6 +16,15 @@ public class BomberManGameServ extends BomberManGame {
 	}
 
 	@Override
+	public void gameOver() {
+		super.gameOver();
+		partie.gamOver();
+		if (thread != null) {
+			this.thread.stop();
+		}
+	}
+
+	@Override
 	protected void takeTurn() {
 		super.takeTurn();
 		// envoie a tout les joueur le jeu;

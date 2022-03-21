@@ -1,6 +1,6 @@
 package model.IA;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import model.BomberManGame;
@@ -9,23 +9,21 @@ import model.utils.AgentAction;
 
 public class IABomberManManuel implements IAStrategi {
 	private boolean joue = false;
-	private ArrayList<AgentAction> action = new ArrayList<AgentAction>();
+	private HashMap<String, AgentAction> action = new HashMap<String, AgentAction>();
 
 	@Override
 	public void Action(Agent a, BomberManGame game) {
 		if (action.size() == 0) {
-			int taille = game.getListBomberMan().size();
-			for (int i = 0; i < taille; i++) {
-				action.add(null);
+			List<Agent> taille = game.getListBomberMan();
+			for (int i = 0; i < taille.size(); i++) {
+				action.put(taille.get(i).getId(), null);
 			}
 		}
-		int pl = placeAgent(a, game);
-		if (action.get(pl) == null) {
-			action.remove(pl);
-			action.add(pl, AgentAction.STOP);
+		if (action.get(a.getId()) == null) {
+			action.put(a.getId(), AgentAction.STOP);
 		}
-		if (action.get(pl) != AgentAction.PUT_BOMB)
-			game.moveAgent(a, action.get(pl));
+		if (action.get(a.getId()) != AgentAction.PUT_BOMB)
+			game.moveAgent(a, action.get(a.getId()));
 		else
 			game.putBomb(a);
 		joue = false;
@@ -44,9 +42,8 @@ public class IABomberManManuel implements IAStrategi {
 		return 0;
 	}
 
-	public void setAction(AgentAction a, int place) {
-		action.remove(place);
-		action.add(place, a);
+	public void setAction(AgentAction a, String place) {
+		action.put(place, a);
 	}
 
 }

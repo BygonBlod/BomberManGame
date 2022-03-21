@@ -69,11 +69,13 @@ public class BomberManGame extends Game {
 			ArrayList<InfoAgent> agents = input.getStart_agents();
 			synchronized (listBomberMan) {
 				synchronized (listEnnemi) {
+					int i = 0;
 					for (InfoAgent a : agents) {
 						switch (a.getType()) {
 						case 'B':
 							listBomberMan.add(new AgentBomberMan(a.getX(), a.getY(), a.getAgentAction(), a.getColor(),
-									a.isInvincible(), a.isSick()));
+									a.isInvincible(), a.isSick(), i + ""));
+							i++;
 							break;
 						case 'R':
 							listEnnemi.add(new AgentRajion(a.getX(), a.getY(), a.getAgentAction(), a.getColor(),
@@ -101,21 +103,15 @@ public class BomberManGame extends Game {
 
 	@Override
 	public void gameOver() {
-		System.out.println("------ Fin du Jeu ------");
-		synchronized (listBomberMan) {
-			synchronized (listEnnemi) {
-				if (listBomberMan.size() == 0)
-					end = "YOU DIED";
-				if (listEnnemi.size() == 0)
-					end = "YOU WIN";
-				if (this.turn == this.getMaxturn()) {
-					end = "GAME FINISH";
-				}
-				if (thread != null) {
-					this.thread.stop();
-				}
-			}
+		System.out.println("------ Fin du Jeu ------bis");
+		if (listBomberMan.size() == 0)
+			end = "YOU DIED";
+		if (listEnnemi.size() == 0)
+			end = "YOU WIN";
+		if (this.turn == this.getMaxturn()) {
+			end = "GAME FINISH";
 		}
+
 	}
 
 	@Override
@@ -146,7 +142,7 @@ public class BomberManGame extends Game {
 				Agent a = listBomberMan.get(i);
 				// if (i == 0) {
 				stratBomberman.Action(a, this);
-				stratBomberman.setAction(null, i);
+				stratBomberman.setAction(null, a.getId());
 				// } else {
 				// stratEnnemi.Action(a, this);
 				// }
