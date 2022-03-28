@@ -1,7 +1,9 @@
 package Server;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -9,8 +11,10 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -68,23 +72,21 @@ public class ThreadedClient extends Thread {
 							received = DeserializationJson.JsonName(json);
 							nameClient = received.get(0);
 							if (received.size() == 2) {
-								try {
+								try (InputStream input = new FileInputStream(
+										System.getProperty("user.dir") + "/config.properties")) {
 
-									String dataSet = "name=" + received.get(0) + "&pwd=" + received.get(1);
+									Properties prop = new Properties();
+									prop.load(input);
+									String web_name = prop.getProperty("web.name");
+									String token = prop.getProperty("web.connect.token");
 
-									/*
-									 * HttpClient client = HttpClient.newHttpClient(); HttpRequest request =
-									 * HttpRequest.newBuilder()
-									 * .uri(URI.create("http://127.0.0.1:8080/Oui/ConnexionApi"))
-									 * .POST(BodyPublishers.ofString(dataSet)) .header("Accept",
-									 * "z32iG.4_N7|{)DjcbDU4").build();
-									 */
+									String dataSet = "?name=" + received.get(0) + "&pwd=" + received.get(1);
 
 									HttpClient client = HttpClient.newHttpClient();
 									HttpRequest request = HttpRequest.newBuilder()
-											.uri(URI.create("http://127.0.0.1:8080/Oui/ConnexionApi?name="
-													+ received.get(0) + "&pwd=" + received.get(1)))
-											.GET().header("Accept", "z32iG.4_N7|{)DjcbDU4").build();
+											.uri(URI.create(
+													"http://127.0.0.1:8080/" + web_name + "/ConnexionApi" + dataSet))
+											.POST(BodyPublishers.ofString("")).header("Accept", token).build();
 
 									HttpResponse<String> response = client.send(request,
 											HttpResponse.BodyHandlers.ofString());
