@@ -41,8 +41,7 @@ public class ClientWrite extends Thread {
 					System.out.println("entrer votre mot de passe :");
 					scanner = new Scanner(System.in);
 					String pwd = scanner.nextLine();
-					jsonStr = CreateJson.JsonName(pseudo, pwd);
-					sendMessage(jsonStr);
+					connect(pseudo, pwd);
 
 					break;
 				case "/close":
@@ -70,5 +69,11 @@ public class ClientWrite extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void connect(String pseudo, String pwd) {
+		String jsonStr = "";
+		jsonStr = CreateJson.JsonName(pseudo, pwd);
+		sendMessage(jsonStr);
 	}
 }
