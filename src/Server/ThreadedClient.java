@@ -166,7 +166,7 @@ public class ThreadedClient extends Thread {
 	}
 
 	private void Select() {
-		System.out.println(nameClient + " " + received.get(0));
+		System.out.println(nameClient + " : " + received.get(0));
 		if (nameClient.equals(received.get(0))) {
 			String message = received.get(1);
 			String[] partieUrl = message.split("/");

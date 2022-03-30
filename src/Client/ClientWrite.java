@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Scanner;
 
+import View.ViewConnect;
 import json.CreateJson;
 
 public class ClientWrite extends Thread {
@@ -34,14 +35,13 @@ public class ClientWrite extends Thread {
 				String text = scanner.nextLine();
 				switch (text) {
 				case "/connect":
-					System.out.println("entrer votre pseudo :");
-					scanner = new Scanner(System.in);
-					String pseudo = scanner.nextLine();
-					client.Id = pseudo;
-					System.out.println("entrer votre mot de passe :");
-					scanner = new Scanner(System.in);
-					String pwd = scanner.nextLine();
-					connect(pseudo, pwd);
+					ViewConnect view = new ViewConnect(this);
+					/*
+					 * System.out.println("entrer votre pseudo :"); scanner = new
+					 * Scanner(System.in); String pseudo = scanner.nextLine(); client.Id = pseudo;
+					 * System.out.println("entrer votre mot de passe :"); scanner = new
+					 * Scanner(System.in); String pwd = scanner.nextLine(); connect(pseudo, pwd);
+					 */
 
 					break;
 				case "/close":
@@ -73,6 +73,7 @@ public class ClientWrite extends Thread {
 
 	public void connect(String pseudo, String pwd) {
 		String jsonStr = "";
+		client.Id = pseudo;
 		jsonStr = CreateJson.JsonName(pseudo, pwd);
 		sendMessage(jsonStr);
 	}

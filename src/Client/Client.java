@@ -62,7 +62,7 @@ public class Client {
 		int res = choose.showOpenDialog(null);
 		if (res == JFileChooser.APPROVE_OPTION) {
 			String layout = choose.getSelectedFile().getPath();
-			write.sendMessage(CreateJson.JsonSelect(Id, choose.getSelectedFile().getPath()));
+			write.sendMessage(CreateJson.JsonSelect(Id, layout));
 
 		}
 	}
