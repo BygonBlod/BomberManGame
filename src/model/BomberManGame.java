@@ -15,13 +15,13 @@ import model.IA.IARajion;
 import model.IA.IARandom;
 import model.IA.IAStrategi;
 import model.IA.IAVol;
+import model.IAutils.Position;
 import model.utils.AgentAction;
 import model.utils.InfoAgent;
 import model.utils.InfoBomb;
 import model.utils.InfoItem;
 import model.utils.ItemType;
 import model.utils.StateBomb;
-import model.utils.Wall;
 
 public class BomberManGame extends Game {
 	private String plateau;
@@ -57,6 +57,10 @@ public class BomberManGame extends Game {
 	}
 
 	@Override
+	/**
+	 * initialize les listes de bombermans, Ennemis, bombs, item. Initialize les
+	 * tableaux des murs et des murs cassables
+	 */
 	protected void initializeGame() {
 		try {
 			listBomberMan = Collections.synchronizedList(new ArrayList<Agent>());
@@ -70,7 +74,7 @@ public class BomberManGame extends Game {
 			synchronized (listBomberMan) {
 				synchronized (listEnnemi) {
 					int i = 0;
-					for (InfoAgent a : agents) {
+					for (InfoAgent a : agents) {// créer un nouveau type d'agent selon sont type
 						switch (a.getType()) {
 						case 'B':
 							listBomberMan.add(new AgentBomberMan(a.getX(), a.getY(), a.getAgentAction(), a.getColor(),
@@ -91,8 +95,6 @@ public class BomberManGame extends Game {
 							break;
 						}
 					}
-					// System.out.println(listBomberMan.size());
-					// System.out.println(listEnnemi.size());
 				}
 			}
 		} catch (Exception e) {
@@ -102,6 +104,9 @@ public class BomberManGame extends Game {
 	}
 
 	@Override
+	/**
+	 * change le string de fin de parti selon la fin qui s'est passé
+	 */
 	public void gameOver() {
 		System.out.println("------ Fin du Jeu ------bis");
 		if (listBomberMan.size() == 0)
@@ -114,6 +119,9 @@ public class BomberManGame extends Game {
 
 	}
 
+	/**
+	 * vérifie si les listes d'agent sont vide
+	 */
 	@Override
 	public boolean gameContinue() {
 		synchronized (listBomberMan) {
@@ -127,16 +135,21 @@ public class BomberManGame extends Game {
 		}
 	}
 
+	/**
+	 * fais toute les actions dans un ordre chronologique d'un tour
+	 */
 	@Override
 	protected void takeTurn() {
 		System.out.println("---------  Tour: " + turn + "  ---------");
-		regleBomb();
-		regleEnnemi();
+		regleBomb();// augmente d'un tour chaque bomb et fait exploser celle qui sont au dernier
+		// stade
+		regleEnnemi();// supprime les Bomberman qui sont sous les ennemis
 		try {
 			thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		// fait les actions des bomberman puis celle des ennemis
 		synchronized (listBomberMan) {
 			for (int i = 0; i < listBomberMan.size(); i++) {
 				Agent a = listBomberMan.get(i);
@@ -170,10 +183,13 @@ public class BomberManGame extends Game {
 					a.setTpsSick(a.getTpsSick() - 1);
 			}
 		}
-		regleItem();
+		regleItem();// si un agent est sur une case item il le reçoit
 
 	}
 
+	/**
+	 * supprime de la liste des bombermans ceux qui sont en dessous d'enemis
+	 */
 	public void regleEnnemi() {
 		ArrayList<Agent> removeBM = new ArrayList<Agent>();
 		synchronized (listBomberMan) {
@@ -187,10 +203,13 @@ public class BomberManGame extends Game {
 				}
 				listBomberMan.removeAll(removeBM);
 			}
-			// System.out.println(listBomberMan.toString());
 		}
 	}
 
+	/**
+	 * pour chaque bomb sont état est augmenter de 1 si il arrive à l'état Boom elle
+	 * explose et est supprimer de la liste
+	 */
 	private void regleBomb() {
 		ArrayList<InfoBomb> remove = new ArrayList<InfoBomb>();
 		synchronized (listBomb) {
@@ -218,15 +237,20 @@ public class BomberManGame extends Game {
 		}
 	}
 
+	/**
+	 * fait exploser la bomb selon sont rayon et supprimer les agents et les murs
+	 * cassables sur sont chemin
+	 * 
+	 * @param bomb
+	 */
 	public void explosion(InfoBomb bomb) {
-		// System.out.println("explosion");
 		ArrayList<Agent> removeBM = new ArrayList<Agent>();
 		ArrayList<Agent> removeE = new ArrayList<Agent>();
 		int range = bomb.getRange();
 		synchronized (listBomberMan) {
 			synchronized (listEnnemi) {
 				for (int i = 1; i <= range; i++) {
-					for (Agent b : listBomberMan) {
+					for (Agent b : listBomberMan) {// ajoute à une liste les bomberman qui meurt à cause de la bomb
 						if (b.getX() == bomb.getX() && b.getY() == bomb.getY() && !b.getAgentG().isInvincible())
 							removeBM.add(b);
 						if (b.getX() == bomb.getX() + i && b.getY() == bomb.getY() && !b.getAgentG().isInvincible())
@@ -238,7 +262,7 @@ public class BomberManGame extends Game {
 						if (b.getY() == bomb.getY() - i && b.getX() == bomb.getX() && !b.getAgentG().isInvincible())
 							removeBM.add(b);
 					}
-					for (Agent e : listEnnemi) {
+					for (Agent e : listEnnemi) {// ajoute à une liste les ennemis qui meurt à cause de la bomb
 						if (e.getX() == bomb.getX() && e.getY() == bomb.getY() && !e.getAgentG().isInvincible())
 							removeE.add(e);
 						if (e.getX() == bomb.getX() + i && e.getY() == bomb.getY() && !e.getAgentG().isInvincible())
@@ -250,11 +274,8 @@ public class BomberManGame extends Game {
 						if (e.getY() == bomb.getY() - i && e.getX() == bomb.getX() && !e.getAgentG().isInvincible())
 							removeE.add(e);
 					}
-					if (breakable_walls[bomb.getX()][bomb.getY()] == true) {
-						NewItem(bomb.getX(), bomb.getY());
-						breakable_walls[bomb.getX()][bomb.getY()] = false;
-						noBreakable(bomb.getX(), bomb.getY());
-					}
+					// supression des murs cassables si ils sont dans l'explosion
+
 					if (bomb.getX() + i < breakable_walls.length
 							&& breakable_walls[bomb.getX() + i][bomb.getY()] == true) {
 						NewItem(bomb.getX() + i, bomb.getY());
@@ -278,12 +299,24 @@ public class BomberManGame extends Game {
 						noBreakable(bomb.getX(), bomb.getY() - i);
 					}
 				}
+				if (breakable_walls[bomb.getX()][bomb.getY()] == true) {
+					NewItem(bomb.getX(), bomb.getY());
+					breakable_walls[bomb.getX()][bomb.getY()] = false;
+					noBreakable(bomb.getX(), bomb.getY());
+				}
+				// suppression des agents qui ont explosés
 				listBomberMan.removeAll(removeBM);
 				listEnnemi.removeAll(removeE);
 			}
 		}
 	}
 
+	/**
+	 * ajoute à la liste d'items un nouvelle item aléatoire avec une chance sur 4
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public void NewItem(int x, int y) {
 		int rand = new Random().nextInt(4);
 		if (rand == 0) {
@@ -310,6 +343,10 @@ public class BomberManGame extends Game {
 
 	}
 
+	/**
+	 * si un agent est sur un item il obtient sont malus ou sont bonus et est
+	 * supprimer de la liste des items
+	 */
 	public void regleItem() {
 		ArrayList<InfoItem> remove = new ArrayList<InfoItem>();
 		ArrayList<Agent> agent = new ArrayList<Agent>();
@@ -320,34 +357,39 @@ public class BomberManGame extends Game {
 				for (Agent a : agent) {
 					if (item.getX() == a.getX() && item.getY() == a.getY()) {
 						if (item.getType() == ItemType.FIRE_DOWN && a.getLvlBomb() > 1) {
-							// System.out.println("fire-down");
-							a.setLvlBomb(a.getLvlBomb() - 1);
+							a.setLvlBomb(a.getLvlBomb() - 1);// obtient un niveau de bomb inférieur
 							remove.add(item);
 						}
 						if (item.getType() == ItemType.FIRE_UP && a.getLvlBomb() < 4) {
-							// System.out.println("fire-up");
-							a.setLvlBomb(a.getLvlBomb() + 1);
+							a.setLvlBomb(a.getLvlBomb() + 1);// obtient un niveau de bomb supérieur
 							remove.add(item);
 						}
 						if (item.getType() == ItemType.FIRE_SUIT && a.getTpsInvincible() == 0) {
-							// System.out.println("fire-suit");
-							a.setTpsInvincible(10);
+							a.setTpsInvincible(10);// deviens invincible pendant 10 tours
 							remove.add(item);
 						}
 						if (item.getType() == ItemType.SKULL && a.getTpsSick() == 0) {
-							// System.out.println("skull");
-							a.setTpsSick(10);
+							a.setTpsSick(10);// deviens malade pendant 10 tours
 							remove.add(item);
 						}
 
 					}
 				}
 			}
-			listItem.removeAll(remove);
+			listItem.removeAll(remove);// supprime les items utiliser
 		}
 	}
 
+	/**
+	 * retourne true si l'action est possible false dans le cas contraire
+	 * 
+	 * @param a
+	 * @param ag
+	 * @return
+	 */
 	public boolean IsLegalMove(Agent a, AgentAction ag) {
+		// pour chaque actions donné ont va vérifier qu'il n'y ai oas de mur ou ennemi
+		// ou d'agent invincible
 		if (ag.equals(AgentAction.MOVE_UP)) {
 			if (walls[a.getX()][a.getY() - 1] == true)
 				return false;
@@ -427,7 +469,7 @@ public class BomberManGame extends Game {
 			}
 		}
 		if (ag.equals(AgentAction.PUT_BOMB)) {
-			if (a.getAgentG().isSick())
+			if (a.getAgentG().isSick())// si un agent est malade il ne peut poser de bomb
 				return false;
 			for (InfoBomb b : listBomb) {
 				if (b.getX() == a.getX() && b.getY() == a.getY())
@@ -438,6 +480,12 @@ public class BomberManGame extends Game {
 		return false;
 	}
 
+	/**
+	 * regarde si l'action est possible et si c'est le cas l'agent fait cette action
+	 * 
+	 * @param a
+	 * @param ag
+	 */
 	public void moveAgent(Agent a, AgentAction ag) {
 		if (IsLegalMove(a, ag)) {
 			if (ag.equals(AgentAction.MOVE_UP)) {
@@ -459,6 +507,11 @@ public class BomberManGame extends Game {
 		}
 	}
 
+	/***
+	 * retourne la liste de tout les Infoagents
+	 * 
+	 * @return
+	 */
 	public ArrayList<InfoAgent> getAgents() {
 		ArrayList<InfoAgent> res = new ArrayList<InfoAgent>();
 		synchronized (listBomberMan) {
@@ -472,6 +525,12 @@ public class BomberManGame extends Game {
 		return res;
 	}
 
+	/**
+	 * regarde si il est possible de poser une bomb
+	 * 
+	 * @param a
+	 * @return
+	 */
 	public boolean IsLegalPutBomb(Agent a) {
 		if (a.getAgentG().isSick())
 			return false;
@@ -484,11 +543,23 @@ public class BomberManGame extends Game {
 		return true;
 	}
 
+	/**
+	 * pose une bomb à l'endroit où est l'agent
+	 * 
+	 * @param a
+	 */
 	public void putBomb(Agent a) {
 		if (IsLegalPutBomb(a))
 			listBomb.add(new InfoBomb(a.getX(), a.getY(), a.getLvlBomb(), StateBomb.Step0));
 	}
 
+	/**
+	 * retourne true si il y a un ennemi ou un bomberman invincible
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean isEnnemiOrInvicible(int x, int y) {
 		synchronized (listEnnemi) {
 			for (Agent ennemi : listEnnemi) {
@@ -505,13 +576,22 @@ public class BomberManGame extends Game {
 		return false;
 	}
 
+	/**
+	 * notifie tous les observateurs
+	 */
 	public void gameChange() {
+		// Deprecated parce que c'est mieux
 		setChanged();
 		notifyObservers();
 	}
 
-	public void changeBreakables(List<Wall> list) {
-		for (Wall w : list) {
+	/**
+	 * change les mur qui viennent d'être supprimer et qui sont dans lea liste
+	 * 
+	 * @param list
+	 */
+	public void changeBreakables(List<Position> list) {
+		for (Position w : list) {
 			breakable_walls[w.getX()][w.getY()] = false;
 		}
 	}

@@ -23,6 +23,10 @@ public class ClientListen extends Thread {
 		this.client = c;
 	}
 
+	/**
+	 * lorsqu'il reçoit un message du serveur il regarde son type et agis en
+	 * fonction d'elle
+	 */
 	public void run() {
 		try {
 			entree = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -35,16 +39,16 @@ public class ClientListen extends Thread {
 					JSONObject json = (JSONObject) jsonParser.parse(data);
 					String type = (String) json.get("type");
 					switch (type) {
-					case "connect":
-						client.setConnected(DeserializationJson.JsonConnect(json));
+					case "connectResponse":// connexion
+						client.setConnected(DeserializationJson.JsonConnectResponse(json));
 						break;
-					case "tchat":
+					case "tchat":// tchat
 						Tchat(DeserializationJson.JsonTchat(json));
 						break;
-					case "GameBegin":
+					case "GameBegin":// début de partie
 						client.changeGame(DeserializationJson.JsonGameBegin(json));
 						break;
-					case "GameParty":
+					case "GameParty":// pendant la partie
 						client.changeGame(DeserializationJson.JsonGamePartie(json));
 						break;
 

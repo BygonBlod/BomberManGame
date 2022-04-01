@@ -3,8 +3,14 @@ package Server;
 import java.util.List;
 
 import model.BomberManGame;
-import model.utils.Wall;
+import model.IAutils.Position;
 
+/**
+ * 
+ * @author Antonin class fille de BomberManGame avec des extensions pour le
+ *         serveur
+ *
+ */
 public class BomberManGameServ extends BomberManGame {
 	private GameChange change;
 	private Partie partie;
@@ -35,8 +41,8 @@ public class BomberManGameServ extends BomberManGame {
 
 	@Override
 	public void noBreakable(int x, int y) {
-		List<Wall> res = change.getListBreakable();
-		res.add(new Wall(x, y));
+		List<Position> res = change.getListBreakable();
+		res.add(new Position(x, y));
 		change.setListBreakable(res);
 
 	}

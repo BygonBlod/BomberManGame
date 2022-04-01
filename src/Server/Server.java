@@ -8,6 +8,11 @@ import java.util.List;
 
 import json.CreateJson;
 
+/**
+ * 
+ * @author Antonin
+ *
+ */
 public class Server {
 
 	private final int port;
@@ -61,12 +66,18 @@ public class Server {
 
 	public void removeClient(ThreadedClient threadedClient) {
 		broadcast(CreateJson.JsonTchat("[SERVER]", threadedClient.getNameClient() + " s'est déconnecter"),
-				threadedClient.getSocket());
+				threadedClient.getSocket());// envoie un message aux autres joueurs que ce joueurs est déconnecter
 		threadedClient.interrupt();
 		this.clients.remove(threadedClient);
 
 	}
 
+	/**
+	 * si la partie existe il ajoute le joueur a cette partie sinon il l'a créer
+	 * 
+	 * @param lvl
+	 * @param client
+	 */
 	public void addGame(String lvl, ThreadedClient client) {
 		boolean exist = false;
 		for (Partie game : games) {

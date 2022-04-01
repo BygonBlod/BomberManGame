@@ -21,11 +21,19 @@ public class ClientWrite extends Thread {
 		this.client = c;
 	}
 
+	/**
+	 * envoie du message vers le serveur
+	 * 
+	 * @param message
+	 */
 	public void sendMessage(String message) {
 		sortie.println(message);
 		sortie.flush();
 	}
 
+	/**
+	 * regarde ce qui est entrer dans le terminal et agis en fonction
+	 */
 	public void run() {
 		try {
 			sortie = new PrintWriter(socket.getOutputStream(), true);
@@ -47,12 +55,6 @@ public class ClientWrite extends Thread {
 				case "/close":
 					socket.close();
 					break;
-				case "/play":
-					if (client.isConnected()) {
-						System.out.println("essai play");
-						client.connect();
-					}
-					break;
 				default:
 					if (client.isConnected()) {
 						jsonStr = CreateJson.JsonTchat(Id, text);
@@ -71,10 +73,16 @@ public class ClientWrite extends Thread {
 		}
 	}
 
+	/**
+	 * envoie le json de connexion au serveur
+	 * 
+	 * @param pseudo
+	 * @param pwd
+	 */
 	public void connect(String pseudo, String pwd) {
 		String jsonStr = "";
 		client.Id = pseudo;
-		jsonStr = CreateJson.JsonName(pseudo, pwd);
+		jsonStr = CreateJson.JsonConnectAnswer(pseudo, pwd);
 		sendMessage(jsonStr);
 	}
 }

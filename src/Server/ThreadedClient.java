@@ -23,6 +23,11 @@ import json.CreateJson;
 import json.DeserializationJson;
 import model.utils.AgentAction;
 
+/**
+ * 
+ * @author Antonin
+ *
+ */
 public class ThreadedClient extends Thread {
 	private Server server;
 	private Socket socket;
@@ -63,13 +68,12 @@ public class ThreadedClient extends Thread {
 					JSONParser jsonParser = new JSONParser();
 					if (data.length() > 0) {
 						// System.out.println(data);
-
 						JSONObject json = (JSONObject) jsonParser.parse(data);
 						String type = (String) json.get("type");
 						System.out.println("type :" + type);
 						switch (type) {
-						case "name":
-							received = DeserializationJson.JsonName(json);
+						case "connectAnswer":// question du client pour se connecter
+							received = DeserializationJson.JsonConnectAnswer(json);
 							nameClient = received.get(0);
 							if (received.size() == 2) {
 								try (InputStream input = new FileInputStream(
@@ -92,24 +96,27 @@ public class ThreadedClient extends Thread {
 											HttpResponse.BodyHandlers.ofString());
 
 									System.out.println(response.body());
-									if (response.body().contains("success")) {
-										sendMessage(CreateJson.JsonConnect(true));
+									if (response.body().contains("success")) {// envoie une réponse au client si c'est
+																				// un succés ou non
+										sendMessage(CreateJson.JsonConnectResponse(true));
 										System.out.println("succés");
+									} else {
+										sendMessage(CreateJson.JsonConnectResponse(true));
 									}
 								} catch (IOException | InterruptedException e) {
 									e.printStackTrace();
 								}
 							}
 							break;
-						case "tchat":
+						case "tchat":// récupère le message et la personne ayant envoyer le message
 							received = DeserializationJson.JsonTchat(json);
 							Tchat();
 							break;
-						case "select":
+						case "select":// récupère le path du niveau
 							received = DeserializationJson.JsonSelect(json);
 							Select();
 							break;
-						case "action":
+						case "action":// récupère l'action
 							action = DeserializationJson.JsonAction(json);
 							System.out.println("action " + action);
 							party.action(action, this);
@@ -119,11 +126,11 @@ public class ThreadedClient extends Thread {
 			} catch (SocketException e) {
 				deconnect();
 			} catch (Exception e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 				try {
 					socket.close();
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					// e1.printStackTrace();
 				}
 				deconnect();
 			}
@@ -152,16 +159,17 @@ public class ThreadedClient extends Thread {
 			if (nameClient.equals(received.get(0))) {
 				String message = received.get(1);
 				if (message.contains("/close")) {
-					socket.close();
+					socket.close();// ferme la connection
 				} else {
 					System.out.println("[TCHAT]" + nameClient + "> " + message);
-					server.broadcast(CreateJson.JsonTchat(nameClient, message), socket);
+					server.broadcast(CreateJson.JsonTchat(nameClient, message), socket);// envoie à tout le monde le
+																						// message
 				}
 			}
 		} catch (SocketException e) {
 			deconnect();
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -171,10 +179,9 @@ public class ThreadedClient extends Thread {
 			String message = received.get(1);
 			String[] partieUrl = message.split("/");
 			String partie = partieUrl[partieUrl.length - 1];
-			server.addGame(message, this);
+			server.addGame(partie, this);// envoie la demande de jouer a une partie au serveur
 			System.out.println("[GAME]:choix niveau " + nameClient + "> " + partie);
 		}
-
 	}
 
 	public void setParty(Partie p) {

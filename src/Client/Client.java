@@ -1,6 +1,9 @@
 package Client;
 
 import java.net.Socket;
+/**
+ * @author Antonin
+ */
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -31,6 +34,9 @@ public class Client {
 		this.isConnected = false;
 	}
 
+	/**
+	 * Se connect au serveur et lance les threads pour l'écriture et l'écoute
+	 */
 	public void start() {
 
 		Socket socket = null;
@@ -49,6 +55,9 @@ public class Client {
 
 	}
 
+	/**
+	 * ouvre une fenêtre pour que l'utilisateur puisse choisir son layout de jeu
+	 */
 	public void connect() {
 		game = null;
 		start = false;
@@ -61,12 +70,17 @@ public class Client {
 		choose.addChoosableFileFilter(filter);
 		int res = choose.showOpenDialog(null);
 		if (res == JFileChooser.APPROVE_OPTION) {
-			String layout = choose.getSelectedFile().getPath();
+			String layout = choose.getSelectedFile().getName();
 			write.sendMessage(CreateJson.JsonSelect(Id, layout));
 
 		}
 	}
 
+	/**
+	 * change le jeu ou l'initialise et met à jour la vue
+	 * 
+	 * @param game
+	 */
 	public void changeGame(GameChange game) {
 		if (!start) {
 			time = (System.currentTimeMillis());
@@ -86,16 +100,24 @@ public class Client {
 
 	}
 
+	/**
+	 * arrête les threads du client
+	 */
 	public void deleteClient() {
 		listen.interrupt();
 		write.interrupt();
 		System.exit(0);
 	}
 
+	/**
+	 * envoie l'action fait par l'utilisateur avec son clavier
+	 * 
+	 * @param a
+	 */
 	public void setAction(AgentAction a) {
 		long actualTime = (System.currentTimeMillis());
 		action = a;
-		if (actualTime - time >= 100) {
+		if (actualTime - time >= 100) {// maximise à action tout les 100 millisecondes
 			write.sendMessage(CreateJson.JsonAction(action));
 			time = actualTime;
 		}
@@ -121,6 +143,11 @@ public class Client {
 		return isConnected;
 	}
 
+	/**
+	 * connect selon le boolean
+	 * 
+	 * @param isConnected
+	 */
 	public void setConnected(boolean isConnected) {
 		this.isConnected = isConnected;
 		if (isConnected) {

@@ -4,6 +4,12 @@ import model.utils.AgentAction;
 import model.utils.ColorAgent;
 import model.utils.InfoAgent;
 
+/**
+ * 
+ * @author Antonin class pour créer un agent basique avec toutes les
+ *         informations dont ont a besoin pour l'utiliser dans le jeu
+ *
+ */
 public abstract class Agent {
 	private int posX;
 	private int posY;
@@ -121,6 +127,9 @@ public abstract class Agent {
 		this.id = id;
 	}
 
+	/**
+	 * méthode utiliser pour créer le json
+	 */
 	public String toString() {
 		return "{\"type\":\"" + this.getType() + "\",\"x\":" + this.getX() + ",\"y\":" + this.getY() + ",\"lvlB\":"
 				+ lvlBomb + ",\"ti\":" + tpsInvincible + ",\"ts\":" + tpsSick + ",\"action\":\"" + getAgentAction()

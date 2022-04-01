@@ -13,16 +13,22 @@ import model.Agent.AgentBird;
 import model.Agent.AgentBomberMan;
 import model.Agent.AgentEnnemi;
 import model.Agent.AgentRajion;
+import model.IAutils.Position;
 import model.utils.AgentAction;
 import model.utils.ColorAgent;
 import model.utils.InfoBomb;
 import model.utils.InfoItem;
 import model.utils.ItemType;
 import model.utils.StateBomb;
-import model.utils.Wall;
 
 public class DeserializationJson {
 
+	/**
+	 * récupère le pseudo et le message et les mets dans une liste de string
+	 * 
+	 * @param json
+	 * @return
+	 */
 	public static ArrayList<String> JsonTchat(JSONObject json) {
 		ArrayList<String> res = new ArrayList<>();
 		res.add((String) json.get("name"));
@@ -30,13 +36,26 @@ public class DeserializationJson {
 		return res;
 	}
 
-	public static ArrayList<String> JsonName(JSONObject json) {
+	/**
+	 * récupère le pseudo et le mot de passe et les mets dans une liste de string
+	 * 
+	 * @param json
+	 * @return
+	 */
+	public static ArrayList<String> JsonConnectAnswer(JSONObject json) {
 		ArrayList<String> res = new ArrayList<String>();
 		res.add((String) json.get("name"));
 		res.add((String) json.get("pwd"));
 		return res;
 	}
 
+	/**
+	 * récupère le pseudo et le path pour le layout et les mets dans une liste de
+	 * string
+	 * 
+	 * @param json
+	 * @return
+	 */
 	public static ArrayList<String> JsonSelect(JSONObject json) {
 
 		ArrayList<String> res = new ArrayList<>();
@@ -45,16 +64,35 @@ public class DeserializationJson {
 		return res;
 	}
 
-	public static boolean JsonConnect(JSONObject json) {
+	/**
+	 * retourne si valid et a true ou pas
+	 * 
+	 * @param json
+	 * @return
+	 */
+	public static boolean JsonConnectResponse(JSONObject json) {
 		boolean res = (boolean) json.get("valid");
 		return res;
 	}
 
+	/**
+	 * retourne l'action envoyer par le joueur
+	 * 
+	 * @param json
+	 * @return
+	 */
 	public static AgentAction JsonAction(JSONObject json) {
 		String action = (String) json.get("action");
 		return getAction(action);
 	}
 
+	/**
+	 * retourne un objet avec les listes de bomberman, ennemis, items et bombes
+	 * 
+	 * @param json
+	 * @return
+	 * @throws ParseException
+	 */
 	public static GameChange JsonGameBegin(JSONObject json) throws ParseException {
 		JSONParser jsonParser = new JSONParser();
 		int x = (int) ((long) json.get("x"));
@@ -121,6 +159,13 @@ public class DeserializationJson {
 
 	}
 
+	/**
+	 * retourne un objet avec les listes de bomberman, ennemis, items et bombes
+	 * 
+	 * @param json
+	 * @return
+	 * @throws ParseException
+	 */
 	public static GameChange JsonGamePartie(JSONObject json) throws ParseException {
 		JSONParser jsonParser = new JSONParser();
 		GameChange res = new GameChange();
@@ -128,7 +173,7 @@ public class DeserializationJson {
 		ArrayList<Agent> listEnnemi = new ArrayList<Agent>();
 		ArrayList<InfoBomb> listBomb = new ArrayList<InfoBomb>();
 		ArrayList<InfoItem> listItem = new ArrayList<InfoItem>();
-		ArrayList<Wall> listWall = new ArrayList<Wall>();
+		ArrayList<Position> listWall = new ArrayList<Position>();
 
 		JSONArray list = (JSONArray) json.get("listBomberman");
 		ColorAgent[] color = ColorAgent.values();
@@ -180,7 +225,7 @@ public class DeserializationJson {
 			JSONObject obj = (JSONObject) jsonParser.parse(w3.toString());
 			int xw = (int) ((long) obj.get("x"));
 			int yw = (int) ((long) obj.get("y"));
-			listWall.add(new Wall(xw, yw));
+			listWall.add(new Position(xw, yw));
 
 		}
 		list = (JSONArray) json.get("listItem");
@@ -234,6 +279,18 @@ public class DeserializationJson {
 		return null;
 	}
 
+	/**
+	 * retourne le bon type d'agent avec les informations données
+	 * 
+	 * @param xw
+	 * @param yw
+	 * @param actionA
+	 * @param cha
+	 * @param color
+	 * @param b
+	 * @param c
+	 * @return
+	 */
 	private static Agent FabriqueAgent(int xw, int yw, AgentAction actionA, char cha, ColorAgent color, boolean b,
 			boolean c) {
 		switch (cha) {
@@ -246,6 +303,12 @@ public class DeserializationJson {
 		}
 	}
 
+	/**
+	 * retourne l'action qui correspond au string
+	 * 
+	 * @param action
+	 * @return
+	 */
 	private static AgentAction getAction(String action) {
 		switch (action) {
 		case "MOVE_UP":

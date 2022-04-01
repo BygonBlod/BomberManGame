@@ -6,11 +6,18 @@ import org.json.simple.JSONObject;
 
 import Server.GameChange;
 import model.BomberManGame;
+import model.IAutils.Position;
 import model.utils.AgentAction;
-import model.utils.Wall;
 
 public class CreateJson {
 
+	/**
+	 * créer le json pour le tchat
+	 * 
+	 * @param nameUser
+	 * @param message
+	 * @return
+	 */
 	public static String JsonTchat(String nameUser, String message) {
 		JSONObject json = new JSONObject();
 		json.put("type", "tchat");
@@ -19,14 +26,28 @@ public class CreateJson {
 		return json.toJSONString();
 	}
 
-	public static String JsonName(String nameUser, String pwd) {
+	/**
+	 * créer le json pour la connexion
+	 * 
+	 * @param nameUser
+	 * @param pwd
+	 * @return
+	 */
+	public static String JsonConnectAnswer(String nameUser, String pwd) {
 		JSONObject json = new JSONObject();
-		json.put("type", "name");
+		json.put("type", "connectAnswer");
 		json.put("pwd", pwd);
 		json.put("name", nameUser);
 		return json.toJSONString();
 	}
 
+	/**
+	 * créer le json pour la selection de la partie
+	 * 
+	 * @param nameUser
+	 * @param partie
+	 * @return
+	 */
 	public static String JsonSelect(String nameUser, String partie) {
 		JSONObject json = new JSONObject();
 		json.put("type", "select");
@@ -35,13 +56,25 @@ public class CreateJson {
 		return json.toJSONString();
 	}
 
-	public static String JsonConnect(boolean co) {
+	/**
+	 * créer le json pour le retour si la connexion s'est bien passé
+	 * 
+	 * @param co
+	 * @return
+	 */
+	public static String JsonConnectResponse(boolean co) {
 		JSONObject json = new JSONObject();
-		json.put("type", "connect");
+		json.put("type", "connectResponse");
 		json.put("valid", co);
 		return json.toJSONString();
 	}
 
+	/**
+	 * créer le json pour envoyer l'action choisi par le joueur
+	 * 
+	 * @param action
+	 * @return
+	 */
 	public static String JsonAction(AgentAction action) {
 		JSONObject json = new JSONObject();
 		json.put("type", "action");
@@ -49,23 +82,29 @@ public class CreateJson {
 		return json.toJSONString();
 	}
 
+	/**
+	 * créer le json pour le début de partie
+	 * 
+	 * @param game
+	 * @return
+	 */
 	public static String JsonGameBegin(BomberManGame game) {
 
-		ArrayList<Wall> listWall = new ArrayList<Wall>();
+		ArrayList<Position> listWall = new ArrayList<Position>();
 		boolean[][] walls = game.getWalls();
 		for (int i = 0; i < walls.length; i++) {
 			for (int j = 0; j < walls[0].length; j++) {
 				if (walls[i][j] == true) {
-					listWall.add(new Wall(i, j));
+					listWall.add(new Position(i, j));
 				}
 			}
 		}
-		ArrayList<Wall> listbreakable = new ArrayList<Wall>();
+		ArrayList<Position> listbreakable = new ArrayList<Position>();
 		boolean[][] breakables = game.getBreakable_walls();
 		for (int i = 0; i < breakables.length; i++) {
 			for (int j = 0; j < breakables[0].length; j++) {
 				if (breakables[i][j] == true) {
-					listbreakable.add(new Wall(i, j));
+					listbreakable.add(new Position(i, j));
 				}
 			}
 		}
@@ -81,6 +120,12 @@ public class CreateJson {
 		return json.toJSONString();
 	}
 
+	/**
+	 * créer le json pendant la partie
+	 * 
+	 * @param game
+	 * @return
+	 */
 	public static String JsonGamePartie(GameChange game) {
 		JSONObject json = new JSONObject();
 		json.put("type", "GameParty");

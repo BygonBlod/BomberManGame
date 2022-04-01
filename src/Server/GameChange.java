@@ -5,18 +5,23 @@ import java.util.List;
 
 import model.BomberManGame;
 import model.Agent.Agent;
+import model.IAutils.Position;
 import model.utils.InfoAgent;
 import model.utils.InfoBomb;
 import model.utils.InfoItem;
-import model.utils.Wall;
 
+/**
+ * 
+ * @author Antonin Class permetant de stocker les informations importantes du
+ *         jeu pour les transférer au client
+ */
 public class GameChange {
 
 	List<Agent> listBomberMan;
 	List<Agent> listEnnemi;
 	List<InfoBomb> listBomb;
 	List<InfoItem> listItem;
-	List<Wall> listBreakable;
+	List<Position> listBreakable;
 	boolean breakable_walls[][];
 	boolean walls[][];
 	private String end;
@@ -36,12 +41,15 @@ public class GameChange {
 		reset();
 	}
 
+	/**
+	 * initialize toute les listes
+	 */
 	public void reset() {
 		listBomberMan = new ArrayList<Agent>();
 		listEnnemi = new ArrayList<Agent>();
 		listBomb = new ArrayList<InfoBomb>();
 		listItem = new ArrayList<InfoItem>();
-		listBreakable = new ArrayList<Wall>();
+		listBreakable = new ArrayList<Position>();
 	}
 
 	public void set(BomberManGame game) {
@@ -49,11 +57,6 @@ public class GameChange {
 		listEnnemi = game.getListEnnemi();
 		listBomb = game.getListBomb();
 		listItem = game.getListItem();
-		/*
-		 * System.out.println("agents: " + listBomberMan.toString());
-		 * System.out.println("bombs: " + listBomb.toString());
-		 * System.out.println("items: " + listItem.toString());
-		 */
 	}
 
 	public void set(GameChange game) {
@@ -62,7 +65,7 @@ public class GameChange {
 		listBomb = game.getListBomb();
 		listItem = game.getListItem();
 		listBreakable = game.getListBreakable();
-		for (Wall w : listBreakable) {
+		for (Position w : listBreakable) {
 			breakable_walls[w.getX()][w.getY()] = false;
 		}
 		changeEnd();
@@ -124,11 +127,11 @@ public class GameChange {
 		this.listItem = listItem;
 	}
 
-	public List<Wall> getListBreakable() {
+	public List<Position> getListBreakable() {
 		return listBreakable;
 	}
 
-	public void setListBreakable(List<Wall> res) {
+	public void setListBreakable(List<Position> res) {
 		this.listBreakable = res;
 	}
 

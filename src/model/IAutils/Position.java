@@ -1,24 +1,23 @@
 package model.IAutils;
 
 public class Position {
-    private int x;
-    private int y;
+	private int x;
+	private int y;
 
-    public Position(int x, int y){
-        this.x=x;
-        this.y=y;
-    }
+	public Position(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
 
-    public int getX() {
-        return x;
-    }
+	public int getX() {
+		return x;
+	}
 
-    public int getY() {
-        return y;
-    }
-    
+	public int getY() {
+		return y;
+	}
 
-    public void setX(int x) {
+	public void setX(int x) {
 		this.x = x;
 	}
 
@@ -26,7 +25,7 @@ public class Position {
 		this.y = y;
 	}
 
-	public String toString(){
-        return "("+x+":"+y+")";
-    }
+	public String toString() {
+		return "{\"x\":" + x + ",\"y\":" + y + "}";
+	}
 }
