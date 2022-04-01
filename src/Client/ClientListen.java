@@ -51,7 +51,6 @@ public class ClientListen extends Thread {
 					case "GameParty":// pendant la partie
 						client.changeGame(DeserializationJson.JsonGamePartie(json));
 						break;
-
 					}
 				}
 			}
@@ -61,6 +60,8 @@ public class ClientListen extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

@@ -35,6 +35,13 @@ public class BomberManGameServ extends BomberManGame {
 		super.takeTurn();
 		// envoie a tout les joueur le jeu;
 		change.set(this);
+		if (getListBomberMan().size() == 0)
+			change.setEnd("YOU DIED");
+		if (getListEnnemi().size() == 0)
+			change.setEnd("YOU WIN");
+		if (this.turn == this.getMaxturn()) {
+			change.setEnd("GAME FINISH");
+		}
 		partie.endTurn(change);
 		change.reset();// à la fin réinitialise les changement
 	}

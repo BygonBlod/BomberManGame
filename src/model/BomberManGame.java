@@ -39,7 +39,7 @@ public class BomberManGame extends Game {
 	private IAStrategi stratRajion;
 
 	public BomberManGame(String p) {
-		super(200);
+		super(400);
 		this.plateau = p;
 		stratEnnemi = new IARandom();
 		stratBomberman = new IABomberManManuel();
@@ -108,13 +108,13 @@ public class BomberManGame extends Game {
 	 * change le string de fin de parti selon la fin qui s'est passé
 	 */
 	public void gameOver() {
-		System.out.println("------ Fin du Jeu ------bis");
+		System.out.println("------ Fin du Jeu ------");
 		if (listBomberMan.size() == 0)
-			end = "YOU DIED";
+			setEnd("YOU DIED");
 		if (listEnnemi.size() == 0)
-			end = "YOU WIN";
+			setEnd("YOU WIN");
 		if (this.turn == this.getMaxturn()) {
-			end = "GAME FINISH";
+			setEnd("GAME FINISH");
 		}
 
 	}
@@ -670,6 +670,10 @@ public class BomberManGame extends Game {
 		synchronized (listBomberMan) {
 			this.listBomberMan = listBomberMan;
 		}
+	}
+
+	public void setEnd(String end) {
+		this.end = end;
 	}
 
 }

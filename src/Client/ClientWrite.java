@@ -57,7 +57,7 @@ public class ClientWrite extends Thread {
 					break;
 				default:
 					if (client.isConnected()) {
-						jsonStr = CreateJson.JsonTchat(Id, text);
+						jsonStr = CreateJson.JsonTchat(client.Id, text);
 						sendMessage(jsonStr);
 					}
 					break;

@@ -15,6 +15,7 @@ import model.utils.AgentAction;
 
 public class Client {
 
+	private static Object LOCK = new Object();
 	private final String host;
 	private final int port;
 	String Id;
@@ -80,13 +81,13 @@ public class Client {
 	 * change le jeu ou l'initialise et met à jour la vue
 	 * 
 	 * @param game
+	 * @throws InterruptedException
 	 */
-	public void changeGame(GameChange game) {
+	public void changeGame(GameChange game) throws InterruptedException {
 		if (!start) {
 			time = (System.currentTimeMillis());
 			this.game = game;
 			if (view == null) {
-				System.out.println("new view");
 				view = new ViewBomberManGame(game, this);
 			} else {
 				view.getFrame().dispose();
@@ -96,8 +97,14 @@ public class Client {
 		} else {
 			this.game.set(game);
 			view.update(this.game);
-		}
+			if (game.getEnd() != "") {
+				synchronized (LOCK) {
+					LOCK.wait(2000);
+				}
+				view.getFrame().dispose();
+			}
 
+		}
 	}
 
 	/**

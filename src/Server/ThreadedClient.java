@@ -67,7 +67,7 @@ public class ThreadedClient extends Thread {
 					String message = "";
 					JSONParser jsonParser = new JSONParser();
 					if (data.length() > 0) {
-						// System.out.println(data);
+						System.out.println(data);
 						JSONObject json = (JSONObject) jsonParser.parse(data);
 						String type = (String) json.get("type");
 						System.out.println("type :" + type);
@@ -162,7 +162,7 @@ public class ThreadedClient extends Thread {
 					socket.close();// ferme la connection
 				} else {
 					System.out.println("[TCHAT]" + nameClient + "> " + message);
-					server.broadcast(CreateJson.JsonTchat(nameClient, message), socket);// envoie à tout le monde le
+					server.broadcast(CreateJson.JsonTchat(nameClient, message), socket);// envoie à tout le monde le //
 																						// message
 				}
 			}

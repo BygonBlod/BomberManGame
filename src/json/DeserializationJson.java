@@ -238,7 +238,11 @@ public class DeserializationJson {
 			listItem.add(new InfoItem(xw, yw, typeI));
 
 		}
-
+		String end = (String) json.get("end");
+		if (end != null) {
+			System.out.println("  " + end);
+			res.setEnd(end);
+		}
 		res.setListBomb(listBomb);
 		res.setListBomberMan(listBomber);
 		res.setListEnnemi(listEnnemi);

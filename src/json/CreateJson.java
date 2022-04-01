@@ -134,6 +134,9 @@ public class CreateJson {
 		json.put("listEnnemi", game.getListEnnemi());
 		json.put("listBomb", game.getListBomb());
 		json.put("listItem", game.getListItem());
+		if (game.getEnd() != "") {
+			json.put("end", game.getEnd());
+		}
 		return json.toJSONString();
 
 	}

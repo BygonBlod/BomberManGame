@@ -50,6 +50,7 @@ public class GameChange {
 		listBomb = new ArrayList<InfoBomb>();
 		listItem = new ArrayList<InfoItem>();
 		listBreakable = new ArrayList<Position>();
+		end = "";
 	}
 
 	public void set(BomberManGame game) {
@@ -57,6 +58,8 @@ public class GameChange {
 		listEnnemi = game.getListEnnemi();
 		listBomb = game.getListBomb();
 		listItem = game.getListItem();
+		if (game.getEnd() != null)
+			this.end = game.getEnd();
 	}
 
 	public void set(GameChange game) {
@@ -67,6 +70,9 @@ public class GameChange {
 		listBreakable = game.getListBreakable();
 		for (Position w : listBreakable) {
 			breakable_walls[w.getX()][w.getY()] = false;
+		}
+		if (game.getEnd() != null) {
+			this.end = game.getEnd();
 		}
 		changeEnd();
 
