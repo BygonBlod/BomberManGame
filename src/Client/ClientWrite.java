@@ -37,21 +37,17 @@ public class ClientWrite extends Thread {
 	public void run() {
 		try {
 			sortie = new PrintWriter(socket.getOutputStream(), true);
+			ViewConnect view = new ViewConnect(this);
 			while (socket.isConnected()) {
 				String jsonStr = "";
 				Scanner scanner = new Scanner(System.in);
 				String text = scanner.nextLine();
 				switch (text) {
-				case "/connect":
-					ViewConnect view = new ViewConnect(this);
-					/*
-					 * System.out.println("entrer votre pseudo :"); scanner = new
-					 * Scanner(System.in); String pseudo = scanner.nextLine(); client.Id = pseudo;
-					 * System.out.println("entrer votre mot de passe :"); scanner = new
-					 * Scanner(System.in); String pwd = scanner.nextLine(); connect(pseudo, pwd);
-					 */
-
-					break;
+				/*
+				 * case "/connect":
+				 * 
+				 * break;
+				 */
 				case "/close":
 					socket.close();
 					break;
@@ -66,6 +62,9 @@ public class ClientWrite extends Thread {
 			}
 
 		} catch (SocketException e) {
+			System.out.println("Vous êtes déconnecter");
+			client.deleteClient();
+		} catch (NullPointerException e) {
 			System.out.println("Vous êtes déconnecter");
 			client.deleteClient();
 		} catch (IOException e) {

@@ -57,6 +57,9 @@ public class ClientListen extends Thread {
 		} catch (SocketException e) {
 			System.out.println("Vous êtes déconnecter");
 			client.deleteClient();
+		} catch (NullPointerException e) {
+			System.out.println("Vous êtes déconnecter");
+			client.deleteClient();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
