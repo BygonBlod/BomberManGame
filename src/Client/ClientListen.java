@@ -36,6 +36,7 @@ public class ClientListen extends Thread {
 				String data = entree.readLine();
 				String message = "";
 				if (data.length() > 0) {
+					// System.out.println(data);
 					JSONObject json = (JSONObject) jsonParser.parse(data);
 					String type = (String) json.get("type");
 					switch (type) {

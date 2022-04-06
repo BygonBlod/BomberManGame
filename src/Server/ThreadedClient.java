@@ -67,10 +67,10 @@ public class ThreadedClient extends Thread {
 					String message = "";
 					JSONParser jsonParser = new JSONParser();
 					if (data.length() > 0) {
-						System.out.println(data);
+						// System.out.println(data);
 						JSONObject json = (JSONObject) jsonParser.parse(data);
 						String type = (String) json.get("type");
-						System.out.println("type :" + type);
+						// System.out.println("type :" + type);
 						switch (type) {
 						case "connectAnswer":// question du client pour se connecter
 							received = DeserializationJson.JsonConnectAnswer(json);
